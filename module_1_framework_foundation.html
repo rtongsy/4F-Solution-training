@@ -594,7 +594,7 @@ function submitResults(){
   st.style.color='#3C3489';
   st.textContent='Sending results...';
   if(btn)btn.disabled=true;
-  var completed=new Date().toLocaleString('en-CA',{timeZone:'America/Edmonton',hour12:true});
+  var completed=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
   var payload={
     participant_name: nm,
     module: '4F Solution - Module 1',
