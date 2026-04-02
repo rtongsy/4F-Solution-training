@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F Solution — Module 3: Cash Flow</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e6de;
+      --color-text-secondary: #9c9a92;
+      --color-text-tertiary: #6b6963;
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #272724;
+      --color-border-tertiary: rgba(255,255,255,0.10);
+      --color-border-secondary: rgba(255,255,255,0.18);
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
+  .mod { width: 100%; }
+  .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
+  .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
+  .prog-step.done { background: #1D9E75; }
+  .prog-step.active { background: #5DCAA5; }
+  .step-label { font-size: 14px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #E1F5EE; color: #085041; margin-bottom: 1rem; letter-spacing: .03em; }
+  h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
+  .card-title { font-size: 17px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
+  .card-body { font-size: 17px; color: var(--color-text-secondary); line-height: 1.65; }
+  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
+  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
+  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
+  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; border-radius: 0; }
+  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; border-radius: 0; }
+  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: 0; }
+  .hb-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
+  .hb-purple .hb-label { color: #534AB7; }
+  .hb-teal .hb-label { color: #0F6E56; }
+  .hb-coral .hb-label { color: #993C1D; }
+  .hb-green .hb-label { color: #3B6D11; }
+  .hb-amber .hb-label { color: #854F0B; }
+  .hb-text { font-size: 17px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+  .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 17px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
+  .quiz-option:hover { border-color: #5DCAA5; background: #E1F5EE; color: #085041; }
+  .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
+  .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
+  .feedback { font-size: 17px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
+  .feedback.show { display: block; }
+  .fb-correct { background: #E1F5EE; color: #085041; }
+  .fb-wrong { background: #FAECE7; color: #712B13; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .nav-btn { font-size: 17px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
+  .nav-btn:hover { background: var(--color-background-secondary); }
+  .nav-btn.primary { background: #0F6E56; border-color: #0F6E56; color: #E1F5EE; font-weight: 600; }
+  .nav-btn.primary:hover { background: #085041; }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .counter { font-size: 14px; color: var(--color-text-tertiary); min-width: 60px; text-align: center; }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 16px; color: var(--color-text-secondary); }
+  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .q-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #0F6E56; }
+  .q-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #0F6E56; margin-bottom: .4rem; }
+  .q-text { font-size: 18px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
+  .q-why { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; }
+  .cf-equation { display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1.5rem; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .cf-box { background: var(--color-background-primary); border-radius: var(--border-radius-md); padding: .75rem 1.25rem; text-align: center; border: 0.5px solid var(--color-border-tertiary); min-width: 120px; }
+  .cf-box-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .2rem; }
+  .cf-box-val { font-size: 22px; font-weight: 700; }
+  .cf-op { font-size: 28px; font-weight: 700; color: var(--color-text-tertiary); }
+  .expense-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
+  .expense-card { border-radius: var(--border-radius-md); padding: 1rem; border: 0.5px solid var(--color-border-tertiary); }
+  .expense-type { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .4rem; }
+  .expense-def { font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: .5rem; }
+  .expense-eg { font-size: 13px; font-style: italic; color: var(--color-text-tertiary); line-height: 1.5; }
+  .surplus-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .surplus-card { border-radius: var(--border-radius-md); padding: 1rem; text-align: center; }
+  .surplus-num { font-size: 24px; font-weight: 700; margin-bottom: .25rem; }
+  .surplus-lbl { font-size: 14px; color: var(--color-text-secondary); line-height: 1.4; }
+  .connection-row { display: grid; grid-template-columns: 1fr; gap: .6rem; margin-bottom: 1.5rem; }
+  .conn-card { display: flex; align-items: flex-start; gap: 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .9rem 1.1rem; }
+  .conn-num { font-size: 20px; font-weight: 700; min-width: 32px; }
+  .conn-content { flex: 1; }
+  .conn-title { font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: .2rem; }
+  .conn-body { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; }
+</style>
+
+<div class="container">
+<div class="mod">
+
+<div class="progress-bar">
+  <div class="prog-step active" id="p0"></div>
+  <div class="prog-step" id="p1"></div>
+  <div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div>
+  <div class="prog-step" id="p4"></div>
+  <div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div>
+  <div class="prog-step" id="p7"></div>
+  <div class="prog-step" id="p8"></div>
+  <div class="prog-step" id="p9"></div>
+  <span class="step-label" id="step-label">1 of 10</span>
+</div>
+
+<!-- SCREEN 0 — Welcome -->
+<div class="screen active" id="s0">
+  <div class="tag">4F Solution — Module 3</div>
+  <h2>Cash flow — the engine that funds everything</h2>
+  <p class="sub">No plan works without understanding what comes in, what goes out, and what is left. Cash flow is the first Fundamental because it determines what is possible across all the others.</p>
+  <div class="badge-row">
+    <div class="badge"><div class="badge-dot" style="background:#0F6E56"></div>6 lessons</div>
+    <div class="badge"><div class="badge-dot" style="background:#1D9E75"></div>5 knowledge checks</div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">What you will learn</div>
+    <div class="hb-text">Why cash flow comes first in the 4F process. How to uncover all sources of income — not just employment. How to categorize expenses. What surplus tells you and how to direct it. How debt affects cash flow. How to connect cash flow directly to Protection, Growth, and Tax Efficiency.</div>
+  </div>
+</div>
+
+<!-- SCREEN 1 — Why cash flow comes first -->
+<div class="screen" id="s1">
+  <div class="tag">4F Solution — Lesson 1: Why cash flow comes first</div>
+  <h2>Discovery and education happen at the same time</h2>
+  <p class="sub">The cash flow conversation is not an information-gathering exercise. It is the first moment the client sees their financial picture clearly — many for the first time. The professional's job is to ask and to educate simultaneously.</p>
+  <div class="highlight-box hb-coral">
+    <div class="hb-label">The professional's role in this conversation</div>
+    <div class="hb-text">To ask and to educate simultaneously. Most clients have never seen their cash flow mapped clearly. The professional surfaces the picture and helps the client understand what it means — often for the first time. Discovery and education happen in the same conversation.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">What the client gains from this conversation</div>
+    <div class="card-body">Clarity they did not have before. Most clients carry a vague sense of where their money goes — but have never had someone help them see it clearly. The professional who does this becomes immediately more valuable than anyone who has simply sold them a product.</div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">What cash flow tells the professional</div>
+    <div class="hb-text">How much is available across protection, growth, and tax efficiency. How realistic the client's goals are given their current situation. And where the critical gaps are. Without cash flow clarity, the complete plan cannot be built — and nothing should be recommended until it is.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Why most professionals skip it</div>
+    <div class="card-body">Cash flow conversations feel intrusive. Clients are not used to sharing this level of detail. And professionals are not always comfortable asking. But skipping it means the complete plan — when it is brought back — will be built on assumptions rather than facts. The discovery conversation is where those facts are gathered.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">How to frame it for the client</div>
+    <div class="card-body">"Before anything else, I need to understand your financial picture — what comes in, what goes out, and what you have available to work with. Once I have the full picture across all four areas, I will put together a complete plan and bring it back to you. For now, I just need to understand."</div>
+  </div>
+
+  <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#0F6E56;margin-bottom:.75rem;margin-top:1.25rem">The conversation — step by step</div>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">The dual purpose of every question</div>
+    <div class="hb-text">Each question does two things: it gives the professional information they need, and it gives the client a clearer picture of their own situation. Many clients will say "I have never thought about it that way." Those moments are not interruptions — they are the point.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Step 1 — Frame it</div>
+    <div class="q-text">"Today is about understanding — not about making any decisions. I am going to ask about income, expenses, debt, and what is left at the end of the month. Once I have the full picture across all four areas of your financial life, I will put together a complete plan and bring it back to you. For now, I just need to listen."</div>
+    <div class="q-why">Sets the tone. Removes defensiveness. Positions the professional as a diagnostician, not a salesperson.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Step 2 — Income</div>
+    <div class="q-text">"What does total household income look like in a typical month — all sources combined?"</div>
+    <div class="q-why">Start broad. Follow with: "Is that consistent, or does it vary?" and "Is there anything else that comes in that we should factor in?"</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Step 3 — Expenses</div>
+    <div class="q-text">"And on the expense side — what goes out in a typical month? All of it, from fixed commitments to day-to-day spending."</div>
+    <div class="q-why">Follow with: "Are there any large annual expenses we should factor in — things that do not show up every month but matter to the picture?"</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Step 4 — Surplus and debt</div>
+    <div class="q-text">"So after everything goes out — what does that leave? And do you carry any debt beyond your regular commitments?"</div>
+    <div class="q-why">This is where the real picture emerges. The surplus number is what the complete plan is built around.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Step 5 — Reflect, educate, and connect</div>
+    <div class="q-text">"So if I am hearing you correctly — you have roughly [income] coming in, [expenses] going out, which leaves about [surplus] available each month. A lot of people have never seen that number clearly before. Does that feel accurate?" Then move to the next Fundamental — do not close or summarize the full meeting here.</div>
+    <div class="q-why">Confirms the numbers. Validates the clarity the client has just gained. Then the professional moves directly into the Protection discovery — cash flow is the first of four conversations in this meeting, not the only one.</div>
+  </div>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">What the client should feel after the cash flow conversation</div>
+    <div class="hb-text">Clear — because for the first time they understand their own cash flow in plain language. And curious — because the professional has helped them see the foundation, and is now moving forward to look at what sits on top of it. The full picture and recommendations come at the end of the complete discovery — not here.</div>
+  </div>
+</div>
+
+<!-- SCREEN 2 — The cash flow equation -->
+<div class="screen" id="s2">
+  <div class="tag">4F Solution — Lesson 2: The cash flow equation</div>
+  <h2>Income minus expenses equals surplus — or deficit</h2>
+  <p class="sub">The equation is simple. The conversation around it is not. The professional's job is to understand all three components clearly before drawing any conclusions.</p>
+
+  <div class="cf-equation">
+    <div class="cf-box">
+      <div class="cf-box-label" style="color:#0F6E56">Income</div>
+      <div class="cf-box-val" style="color:#0F6E56">All in</div>
+    </div>
+    <div class="cf-op">−</div>
+    <div class="cf-box">
+      <div class="cf-box-label" style="color:#993C1D">Expenses</div>
+      <div class="cf-box-val" style="color:#993C1D">All out</div>
+    </div>
+    <div class="cf-op">=</div>
+    <div class="cf-box">
+      <div class="cf-box-label" style="color:#534AB7">Surplus</div>
+      <div class="cf-box-val" style="color:#534AB7">What's left</div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">Educate as you discover</div>
+    <div class="hb-text">Most clients have never seen their financial life expressed this simply. Showing them the equation — and where they sit within it — is itself an act of value. Many will say "I have never thought about it that way." That moment of clarity is what separates a discovery conversation from a financial interrogation.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">What professionals often miss</div>
+    <div class="card-body">Most professionals ask about income and stop there. The full picture requires all three components — and the most revealing one is often what the client does not immediately mention. Irregular income, side income, and non-obvious expenses change the equation significantly.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Surplus vs deficit — explain it to the client</div>
+    <div class="card-body">Do not just record the number — help the client understand what it means. "What this tells us is that after everything goes out, you have roughly this much available each month — and that is an important number." A client who understands their own surplus is far more engaged in the rest of the discovery conversation.</div>
+  </div>
+</div>
+
+<!-- SCREEN 3 — Income -->
+<div class="screen" id="s3">
+  <div class="tag">4F Solution — Lesson 3: Income</div>
+  <h2>Income is more than a paycheque</h2>
+  <p class="sub">Most clients underreport income because they only think about their primary employment. The professional's job is to uncover every source — because all of it flows into the equation.</p>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">Sources to explore</div>
+    <div class="hb-text">Employment income. Self-employment or business income. Investment income — dividends, interest, rental. Government benefits. Pension or annuity income. Spousal or partner income. Child or family support payments. Any other regular or irregular cash coming in.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Discovery question — income</div>
+    <div class="q-text">"When you think about all the money that comes into your household in a typical month — employment, investments, anything else — what does that total look like?"</div>
+    <div class="q-why">Why it works: The phrase "anything else" opens the door to irregular and secondary income sources the client might not volunteer. Starting with the household total is less threatening than asking for individual line items.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Follow-up question — income stability</div>
+    <div class="q-text">"Is that income consistent month to month — or does it vary? And are there months where it is significantly higher or lower than average?"</div>
+    <div class="q-why">Why it works: Income variability changes everything about how surplus is allocated and how protection is sized. A variable-income client will need the complete plan to reflect that — with a larger cash reserve and more conservative fixed commitments built into the recommendations.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What to listen for</div>
+    <div class="card-body">Clients who say "it depends" or "it varies a lot" need a deeper conversation about income floors and peaks. Clients who mention a spouse or partner — but only talk about their own income — need to be asked about the household picture explicitly. Both situations change the plan significantly.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Educate as you go — income</div>
+    <div class="card-body">Many clients do not realize how many income sources they have — or how exposed they are if one stops. After mapping income, help the client see it: "What you have just described is your financial engine. Let me show you what happens to the plan if any part of that changes unexpectedly." That is not a scare tactic — it is the foundation of the Protection conversation.</div>
+  </div>
+</div>
+
+<!-- SCREEN 4 — Expenses -->
+<div class="screen" id="s4">
+  <div class="tag">4F Solution — Lesson 4: Expenses</div>
+  <h2>Not all expenses are equal — and the difference matters</h2>
+  <p class="sub">Breaking expenses into categories helps the professional and the client see where flexibility exists — and where it does not.</p>
+
+  <div class="expense-grid">
+    <div class="expense-card" style="border-color:#993C1D;background:#FAECE7">
+      <div class="expense-type" style="color:#993C1D">Fixed</div>
+      <div class="expense-def" style="color:#712B13">Same amount, every period. Cannot easily be changed.</div>
+      <div class="expense-eg" style="color:#993C1D">Rent or mortgage. Loan payments. Insurance premiums. Subscriptions.</div>
+    </div>
+    <div class="expense-card" style="border-color:#854F0B;background:#FAEEDA">
+      <div class="expense-type" style="color:#854F0B">Variable</div>
+      <div class="expense-def" style="color:#633806">Changes month to month but is necessary.</div>
+      <div class="expense-eg" style="color:#854F0B">Groceries. Utilities. Transportation. Healthcare.</div>
+    </div>
+    <div class="expense-card" style="border-color:#534AB7;background:#EEEDFE">
+      <div class="expense-type" style="color:#534AB7">Discretionary</div>
+      <div class="expense-def" style="color:#3C3489">Lifestyle choices. Flexible if needed.</div>
+      <div class="expense-eg" style="color:#534AB7">Dining out. Entertainment. Travel. Clothing beyond basics.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Discovery question — expenses</div>
+    <div class="q-text">"If you had to estimate what goes out of your household in a typical month — all of it, fixed commitments, day-to-day spending, everything — what would that number be?"</div>
+    <div class="q-why">Why it works: Most clients do not have an exact figure. That is fine. You are looking for a realistic estimate, not accounting precision. The key is getting them to think about the full picture rather than just the obvious bills.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What the categories tell you</div>
+    <div class="card-body">Fixed expenses set the floor — they must be covered regardless. Variable expenses tell you about lifestyle and room to adjust. Discretionary expenses show where surplus is currently going — and whether the client's spending aligns with the values and goals they described in the discovery conversation.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Educate as you go — expenses</div>
+    <div class="card-body">Clients rarely think about their expenses in categories. Walking them through fixed, variable, and discretionary is itself educational. "Fixed expenses are commitments you cannot easily change. Variable expenses are necessary but flexible. Discretionary is where you have the most control — and where most of the opportunity usually sits." This gives the client a language for their own spending for the first time.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">The alignment check</div>
+    <div class="card-body">If a client says family security is their top value but is spending heavily on discretionary items while underinsured — surface it, do not judge it: "Based on what you told me matters most to you, I want to show you what your current spending is funding — and what it is not yet funding. That is not a criticism. It is just a gap we can close."</div>
+  </div>
+</div>
+
+<!-- SCREEN 5 — Surplus and debt -->
+<div class="screen" id="s5">
+  <div class="tag">4F Solution — Lesson 5: Surplus and debt</div>
+  <h2>Surplus is the engine. Debt is the drag.</h2>
+  <p class="sub">Once income and expenses are understood, two questions define what is possible: how much is left, and how much of that is already committed to debt repayment.</p>
+
+  <div class="surplus-row">
+    <div class="surplus-card" style="background:#E1F5EE;border:0.5px solid #5DCAA5">
+      <div class="surplus-num" style="color:#0F6E56">Surplus</div>
+      <div class="surplus-lbl" style="color:#0F6E56">Income exceeds expenses — there is something to allocate</div>
+    </div>
+    <div class="surplus-card" style="background:#FAECE7;border:0.5px solid #F0997B">
+      <div class="surplus-num" style="color:#993C1D">Deficit</div>
+      <div class="surplus-lbl" style="color:#993C1D">Expenses exceed income — the plan must start here</div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">What surplus means for the complete plan</div>
+    <div class="hb-text">Surplus is what the complete plan is built around — but recommendations on how to allocate it come when the professional returns with the full picture. During discovery, the professional's job is simply to understand the number clearly. The exception: if a critical and obvious issue exists — such as high-interest debt consuming most of the surplus — the professional may surface it directly. Everything else waits for the complete plan.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Discovery question — surplus</div>
+    <div class="q-text">"At the end of a typical month, after everything is paid — what does that look like? Is there money left over, or does it tend to be tight?"</div>
+    <div class="q-why">Why it works: Non-judgmental and open. "Does it tend to be tight" gives the client permission to be honest without feeling exposed. The answer tells you everything about what the plan has to work with.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Discovery question — debt</div>
+    <div class="q-text">"Beyond your regular monthly commitments, do you carry any debt — a mortgage, vehicle loans, credit lines, anything else? And roughly what does the monthly repayment on those look like?"</div>
+    <div class="q-why">Why it works: Separating debt repayment from regular expenses gives a clearer picture of true surplus. A client who appears to have significant surplus may have most of it committed to debt service — which changes the complete plan significantly. This is information, not a recommendation.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">How debt affects the plan</div>
+    <div class="card-body">High-interest debt — credit cards, unsecured lines — typically costs more than any investment can earn. Addressing it is a Cash Flow and Growth conversation simultaneously. Mortgage and asset-backed debt is different — it is often part of a long-term plan and should be understood in context, not immediately eliminated.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Educate as you go — surplus and debt</div>
+    <div class="card-body">Most clients have never seen their real surplus — net of debt repayment — expressed as a single number. Show them: "After your income, your expenses, and your debt commitments, what you actually have available each month is roughly this — and that number is the foundation of everything we are going to look at." Many clients find this clarifying and even relieving — because for the first time, someone has actually looked at the full picture with them.</div>
+  </div>
+</div>
+
+<!-- SCREEN 6 — Connecting to 4F -->
+<div class="screen" id="s6">
+  <div class="tag">4F Solution — Lesson 6: Cash flow and the 4 Fundamentals</div>
+  <h2>Cash flow is the input. The other three are what you do with it.</h2>
+  <p class="sub">Once the professional understands the client's cash flow picture, the discovery continues across Protection, Growth, and Tax Efficiency. Cash flow is the foundation — the other three Fundamentals build on it. The complete plan and all recommendations come after the full discovery is done.</p>
+
+  <div class="connection-row">
+    <div class="conn-card">
+      <div class="conn-num" style="color:#993C1D">2</div>
+      <div class="conn-content">
+        <div class="conn-title">Cash flow → Protection</div>
+        <div class="conn-body">Surplus determines what protection coverage is realistic and sustainable. A deficit signals that the complete plan must address cash flow stability before protection can be properly funded. This assessment happens when the professional builds the plan — not during the discovery conversation.</div>
+      </div>
+    </div>
+    <div class="conn-card">
+      <div class="conn-num" style="color:#3B6D11">3</div>
+      <div class="conn-content">
+        <div class="conn-title">Cash flow → Growth</div>
+        <div class="conn-body">Surplus above protection needs is what funds the growth strategy. During discovery, the professional understands what is available. When they return with the complete plan, they show the client what that surplus can realistically build toward over five, ten, and twenty years — and what consistent allocation makes possible.</div>
+      </div>
+    </div>
+    <div class="conn-card">
+      <div class="conn-num" style="color:#854F0B">4</div>
+      <div class="conn-content">
+        <div class="conn-title">Cash flow → Tax efficiency</div>
+        <div class="conn-body">Where surplus is directed determines how much of it the client keeps. Tax-advantaged accounts, contribution room, and income-splitting strategies all require cash flow to fund them. During discovery, the professional notes what is currently in place. The complete plan shows the client how to restructure surplus allocation for maximum tax efficiency.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">Transitioning to the next fundamental</div>
+    <div class="hb-text">"Now that I have a clear picture of your cash flow, I want to look at the other three areas — protection, growth, and tax efficiency. Each one connects directly to what you just shared with me. Once I have the full picture across all four, I will put together a complete plan and bring it back to you." The bridge — where recommendations are presented — happens after all four Fundamentals have been discovered, not at the end of cash flow.</div>
+  </div>
+</div>
+
+<!-- SCREEN 7 — Summary review -->
+<div class="screen" id="s7">
+  <div class="tag">4F Solution — Lesson 7: Summary review</div>
+  <h2>What you have covered — the cash flow picture</h2>
+  <p class="sub">Before the knowledge check, take a moment to consolidate. This is the complete cash flow picture — what it is, what it tells you, and how the conversation works.</p>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">Cash flow in one sentence</div>
+    <div class="hb-text">Income minus expenses equals surplus — and surplus is what every other Fundamental is built around. Without understanding it, nothing else can be properly sized or recommended.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem">
+    <div class="card" style="margin-bottom:0;border-top:3px solid #0F6E56">
+      <div class="card-title" style="color:#0F6E56">Income</div>
+      <div class="card-body">All sources — employment, investments, benefits, business. Consistent or variable. Household total, not just the client's own.</div>
+    </div>
+    <div class="card" style="margin-bottom:0;border-top:3px solid #993C1D">
+      <div class="card-title" style="color:#993C1D">Expenses</div>
+      <div class="card-body">Fixed commitments. Variable necessities. Discretionary choices. Each category tells a different story about flexibility and priorities.</div>
+    </div>
+    <div class="card" style="margin-bottom:0;border-top:3px solid #534AB7">
+      <div class="card-title" style="color:#534AB7">Surplus</div>
+      <div class="card-body">What remains after income and expenses. The number the complete plan is built around. Real surplus accounts for all debt repayment.</div>
+    </div>
+    <div class="card" style="margin-bottom:0;border-top:3px solid #854F0B">
+      <div class="card-title" style="color:#854F0B">Debt</div>
+      <div class="card-body">High-interest debt erodes surplus and must be addressed before other allocations. Asset-backed debt is context-dependent — not automatically a problem.</div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-coral">
+    <div class="hb-label">The professional's role — always</div>
+    <div class="hb-text">Ask and educate simultaneously. Surface the client's picture clearly. Help them understand what it means. Make no recommendations during discovery — except where a critical and obvious issue requires immediate surfacing. Move to Protection when cash flow is understood.</div>
+  </div>
+
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">The 5-step conversation sequence</div>
+    <div class="hb-text">1. Frame it — set the tone, no decisions today. 2. Income — all sources, stability, household total. 3. Expenses — fixed, variable, discretionary. 4. Surplus and debt — the real number and what is committed. 5. Reflect and connect — confirm, educate, move to the next Fundamental.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">How cash flow connects forward</div>
+    <div class="card-body">Cash flow → Protection: surplus sizes what protection is sustainable. Cash flow → Growth: surplus above protection funds the growth strategy. Cash flow → Tax Efficiency: where surplus is directed determines how much the client keeps. All three depend on a clear cash flow picture first.</div>
+  </div>
+</div>
+
+<!-- SCREEN 8 — Knowledge check -->
+<div class="screen" id="s8">
+  <div class="tag">4F Solution — Knowledge check</div>
+  <h2>Knowledge check — 5 questions</h2>
+  <p class="sub">Choose the best answer for each question.</p>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the 4F Solution address Cash Flow before Protection or Growth?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because most clients have cash flow problems that need fixing before anything else</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because cash flow determines how much is available to allocate across every other Fundamental — without it, every recommendation is unsized and unrealistic</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because clients are more comfortable discussing money before discussing risk</button>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has a monthly surplus of $800 but carries high-interest credit card debt. What should the professional address first?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Direct the surplus toward a growth account — compounding starts immediately</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Purchase life insurance to close the protection gap first</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">Address the high-interest debt first — it typically costs more than any investment can earn and erodes true surplus</button>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Which of the following is a discretionary expense?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Monthly mortgage payment</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Grocery spending</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Dining out and entertainment</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says their income "varies a lot." What does this mean for the cash flow conversation?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Use their highest income month as the baseline for planning</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Understand income floors and peaks — variable income requires larger cash reserves and more conservative fixed commitments</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Average the income over the last three months and use that figure</button>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">After completing the cash flow conversation, the professional identifies a monthly surplus of $600. When the complete plan is brought back, what is the correct order for addressing that surplus?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Growth first — start compounding as early as possible</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Tax efficiency first — structure the money correctly from the start</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Emergency reserve, then protection gaps, then growth, then tax efficiency — each step builds on a stable foundation</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+</div>
+
+<!-- SCREEN 9 — Completion + Score + Submit -->
+<div class="screen" id="s8">
+  <div class="tag">4F Solution — Module 3 complete</div>
+  <h2>Module 3 complete</h2>
+  <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
+
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+    <div style="font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:32px;font-weight:700;color:#0F6E56" id="score-display">—</div>
+        <div style="font-size:14px;color:var(--color-text-secondary);margin-top:.25rem">Score</div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:32px;font-weight:700;color:#0F6E56" id="correct-display">—</div>
+        <div style="font-size:14px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div>
+      </div>
+    </div>
+    <div id="q-breakdown" style="font-size:15px;color:var(--color-text-secondary);line-height:1.8"></div>
+  </div>
+
+  <div id="submit-section" style="margin-bottom:1.25rem">
+    <div style="font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">Send results to facilitator</div>
+    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:17px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
+    <div id="name-warning" style="display:none;font-size:14px;color:#993C1D;margin-bottom:.75rem">Please enter your name before submitting.</div>
+    <button class="nav-btn primary" onclick="submitResults()" style="width:100%;padding:.85rem 1.25rem;margin-bottom:.75rem">Submit results</button>
+    <div style="font-size:14px;color:var(--color-text-tertiary);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
+    <div id="submit-status" style="display:none;margin-top:.75rem;font-size:15px;padding:.85rem 1rem;border-radius:var(--border-radius-md)"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.5rem">
+    <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
+    <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
+  <span class="counter" id="counter">1 of 10</span>
+  <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next</button>
+</div>
+
+</div>
+</div>
+
+<script>
+var TOTAL_SCREENS = 10;
+var TOTAL_QUESTIONS = 5;
+var QUIZ_SCREEN_INDEX = 8;
+var LAST_LESSON_INDEX = 7;
+var WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var MODULE_NAME = '4F Solution - Module 3: Cash Flow';
+
+var qLabels = {
+  q1: 'Q1 - Why cash flow comes first',
+  q2: 'Q2 - High-interest debt and surplus allocation',
+  q3: 'Q3 - Identifying discretionary expenses',
+  q4: 'Q4 - Variable income and cash flow planning',
+  q5: 'Q5 - Correct order of surplus allocation'
+};
+
+var qMsgs = {
+  q1c: 'Correct. Cash flow comes first because it sizes everything else. Without knowing what the client has available, any recommendation for protection coverage, savings rate, or debt repayment is a guess — and an unsustainable one.',
+  q1w: 'The reason cash flow comes first is not about fixing problems — it is about sizing every other recommendation correctly. Until you know what the client has available, you cannot make a recommendation that will actually hold.',
+  q2c: 'Correct. High-interest debt typically carries a cost that exceeds what any conservative investment can return. Eliminating it is both a cash flow improvement and a growth strategy — it frees up real surplus and removes a guaranteed drag on the plan.',
+  q2w: 'High-interest debt costs more than most investments earn. Directing surplus toward growth or insurance while carrying high-interest debt means the net position is deteriorating. The debt needs to come first.',
+  q3c: 'Correct. Discretionary expenses are lifestyle choices that can be adjusted — dining out and entertainment are the clearest examples. They are not fixed commitments and not necessities, which means they represent flexibility in the cash flow picture.',
+  q3w: 'Fixed expenses are non-negotiable commitments. Variable expenses are necessary but fluctuate. Discretionary expenses are choices — they can be adjusted if the plan requires it. Dining out and entertainment fall clearly into the discretionary category.',
+  q4c: 'Correct. Variable income requires a different approach to planning. The floor — the lowest reliable income — is what fixed commitments should be based on. Peaks fund reserves and goals. A client with variable income needs a larger emergency buffer and more conservative fixed commitments.',
+  q4w: 'Using the highest or an averaged income figure without understanding variability leads to recommendations the client cannot sustain in low-income months. Variable income clients need plans built on their income floor, with peaks treated as surplus to allocate.',
+  q5c: 'Correct. The sequence exists because each step builds on the stability of the one before it. An emergency reserve prevents disruption. Protection gaps ensure the plan survives an unexpected event. Growth builds toward goals. Tax efficiency preserves the output of growth. Skipping steps creates a plan with structural gaps.',
+  q5w: 'The order is emergency reserve → protection → growth → tax efficiency. Starting with growth or tax efficiency before protection gaps are closed means the plan can be derailed by a single unexpected event. Each step needs the one before it to be stable first.'
+};
+
+var cur = 0;
+var scores = {};
+var qAnswered = {};
+Object.keys(qLabels).forEach(function(q){ scores[q]=null; qAnswered[q]=false; });
+
+function updateUI(){
+  document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur)});
+  document.querySelectorAll('.prog-step').forEach(function(p,i){
+    p.classList.remove('done','active');
+    if(i<cur)p.classList.add('done');
+    else if(i===cur)p.classList.add('active');
+  });
+  document.getElementById('counter').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  document.getElementById('back-btn').disabled=cur===0;
+  var nb=document.getElementById('next-btn');
+  if(cur===TOTAL_SCREENS-1){nb.style.display='none';}
+  else{nb.style.display='';nb.textContent=cur===0?'Begin':cur===LAST_LESSON_INDEX?'Finish':'Next';}
+  document.getElementById('step-label').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  if(cur===TOTAL_SCREENS-1){buildScoreSummary();}
+}
+
+function goNext(){if(cur<TOTAL_SCREENS-1){cur++;updateUI();window.scrollTo(0,0);}}
+function goBack(){if(cur>0){cur--;updateUI();window.scrollTo(0,0);}}
+
+function checkQ(el,correct,qid){
+  if(qAnswered[qid])return;
+  qAnswered[qid]=true;
+  scores[qid]=correct;
+  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){
+    s.style.pointerEvents='none';
+    s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');
+  });
+  var fb=document.getElementById('fb-'+qid);
+  fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
+  fb.textContent=qMsgs[qid+(correct?'c':'w')]||'';
+}
+
+function buildScoreSummary(){
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  document.getElementById('score-display').textContent=pct+'%';
+  document.getElementById('correct-display').textContent=correct+'/'+TOTAL_QUESTIONS;
+  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){
+    var res=scores[q];
+    var icon=res===null?'○':res?'✓':'✗';
+    var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';
+    return '<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';
+  }).join('');
+  var submitBtn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if(submitBtn){
+    if(pct<80){
+      submitBtn.disabled=true;
+      var warn=document.getElementById('score-gate-msg');
+      if(!warn){
+        warn=document.createElement('div');
+        warn.id='score-gate-msg';
+        warn.style.cssText='font-size:15px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';
+        submitBtn.parentNode.insertBefore(warn,submitBtn);
+      }
+      warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';
+    } else {
+      submitBtn.disabled=false;
+      var warn=document.getElementById('score-gate-msg');
+      if(warn)warn.remove();
+    }
+  }
+}
+
+function retakeQuiz(){
+  Object.keys(qLabels).forEach(function(q){
+    qAnswered[q]=false; scores[q]=null;
+    document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){
+      btn.classList.remove('correct','wrong');
+      btn.style.pointerEvents='';
+    });
+    var fb=document.getElementById('fb-'+q);
+    if(fb){fb.className='feedback';fb.textContent='';}
+  });
+  document.getElementById('score-display').textContent='—';
+  document.getElementById('correct-display').textContent='—';
+  document.getElementById('q-breakdown').innerHTML='';
+  var st=document.getElementById('submit-status');
+  st.style.display='none'; st.textContent='';
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if(btn){btn.disabled=false;btn.textContent='Submit results';}
+  var warn=document.getElementById('score-gate-msg');
+  if(warn)warn.remove();
+  cur=QUIZ_SCREEN_INDEX;
+  updateUI();
+  window.scrollTo(0,0);
+}
+
+function submitResults(){
+  var nm=document.getElementById('participant-name').value.trim();
+  if(!nm){
+    document.getElementById('name-warning').style.display='block';
+    document.getElementById('participant-name').focus();
+    return;
+  }
+  document.getElementById('name-warning').style.display='none';
+  var st=document.getElementById('submit-status');
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  if(pct<80){
+    st.style.display='block';
+    st.style.background='#FAECE7';
+    st.style.color='#712B13';
+    st.textContent='A minimum score of 80% is required to submit. You scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+'). Please retake the quiz.';
+    return;
+  }
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  st.style.display='block';
+  st.style.background='#E1F5EE';
+  st.style.color='#085041';
+  st.textContent='Sending results...';
+  if(btn)btn.disabled=true;
+  var payload={
+    participant_name: nm,
+    module: MODULE_NAME,
+    completed_at: new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),
+    score_percent: pct+'%',
+    correct_of_total: correct+'/'+TOTAL_QUESTIONS
+  };
+  qs.forEach(function(q){ payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect'; });
+  var params=new URLSearchParams(payload);
+  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:params})
+  .then(function(){
+    st.style.background='#E1F5EE';
+    st.style.color='#085041';
+    st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct). Your facilitator will receive the full breakdown.';
+    if(btn)btn.textContent='Submitted';
+  })
+  .catch(function(){
+    st.style.background='#FAECE7';
+    st.style.color='#712B13';
+    st.textContent='Submission failed — please check your internet connection and try again.';
+    if(btn)btn.disabled=false;
+  });
+}
+
+updateUI();
+</script>
+</html>
