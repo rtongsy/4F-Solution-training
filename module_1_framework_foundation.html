@@ -607,11 +607,13 @@ function submitResults(){
     q4_income_loss: scores.q4===null?'Not attempted':scores.q4?'Correct':'Incorrect',
     q5_fundamentals_order: scores.q5===null?'Not attempted':scores.q5?'Correct':'Incorrect'
   };
+  var params=new URLSearchParams(payload);
   fetch('https://hooks.zapier.com/hooks/catch/236545/unc6gn1/',{
     method:'POST',
-    body:JSON.stringify(payload)
+    mode:'no-cors',
+    body:params
   })
-  .then(function(res){
+  .then(function(){
     st.style.background='#E1F5EE';
     st.style.color='#085041';
     st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/5 correct). Your facilitator will receive the full breakdown.';
