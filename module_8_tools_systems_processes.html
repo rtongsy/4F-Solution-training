@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F Solution — Module 8: Tools, Systems and Processes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e6de;
+      --color-text-secondary: #9c9a92;
+      --color-text-tertiary: #6b6963;
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #272724;
+      --color-border-tertiary: rgba(255,255,255,0.10);
+      --color-border-secondary: rgba(255,255,255,0.18);
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
+  .mod { width: 100%; }
+  .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
+  .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
+  .prog-step.done { background: #185FA5; }
+  .prog-step.active { background: #378ADD; }
+  .step-label { font-size: 17px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #E6F1FB; color: #0C447C; margin-bottom: 1rem; letter-spacing: .03em; }
+  h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
+  .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
+  .card-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
+  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
+  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
+  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
+  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; border-radius: 0; }
+  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; border-radius: 0; }
+  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: 0; }
+  .hb-blue { background: #E6F1FB; border-left: 3px solid #185FA5; border-radius: 0; }
+  .hb-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
+  .hb-purple .hb-label { color: #534AB7; }
+  .hb-teal .hb-label { color: #0F6E56; }
+  .hb-coral .hb-label { color: #993C1D; }
+  .hb-green .hb-label { color: #3B6D11; }
+  .hb-amber .hb-label { color: #854F0B; }
+  .hb-blue .hb-label { color: #185FA5; }
+  .hb-text { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+  .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 20px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
+  .quiz-option:hover { border-color: #378ADD; background: #E6F1FB; color: #0C447C; }
+  .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
+  .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
+  .feedback { font-size: 20px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
+  .feedback.show { display: block; }
+  .fb-correct { background: #E1F5EE; color: #085041; }
+  .fb-wrong { background: #FAECE7; color: #712B13; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
+  .nav-btn:hover { background: var(--color-background-secondary); }
+  .nav-btn.primary { background: #185FA5; border-color: #185FA5; color: #E6F1FB; font-weight: 600; }
+  .nav-btn.primary:hover { background: #0C447C; }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .counter { font-size: 17px; color: var(--color-text-tertiary); }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-primary); }
+  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .q-card { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-secondary); border-left: 4px solid #185FA5; }
+  .q-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #185FA5; margin-bottom: .4rem; }
+  .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
+  .q-why { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-top: .5rem; padding-top: .5rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .system-card { border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-tertiary); border-top: 3px solid #185FA5; }
+  .system-title { font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .35rem; }
+  .system-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
+  .mvp-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .mvp-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+  .mvp-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #185FA5; margin-bottom: .35rem; }
+  .mvp-body { font-size: 18px; color: var(--color-text-primary); line-height: 1.55; }
+  .stage-row { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.25rem; }
+  .stage-item { display: flex; gap: .85rem; align-items: flex-start; }
+  .stage-dot { width: 12px; height: 12px; border-radius: 50%; background: #185FA5; flex-shrink: 0; margin-top: 6px; }
+  .stage-content { font-size: 20px; color: var(--color-text-primary); line-height: 1.55; }
+  .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
+  .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
+  .audio-btn:hover { background: var(--color-background-primary); }
+  .audio-btn.playing { color: #185FA5; border-color: #185FA5; }
+  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+</style>
+
+<div class="container">
+<div class="mod">
+
+<div class="progress-bar">
+  <div class="prog-step active" id="p0"></div>
+  <div class="prog-step" id="p1"></div>
+  <div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div>
+  <div class="prog-step" id="p4"></div>
+  <div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div>
+  <div class="prog-step" id="p7"></div>
+  <div class="prog-step" id="p8"></div>
+  <div class="prog-step" id="p9"></div>
+  <span class="step-label" id="step-label">1 of 12</span>
+</div>
+
+<!-- SCREEN 0 — Welcome -->
+<div class="screen active" id="s0">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s0">Listen to this screen</span></button><span class="audio-label" id="audio-status-s0"></span></div>
+  <div class="tag">4F Solution — Module 8</div>
+  <h2>Tools, systems and processes</h2>
+  <p class="sub">The 4F Solution is only as consistent as the systems behind it. This module covers the minimum viable setup every professional needs to deliver the process reliably — and how to scale it across a team.</p>
+  <div class="badge-row">
+    <div class="badge"><div class="badge-dot" style="background:#185FA5"></div>8 lessons</div>
+    <div class="badge"><div class="badge-dot" style="background:#378ADD"></div>5 knowledge checks</div>
+  </div>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">What you will learn</div>
+    <div class="hb-text">Why systems matter as much as skills. How to set up a CRM that supports the 4F process. The tools for capturing the discovery conversation. How to build and store the one-page plan. Calendar and follow-up cadence. Compliance and documentation minimums. A consistent client onboarding experience. Pipeline management. And how to run this across a team or agency.</div>
+  </div>
+</div>
+
+<!-- SCREEN 1 — Why systems matter -->
+<div class="screen" id="s1">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s1">Listen to this screen</span></button><span class="audio-label" id="audio-status-s1"></span></div>
+  <div class="tag">4F Solution — Lesson 1: Why systems matter</div>
+  <h2>A great conversation that is not captured is a missed opportunity</h2>
+  <p class="sub">The 4F discovery conversation surfaces more insight about a client in one meeting than most professionals gather in years. Without a system to capture, organize, and act on that insight — it disappears. Systems are what turn a great process into a consistent practice.</p>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">The cost of no system</div>
+    <div class="hb-text">Without systems, the professional relies on memory — and memory fails. Follow-ups get missed. Discovery notes are lost. Clients fall through the cracks between meetings. The 90-day review never happens. The annual review is reactive rather than proactive. And when a life event occurs, the professional finds out too late — or not at all.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Systems do not replace the relationship — they protect it</div>
+    <div class="card-body">A CRM that reminds you to follow up is not impersonal. It is what allows the professional to be present in the meeting rather than trying to remember what to do next. Systems handle the logistics so the professional can focus on the client. That is the point.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">The minimum viable system</div>
+    <div class="card-body">The professional does not need complex software to run the 4F process well. They need six things: a way to capture discovery conversations, a place to store and access client information, a method to build and share the one-page plan, a calendar system with structured follow-up, a compliance record, and a pipeline view of where every client and prospect sits in the process. The tool matters less than the discipline of using it.</div>
+  </div>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">For the team or agency leader</div>
+    <div class="hb-text">Systems become non-negotiable at scale. A solo professional can manage informally. A team cannot. The agency that runs the 4F process consistently across five, ten, or twenty professionals needs shared systems, shared templates, and a shared standard for what good looks like. This module covers both.</div>
+  </div>
+</div>
+
+<!-- SCREEN 2 — CRM -->
+<div class="screen" id="s2">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s2">Listen to this screen</span></button><span class="audio-label" id="audio-status-s2"></span></div>
+  <div class="tag">4F Solution — Lesson 2: CRM</div>
+  <h2>The CRM is the memory of the practice</h2>
+  <p class="sub">A client relationship management system is not a database — it is the infrastructure that ensures every client receives the same standard of care regardless of how many clients the professional is managing.</p>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">What every client record must contain</div>
+    <div class="hb-text">Contact details and household information. The client's stated values from the discovery conversation. A summary of each Fundamental — current picture and identified gaps. The one-page plan — current version with date. Every recommendation made and its status. All meeting dates, notes, and next steps. Policy and account details. Review dates — 90-day and annual.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">The 4F fields every CRM record needs</div>
+    <div class="card-body">Build or configure your CRM so that every client record has a dedicated section for each Fundamental. Values. Cash Flow summary. Protection gaps and coverage in place. Growth vehicles and goal alignment. Tax efficiency picture. This structure mirrors the discovery conversation and makes it easy to see at a glance where the client stands — and what still needs to be addressed.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Minimum viable CRM — what you actually need</div>
+    <div class="card-body">The tool itself can be simple. A purpose-built financial services CRM, a well-structured spreadsheet, or a general CRM configured for the 4F framework will all work. What matters is that it is used consistently — every client record updated after every conversation, every next step logged, every review date set. A CRM that is not updated is worse than no CRM at all — it creates false confidence.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">For the team or agency</div>
+    <div class="card-body">Every professional in the agency must maintain a system that captures the full 4F client picture — values, discovery notes, the one-page plan, recommendations, and review dates. The specific tool is secondary. What matters is that the system is structured around the 4F framework, consistently maintained, and transferable. If a professional is ever unable to serve their clients, another professional should be able to step in with full context — not start from scratch.<br><br>A central shared CRM is the ideal solution and the agency's preferred standard where possible. It gives the leader visibility across the team, supports peer review, and makes transfers seamless. But where professionals use their own tools, the non-negotiable requirement is that those tools are 4F-structured, current, and accessible if needed. The system belongs to the professional. The standard belongs to the agency.</div>
+  </div>
+</div>
+
+<!-- SCREEN 3 — Discovery tools -->
+<div class="screen" id="s3">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s3">Listen to this screen</span></button><span class="audio-label" id="audio-status-s3"></span></div>
+  <div class="tag">4F Solution — Lesson 3: Discovery tools</div>
+  <h2>Capture the discovery conversation — every time, in the same way</h2>
+  <p class="sub">The discovery conversation surfaces the most important information the professional will ever gather about a client. The tool used to capture it must be fast, structured, and consistent — so that nothing important is missed and the output is always usable.</p>
+  <div class="card">
+    <div class="card-title">The 4F discovery intake form</div>
+    <div class="card-body">Every professional needs a structured intake form that mirrors the 4F conversation. One section per Fundamental, with fields for the client's responses, identified gaps, and any immediate concerns. This is not a questionnaire the client fills in — it is a note-taking guide the professional uses during the conversation. It ensures the same questions are asked every time and the same information is captured every time.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">What the intake form must capture</div>
+    <div class="card-body">Values section: the client's stated values in their own words. Cash flow section: income sources, monthly expenses, surplus, debt. Protection section: current coverage for each of the four risks, identified gaps. Growth section: existing accounts and vehicles, goal timelines, risk profile. Tax efficiency section: current structure at accumulation, any distribution planning in place, estate picture. Space for any critical or obvious issues that require immediate attention.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Format — paper, tablet, or digital</div>
+    <div class="card-body">The format matters less than the consistency. A printed form the professional completes by hand works. A tablet with a structured digital form works. A laptop with a CRM open works. What does not work is trying to remember everything mentally and reconstruct notes afterward — the detail that makes the plan compelling is lost. The professional who takes visible notes during the discovery conversation also signals to the client that what they are saying matters.</div>
+  </div>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">For the team or agency</div>
+    <div class="hb-text">A standardized discovery form across the team is what ensures every client gets the same quality of discovery regardless of which professional conducts it. It also makes peer review and coaching possible — the leader can read any professional's discovery notes and immediately assess what was captured and what was missed.</div>
+  </div>
+</div>
+
+<!-- SCREEN 4 — One-page plan and calendar -->
+<div class="screen" id="s4">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s4">Listen to this screen</span></button><span class="audio-label" id="audio-status-s4"></span></div>
+  <div class="tag">4F Solution — Lesson 4: Plan template and calendar</div>
+  <h2>The plan template and the calendar — together they close the loop</h2>
+  <p class="sub">The one-page plan is the client-facing output of the discovery. The calendar is what ensures it gets built, delivered, and followed up on. Neither works without the other.</p>
+  <div class="card">
+    <div class="card-title">The one-page plan template</div>
+    <div class="card-body">Every professional needs a standard template that produces a consistent one-page output from the discovery notes. The template has five fixed sections: values, current picture across the four Fundamentals, identified gaps, recommendations with values connections, and next steps. It should be fillable in under 30 minutes from well-captured discovery notes. The output is saved to the client record in the CRM and given to the client at the solution delivery meeting.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Version control — the plan is a living document</div>
+    <div class="card-body">Every time the plan is reviewed and updated, the new version is saved with a date and the previous version is retained. This creates a record of how the client's situation has evolved — and demonstrates the ongoing value the professional has delivered. At the annual review, comparing the current plan to the one from a year ago is one of the most powerful ways to show a client how much their situation has improved.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">The meeting cadence — non-negotiable dates</div>
+    <div class="card-body">Three calendar events must be booked for every client before the professional leaves the solution delivery meeting: the 90-day review, the annual review, and a mid-year check-in call. These are not optional. They are the infrastructure of the ongoing relationship. A professional who books them immediately signals that this is not a transactional engagement — and a professional who fails to book them almost always fails to conduct them.</div>
+  </div>
+  <div class="mvp-row">
+    <div class="mvp-card">
+      <div class="mvp-label">Solo professional</div>
+      <div class="mvp-body">A shared calendar with automated reminders 2 weeks before each review date. Block the time before you need it.</div>
+    </div>
+    <div class="mvp-card">
+      <div class="mvp-label">Team or agency</div>
+      <div class="mvp-body">Centralized calendar visibility so the leader can see upcoming reviews across all professionals and ensure none are missed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5 — Compliance and documentation -->
+<div class="screen" id="s5">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s5">Listen to this screen</span></button><span class="audio-label" id="audio-status-s5"></span></div>
+  <div class="tag">4F Solution — Lesson 5: Compliance and documentation</div>
+  <h2>Documentation is not bureaucracy — it is the record of advice given</h2>
+  <p class="sub">Good documentation protects the client, the professional, and the agency. It also creates the evidence base that demonstrates the ongoing value of the relationship. The 4F process naturally generates strong documentation — if the professional captures it correctly.</p>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">What must be documented — always</div>
+    <div class="hb-text">The discovery conversation — what was discussed and what was captured across each Fundamental. Every recommendation made — what was recommended, why, and the values connection. Every recommendation declined — the client's reason and the professional's response. Every meeting — date, who attended, what was discussed, what was agreed. Every change to the plan — what changed, why, and when.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Why the values connection protects the professional</div>
+    <div class="card-body">A recommendation documented with its values connection is not just good advice — it is defensible advice. "I recommended this coverage because the client stated that family security was their primary value and their current employer group coverage would not follow them if they changed roles" is a clear record that a professional judgment was made in the client's interest. That record is protection for the professional if a recommendation is ever questioned.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Minimum documentation standard</div>
+    <div class="card-body">After every client interaction: update the CRM with a meeting note that includes the date, what was discussed, any decisions made, and the next scheduled contact. This does not need to be lengthy. A consistent three to five line update after every interaction builds a complete client history over time — and takes less than five minutes.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">For the team or agency</div>
+    <div class="card-body">Documentation standards must be set at the agency level and applied consistently across all professionals. The leader who can review any client file and see a complete, current record of the advice given and the rationale behind it has a compliant and defensible practice. The leader who cannot has a liability.</div>
+  </div>
+</div>
+
+<!-- SCREEN 6 — Client onboarding -->
+<div class="screen" id="s6">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s6">Listen to this screen</span></button><span class="audio-label" id="audio-status-s6"></span></div>
+  <div class="tag">4F Solution — Lesson 6: Client onboarding</div>
+  <h2>The first experience sets the expectation for everything that follows</h2>
+  <p class="sub">Onboarding is not paperwork — it is the moment the client decides whether they have found someone different from everyone else they have worked with. A consistent onboarding experience communicates professionalism before the first conversation begins.</p>
+  <div class="card">
+    <div class="card-title">The onboarding sequence</div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:.65rem;margin-top:.25rem">
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">1</div>
+          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Confirmation</strong> — Immediately after booking the discovery meeting, the client receives a confirmation with the meeting details, a brief description of what to expect, and any information they should have on hand.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">2</div>
+          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Pre-meeting framing</strong> — 24 to 48 hours before the meeting, a brief message reminding the client of the meeting and setting the tone: "This conversation is about understanding what matters most to you — not about products."</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">3</div>
+          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>The discovery meeting</strong> — The 4F conversation, conducted consistently using the structured intake form.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">4</div>
+          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Post-meeting summary</strong> — Within 48 hours, the client receives a brief written summary of what was discussed and when the solution delivery meeting is scheduled.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">5</div>
+          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Solution delivery meeting</strong> — The complete plan presented. Every recommendation values-connected. The 90-day review and annual review booked before the client leaves.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">For the team or agency</div>
+    <div class="hb-text">A consistent onboarding sequence across the whole team means every client — regardless of which professional they work with — receives the same first experience. That consistency is the agency's brand. It is also what makes the practice scalable — a new professional joining the team can deliver a professional client experience from day one because the system defines it.</div>
+  </div>
+</div>
+
+<!-- SCREEN 7 — Pipeline management -->
+<div class="screen" id="s7">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s7">Listen to this screen</span></button><span class="audio-label" id="audio-status-s7"></span></div>
+  <div class="tag">4F Solution — Lesson 7: Pipeline management</div>
+  <h2>Know where every prospect and client sits — at all times</h2>
+  <p class="sub">A pipeline is not a sales tool. It is a visibility tool. The professional who can see at a glance where every person sits in the 4F process can prioritize their time, prevent drop-off, and identify who needs attention before an opportunity is lost.</p>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">The 4F pipeline stages</div>
+    <div class="hb-text">Every prospect and client sits in one of six stages at any given time. The pipeline makes this visible — and makes it actionable.</div>
+  </div>
+  <div class="stage-row">
+    <div class="stage-item">
+      <div class="stage-dot"></div>
+      <div class="stage-content"><strong>Stage 1 — Prospect</strong> — A potential client has been identified. Outreach has been initiated or is planned. No meeting booked yet.</div>
+    </div>
+    <div class="stage-item">
+      <div class="stage-dot"></div>
+      <div class="stage-content"><strong>Stage 2 — Discovery booked</strong> — The first meeting is scheduled. Onboarding sequence in motion. Intake form ready.</div>
+    </div>
+    <div class="stage-item">
+      <div class="stage-dot"></div>
+      <div class="stage-content"><strong>Stage 3 — Discovery complete</strong> — The 4F conversation has happened. Notes captured. Plan being built. Solution delivery meeting to be booked.</div>
+    </div>
+    <div class="stage-item">
+      <div class="stage-dot"></div>
+      <div class="stage-content"><strong>Stage 4 — Solution delivery booked</strong> — Plan complete. One-page summary ready. Meeting scheduled.</div>
+    </div>
+    <div class="stage-item">
+      <div class="stage-dot"></div>
+      <div class="stage-content"><strong>Stage 5 — Active client</strong> — Plan accepted. Implementation in progress. 90-day review and annual review booked. Relationship ongoing.</div>
+    </div>
+    <div class="stage-item">
+      <div class="stage-dot"></div>
+      <div class="stage-content"><strong>Stage 6 — Review due</strong> — A scheduled review is approaching. Action required to confirm, prepare, and conduct the meeting.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">For the team or agency</div>
+    <div class="card-body">The agency leader needs visibility across the full team pipeline — not to manage the professional, but to identify where support is needed. A team where every professional has multiple prospects stalled in Stage 3 for more than two weeks has a plan-building problem, not a prospecting problem. The leader who can see that can intervene with the right coaching at the right time.<br><br>How that visibility is achieved is flexible. A shared CRM gives it automatically. Where professionals use independent systems, a regular pipeline review — a weekly or bi-weekly report, a team meeting where each professional walks through their stages, or a simple shared tracking document — achieves the same outcome. The method matters less than the discipline. The leader who does not have regular visibility into pipeline health across the team cannot lead effectively — regardless of how strong each individual professional is.</div>
+  </div>
+</div>
+
+<!-- SCREEN 8 — Team and agency systems -->
+<div class="screen" id="s8">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
+  <div class="tag">4F Solution — Lesson 8: Team and agency systems</div>
+  <h2>Scaling the 4F Solution across a team</h2>
+  <p class="sub">The systems that work for one professional become the infrastructure of a high-performing agency when they are standardized, shared, and consistently enforced. Consistency is the brand.</p>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">What the agency leader must put in place</div>
+    <div class="hb-text">A CRM or client system structured around the 4F framework — shared is ideal but individual tools are acceptable if they meet the standard. A standard discovery intake form used by every professional. A plan template that produces a consistent one-page output. A process for pipeline visibility across the team — shared system, regular review meeting, or tracking report. A documentation standard applied consistently. A pipeline with defined stages that the leader can see at all times.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Onboarding new professionals to the system</div>
+    <div class="card-body">A new professional joining the team should be able to run their first discovery meeting using the agency's intake form, build the one-page plan using the agency's template, and book follow-ups using the agency's calendar system — without needing to invent any of it themselves. The system is what allows a new professional to deliver a professional client experience from day one. It is also what allows the agency to maintain standards as the team grows.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Peer review and quality control</div>
+    <div class="card-body">The agency leader who can read any professional's discovery notes and one-page plan and immediately assess quality is running a compliant and consistent practice. Build a peer review cadence — monthly or quarterly — where discovery notes and plans are reviewed together as a team. This is the most effective professional development tool the agency has. It surfaces gaps in discovery skills, plan-building, and values connections — and it normalizes a standard of excellence across the whole team.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">The client relationship follows the professional — the system ensures continuity if it cannot</div>
+    <div class="card-body">The client's relationship is with their professional — and it stays that way as long as that professional is able to serve them. What good systems protect against is the gap that occurs when a professional is no longer able to do so — through departure, illness, or transition. In a well-systemized agency, if that situation arises, the CRM holds the full client history, the one-page plan is current and stored, and another professional can step in without the client starting from scratch. The system does not claim the client — it protects the client's continuity of service when circumstances require it.</div>
+  </div>
+</div>
+
+<!-- SCREEN 9 — Summary review -->
+<div class="screen" id="s9">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s9" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s9">Listen to this screen</span></button><span class="audio-label" id="audio-status-s9"></span></div>
+  <div class="tag">4F Solution — Lesson 9: Summary review</div>
+  <h2>The minimum viable system — everything in one place</h2>
+  <p class="sub">Before the knowledge check, consolidate. These are the six components every professional needs to deliver the 4F Solution consistently.</p>
+  <div class="highlight-box hb-blue">
+    <div class="hb-label">The six components</div>
+    <div class="hb-text">
+      <div style="display:flex;flex-direction:column;gap:.65rem">
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">1</div>
+          <div style="font-size:19px;line-height:1.5"><strong>CRM</strong> — Client records with 4F fields, meeting notes, recommendation history, and review dates.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">2</div>
+          <div style="font-size:19px;line-height:1.5"><strong>Discovery intake form</strong> — Structured note-taking guide that mirrors the 4F conversation. One section per Fundamental.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">3</div>
+          <div style="font-size:19px;line-height:1.5"><strong>One-page plan template</strong> — Standard fillable template that produces a consistent client-facing output from the discovery notes.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">4</div>
+          <div style="font-size:19px;line-height:1.5"><strong>Calendar system</strong> — Non-negotiable review dates booked at the solution delivery meeting. 90-day, mid-year, and annual.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">5</div>
+          <div style="font-size:19px;line-height:1.5"><strong>Compliance record</strong> — Every meeting noted. Every recommendation documented with its values connection. Every client decision recorded.</div>
+        </div>
+        <div style="display:flex;gap:.85rem;align-items:flex-start">
+          <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">6</div>
+          <div style="font-size:19px;line-height:1.5"><strong>Pipeline view</strong> — Six stages, every prospect and client visible, bottlenecks surfaced before opportunities are lost.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">The discipline matters more than the tool</div>
+    <div class="card-body">Any reasonably configured system will work. What makes the difference is using it consistently — updating records after every conversation, capturing discovery notes in full, booking reviews before leaving the meeting, and treating documentation as part of the professional standard rather than an afterthought.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">For the agency</div>
+    <div class="card-body">Standard tools, standard templates, standard process. Every professional may work independently — but every professional works to the same 4F standard. A new professional can deliver a professional client experience from day one because the system defines what that looks like. A leader can review quality across the whole team because the discovery notes, plans, and pipeline stages follow a consistent structure. And when a professional can no longer serve their clients, continuity of service is possible because the information exists in a transferable format. The agency's strength is not in owning the client relationships — it is in owning the standard that makes every professional within it trusted, consistent, and effective.</div>
+  </div>
+</div>
+
+<!-- SCREEN 10 — Knowledge check -->
+<div class="screen" id="s10">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s10" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s10">Listen to this screen</span></button><span class="audio-label" id="audio-status-s10"></span></div>
+  <div class="tag">4F Solution — Knowledge check</div>
+  <h2>Knowledge check — 5 questions</h2>
+  <p class="sub">Choose the best answer for each question.</p>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why is a CRM that is not updated consistently described as worse than no CRM at all?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because it is a waste of money if the subscription is not being used effectively</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because it creates false confidence — the professional believes client information is current and complete when it is not, leading to missed follow-ups and gaps in the relationship</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because an outdated CRM creates compliance issues that outweigh its value</button>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">What is the primary purpose of the 4F discovery intake form?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">A questionnaire the client completes before the meeting to save time</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">A structured note-taking guide the professional uses during the conversation to ensure the same questions are asked and the same information is captured every time</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">A compliance document that records the client's consent to receive financial advice</button>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">When must the 90-day review, mid-year check-in, and annual review be booked?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Within one week of the solution delivery meeting once the client has confirmed they are satisfied</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Before the professional leaves the solution delivery meeting — the dates must be in the calendar before the client walks out the door</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">At the 90-day review, once the professional knows the client relationship is solid</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does documenting a recommendation with its values connection protect the professional?</div>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">It creates a clear record that a professional judgment was made in the client's interest — connected to what the client stated they valued — which is defensible if the recommendation is ever questioned</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">It reduces the amount of technical detail required in the compliance file</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">It demonstrates to regulators that the professional completed the required discovery steps</button>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A professional in the agency is no longer able to serve their clients. What does a well-systemized agency ensure for those clients?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">The client relationship automatically transfers to the agency — the client does not have a say in the matter</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">The client must restart the discovery process entirely with a new professional</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">The client's continuity of service is protected — the CRM holds the full history, the plan is current, and a transition can happen without the client starting from scratch</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+</div>
+
+<!-- SCREEN 11 — Completion -->
+<div class="screen" id="s11">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s11" onclick="toggleAudio('s11')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s11" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s11" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s11">Listen to this screen</span></button><span class="audio-label" id="audio-status-s11"></span></div>
+  <div class="tag">4F Solution — Module 8 complete</div>
+  <h2>Module 8 complete</h2>
+  <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+    <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:36px;font-weight:700;color:#185FA5" id="score-display">—</div>
+        <div style="font-size:17px;color:var(--color-text-primary);margin-top:.25rem">Score</div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:36px;font-weight:700;color:#185FA5" id="correct-display">—</div>
+        <div style="font-size:17px;color:var(--color-text-primary);margin-top:.25rem">Correct of 5</div>
+      </div>
+    </div>
+    <div id="q-breakdown" style="font-size:18px;color:var(--color-text-primary);line-height:1.8"></div>
+  </div>
+  <div id="submit-section" style="margin-bottom:1.25rem">
+    <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">Send results to facilitator</div>
+    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:20px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
+    <div id="name-warning" style="display:none;font-size:17px;color:#993C1D;margin-bottom:.75rem">Please enter your name before submitting.</div>
+    <button class="nav-btn primary" onclick="submitResults()" style="width:100%;padding:.85rem 1.25rem;margin-bottom:.75rem">Submit results</button>
+    <div style="font-size:17px;color:var(--color-text-tertiary);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
+    <div id="submit-status" style="display:none;margin-top:.75rem;font-size:20px;padding:.85rem 1rem;border-radius:var(--border-radius-md)"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.5rem">
+    <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
+    <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
+  <span class="counter" id="counter">1 of 12</span>
+  <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next</button>
+</div>
+
+</div>
+</div>
+
+<script>
+var TOTAL_SCREENS = 12;
+var TOTAL_QUESTIONS = 5;
+var QUIZ_SCREEN_INDEX = 10;
+var LAST_LESSON_INDEX = 9;
+var WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var MODULE_NAME = '4F Solution - Module 8: Tools, Systems and Processes';
+
+var qLabels = {
+  q1: 'Q1 - Why an outdated CRM is worse than no CRM',
+  q2: 'Q2 - Purpose of the discovery intake form',
+  q3: 'Q3 - When review meetings must be booked',
+  q4: 'Q4 - Why values-connected documentation protects the professional',
+  q5: 'Q5 - Client relationship continuity when a professional leaves'
+};
+
+var qMsgs = {
+  q1c: 'Correct. An outdated CRM gives the professional a false picture of their client relationships. They believe follow-ups are recorded, next steps are logged, and reviews are booked — when they may not be. The gap between what the CRM shows and what is actually happening is where client relationships fall through the cracks.',
+  q1w: 'The core problem with an outdated CRM is not cost or compliance — it is false confidence. The professional who thinks their client relationships are well managed but whose CRM is outdated is operating on incomplete information. That gap is where missed follow-ups, lapsed reviews, and lost relationships happen.',
+  q2c: 'Correct. The intake form is a professional tool — a structured note-taking guide that ensures the same quality of discovery is conducted with every client. It is used during the conversation, not before it. The professional who uses it captures everything. The one who tries to remember mentally loses the detail that makes the plan compelling.',
+  q2w: 'The intake form is not completed by the client and is not a consent or compliance document. It is a structured guide the professional uses during the discovery conversation to ensure they ask the same questions in the same order and capture the same information every time. Consistency in what is captured is what makes the plan-building step reliable.',
+  q3c: 'Correct. Review dates must be booked before the client walks out of the solution delivery meeting. A professional who plans to book them "later" almost always fails to do so — and the reviews that do not get booked almost never happen. The calendar is the commitment.',
+  q3w: 'Waiting to book reviews — whether for a week, until satisfaction is confirmed, or until the next meeting — dramatically reduces the probability they will actually happen. The professional who books all three dates before the client leaves the solution delivery meeting has an ongoing relationship. The one who plans to do it later usually does not.',
+  q4c: 'Correct. A recommendation documented with its values connection is advice, not just a product sale. The record shows that the professional understood the client\'s situation, identified a specific risk, and recommended a specific solution because of what the client said matters to them. That documentation is defensible if any recommendation is later questioned.',
+  q4w: 'The values connection in documentation does more than meet a technical standard. It creates a clear narrative of professional judgment — showing that the recommendation was made in the client\'s interest and connected to what they told the professional they valued. That narrative is what makes the documentation genuinely protective.',
+  q5c: 'Correct. The client\'s relationship is with their professional — and that does not change unless the professional can no longer serve them. What good systems ensure is that if that situation occurs, the client does not start from scratch. The full history, the current plan, and the booked reviews are all accessible — protecting the client\'s continuity of service.',
+  q5w: 'Good systems do not change who the client\'s relationship is with — that remains with the professional. What systems protect is the client\'s continuity of service if the professional can no longer serve them. Without systems, the client\'s history, their plan, and their review schedule may all be inaccessible. With systems, a transition can happen without the client losing everything that was built.'
+};
+
+var cur = 0;
+var scores = {};
+var qAnswered = {};
+Object.keys(qLabels).forEach(function(q){ scores[q]=null; qAnswered[q]=false; });
+
+var ttsActive = null;
+
+function getScreenText(sid) {
+  var screen = document.getElementById(sid);
+  if (!screen) return '';
+  var clone = screen.cloneNode(true);
+  var remove = clone.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea');
+  remove.forEach(function(el){ el.parentNode && el.parentNode.removeChild(el); });
+  return clone.innerText || clone.textContent || '';
+}
+
+function stopAudio() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (ttsActive) {
+    var btn   = document.getElementById('audio-btn-'+ttsActive);
+    var lbl   = document.getElementById('audio-btn-label-'+ttsActive);
+    var st    = document.getElementById('audio-status-'+ttsActive);
+    var play  = document.getElementById('audio-icon-play-'+ttsActive);
+    var pause = document.getElementById('audio-icon-pause-'+ttsActive);
+    if (btn)   btn.classList.remove('playing');
+    if (lbl)   lbl.textContent = 'Listen to this screen';
+    if (st)    st.textContent = '';
+    if (play)  play.style.display = '';
+    if (pause) pause.style.display = 'none';
+    ttsActive = null;
+  }
+}
+
+function toggleAudio(sid) {
+  if (ttsActive === sid) { stopAudio(); return; }
+  stopAudio();
+  var text = getScreenText(sid);
+  if (!text.trim() || !window.speechSynthesis) return;
+  ttsActive = sid;
+  var btn   = document.getElementById('audio-btn-'+sid);
+  var lbl   = document.getElementById('audio-btn-label-'+sid);
+  var st    = document.getElementById('audio-status-'+sid);
+  var play  = document.getElementById('audio-icon-play-'+sid);
+  var pause = document.getElementById('audio-icon-pause-'+sid);
+  if (btn)   btn.classList.add('playing');
+  if (lbl)   lbl.textContent = 'Stop';
+  if (st)    st.textContent = 'Playing...';
+  if (play)  play.style.display = 'none';
+  if (pause) pause.style.display = '';
+  var utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.92; utt.pitch = 1; utt.lang = 'en-US';
+  utt.onend = stopAudio; utt.onerror = stopAudio;
+  window.speechSynthesis.speak(utt);
+}
+
+function updateUI(){
+  document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur)});
+  document.querySelectorAll('.prog-step').forEach(function(p,i){
+    p.classList.remove('done','active');
+    if(i<cur)p.classList.add('done');
+    else if(i===cur)p.classList.add('active');
+  });
+  document.getElementById('counter').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  document.getElementById('back-btn').disabled=cur===0;
+  var nb=document.getElementById('next-btn');
+  if(cur===TOTAL_SCREENS-1){nb.style.display='none';}
+  else{nb.style.display='';nb.textContent=cur===0?'Begin':cur===LAST_LESSON_INDEX?'Finish':'Next';}
+  document.getElementById('step-label').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  if(cur===TOTAL_SCREENS-1){buildScoreSummary();}
+}
+
+function goNext(){ stopAudio(); if(cur<TOTAL_SCREENS-1){cur++;updateUI();window.scrollTo(0,0);} }
+function goBack(){ stopAudio(); if(cur>0){cur--;updateUI();window.scrollTo(0,0);} }
+
+function checkQ(el,correct,qid){
+  if(qAnswered[qid])return;
+  qAnswered[qid]=true; scores[qid]=correct;
+  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){
+    s.style.pointerEvents='none';
+    s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');
+  });
+  var fb=document.getElementById('fb-'+qid);
+  fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
+  fb.textContent=qMsgs[qid+(correct?'c':'w')]||'';
+}
+
+function buildScoreSummary(){
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  document.getElementById('score-display').textContent=pct+'%';
+  document.getElementById('correct-display').textContent=correct+'/'+TOTAL_QUESTIONS;
+  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){
+    var res=scores[q];
+    var icon=res===null?'○':res?'✓':'✗';
+    var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';
+    return '<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';
+  }).join('');
+  var submitBtn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if(submitBtn){
+    if(pct<80){
+      submitBtn.disabled=true;
+      var warn=document.getElementById('score-gate-msg');
+      if(!warn){
+        warn=document.createElement('div');
+        warn.id='score-gate-msg';
+        warn.style.cssText='font-size:18px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';
+        submitBtn.parentNode.insertBefore(warn,submitBtn);
+      }
+      warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';
+    } else {
+      submitBtn.disabled=false;
+      var warn=document.getElementById('score-gate-msg');
+      if(warn)warn.remove();
+    }
+  }
+}
+
+function retakeQuiz(){
+  Object.keys(qLabels).forEach(function(q){
+    qAnswered[q]=false; scores[q]=null;
+    document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){
+      btn.classList.remove('correct','wrong'); btn.style.pointerEvents='';
+    });
+    var fb=document.getElementById('fb-'+q);
+    if(fb){fb.className='feedback';fb.textContent='';}
+  });
+  document.getElementById('score-display').textContent='—';
+  document.getElementById('correct-display').textContent='—';
+  document.getElementById('q-breakdown').innerHTML='';
+  var st=document.getElementById('submit-status');
+  st.style.display='none'; st.textContent='';
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if(btn){btn.disabled=false;btn.textContent='Submit results';}
+  var warn=document.getElementById('score-gate-msg');
+  if(warn)warn.remove();
+  cur=QUIZ_SCREEN_INDEX; updateUI(); window.scrollTo(0,0);
+}
+
+function submitResults(){
+  var nm=document.getElementById('participant-name').value.trim();
+  if(!nm){
+    document.getElementById('name-warning').style.display='block';
+    document.getElementById('participant-name').focus(); return;
+  }
+  document.getElementById('name-warning').style.display='none';
+  var st=document.getElementById('submit-status');
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  if(pct<80){
+    st.style.display='block'; st.style.background='#FAECE7'; st.style.color='#712B13';
+    st.textContent='A minimum score of 80% is required. You scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+'). Please retake the quiz.';
+    return;
+  }
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  st.style.display='block'; st.style.background='#E6F1FB'; st.style.color='#0C447C';
+  st.textContent='Sending results...';
+  if(btn)btn.disabled=true;
+  var payload={
+    participant_name: nm,
+    module: MODULE_NAME,
+    completed_at: new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),
+    score_percent: pct+'%',
+    correct_of_total: correct+'/'+TOTAL_QUESTIONS
+  };
+  qs.forEach(function(q){ payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect'; });
+  var params=new URLSearchParams(payload);
+  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:params})
+  .then(function(){
+    st.style.background='#E1F5EE'; st.style.color='#085041';
+    st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct). Your facilitator will receive the full breakdown.';
+    if(btn)btn.textContent='Submitted';
+  })
+  .catch(function(){
+    st.style.background='#FAECE7'; st.style.color='#712B13';
+    st.textContent='Submission failed — please check your internet connection and try again.';
+    if(btn)btn.disabled=false;
+  });
+}
+
+updateUI();
+</script>
+</html>
