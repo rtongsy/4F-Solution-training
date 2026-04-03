@@ -41,10 +41,10 @@
   .screen.active { display: block; }
   .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #FAECE7; color: #712B13; margin-bottom: 1rem; letter-spacing: .03em; }
   h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
-  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 1.5rem; }
   .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
   .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
-  .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
+  .card-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
   .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
   .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
   .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
@@ -76,20 +76,20 @@
   .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
   .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-secondary); }
   .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-  .q-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #993C1D; }
+    .q-card { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-secondary); border-left: 4px solid currentColor; }
   .q-label { font-size: 26px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #993C1D; margin-bottom: .4rem; }
   .q-text { font-size: 21px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
-  .q-why { font-size: 21px; color: var(--color-text-secondary); line-height: 1.6; }
+      .q-why { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-top: .5rem; padding-top: .5rem; border-top: 0.5px solid var(--color-border-tertiary); }
   .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
   .risk-card { border-radius: var(--border-radius-md); padding: 1rem; border: 0.5px solid var(--color-border-tertiary); }
   .risk-title { font-size: 26px; font-weight: 700; margin-bottom: .3rem; }
-  .risk-body { font-size: 21px; color: var(--color-text-secondary); line-height: 1.55; }
+  .risk-body { font-size: 21px; color: var(--color-text-primary); line-height: 1.55; }
   .risk-tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .04em; }
   .section-label { font-size: 21px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .75rem; margin-top: 1.25rem; }
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
   .summary-card { border-radius: var(--border-radius-md); padding: 1rem; border-top: 3px solid; }
   .summary-title { font-size: 21px; font-weight: 700; margin-bottom: .35rem; }
-  .summary-body { font-size: 26px; color: var(--color-text-secondary); line-height: 1.55; }
+  .summary-body { font-size: 26px; color: var(--color-text-primary); line-height: 1.55; }
 
   .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
   .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
@@ -113,6 +113,7 @@
   <div class="prog-step" id="p7"></div>
   <div class="prog-step" id="p8"></div>
   <div class="prog-step" id="p9"></div>
+  <div class="prog-step" id="p10"></div>
   <span class="step-label" id="step-label">1 of 10</span>
 </div>
 
@@ -136,7 +137,7 @@
   <h2>Protection — ensuring nothing derails the plan</h2>
   <p class="sub">A plan without protection is a wish. One unexpected event — death, disability, critical illness, or income loss — can erase everything built across Cash Flow, Growth, and Tax Efficiency. This module teaches you how to surface those risks and have the conversation that most professionals avoid.</p>
   <div class="badge-row">
-    <div class="badge"><div class="badge-dot" style="background:#993C1D"></div>7 lessons</div>
+    <div class="badge"><div class="badge-dot" style="background:#993C1D"></div>8 lessons</div>
     <div class="badge"><div class="badge-dot" style="background:#D85A30"></div>5 knowledge checks</div>
   </div>
   <div class="highlight-box hb-coral">
@@ -419,7 +420,46 @@
   </div>
 </div>
 
-<!-- SCREEN 7 — Connecting to values -->
+<!-- SCREEN 7 — Living documents -->
+<div class="screen" id="s8">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
+  <div class="tag">4F Solution — Lesson 7: Living documents</div>
+  <h2>Will, Power of Attorney, and Health directive — the documents most clients do not have</h2>
+  <p class="sub">Insurance addresses the financial consequences of a risk event. Living documents address who makes the decisions — and what happens to what the client has built. Without them, protection is incomplete regardless of how much coverage is in place.</p>
+
+  <div class="highlight-box hb-coral">
+    <div class="hb-label">Why these belong in the protection conversation</div>
+    <div class="hb-text">A client with life insurance but no Will has protected their family's income — but left them to navigate the legal system to access it. A client with no Power of Attorney has no one legally authorized to manage their affairs if they become incapacitated. A client with no Health directive has left critical medical decisions to whoever happens to be present. These gaps are protection gaps — not legal technicalities.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Will — directing what you leave behind</div>
+    <div class="card-body">A Will is the legal document that directs how the client's estate is distributed after death. Without one, the estate is distributed according to the jurisdiction's default rules — which may not reflect the client's wishes. A Will also names the executor who administers the estate, and for clients with children, names a guardian. It is the most fundamental estate document — and a significant proportion of clients either do not have one or have not reviewed it since a major life event. The professional surfaces the question. The recommendation to act belongs to the complete plan.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Power of Attorney — who acts when you cannot</div>
+    <div class="card-body">A Power of Attorney (POA) authorizes a trusted person to manage financial and legal affairs on behalf of the client if they become unable to do so — through incapacity, illness, or injury. Without one, family members may have no legal authority to access accounts, pay bills, or make financial decisions even in a genuine emergency. The professional asks whether one is in place and whether it is current. An outdated POA — naming someone who is deceased, estranged, or no longer trusted — is as problematic as having none at all.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Health directive — who speaks for you medically</div>
+    <div class="card-body">A Health directive (also called an Advance directive or Living Will depending on jurisdiction) documents the client's wishes regarding medical treatment if they are unable to communicate them. It may also designate a healthcare proxy — a person authorized to make medical decisions on the client's behalf. Without one, critical decisions are made by medical professionals and family members without guidance — often in situations of extreme stress and disagreement. This is a deeply personal document and the professional's role is simply to surface whether it exists, not to draft it.</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-label">Discovery question — living documents</div>
+    <div class="q-text">"Do you currently have a Will, a Power of Attorney, and a Health directive in place? And if so — when were they last reviewed? Because a document that was written before a major life change may no longer reflect your actual wishes."</div>
+    <div class="q-why">Why it works: Most clients either do not have all three or have not reviewed them recently. The question surfaces the gap without requiring the professional to act as a legal professional — the complete plan notes what is missing and includes a referral to the appropriate legal professional where needed.</div>
+  </div>
+
+  <div class="highlight-box hb-amber">
+    <div class="hb-label">The professional's role</div>
+    <div class="hb-text">The professional does not draft these documents — that is the role of a lawyer. The professional surfaces whether they exist, whether they are current, and whether they reflect the client's current wishes and circumstances. That discovery is enough to include a clear action item in the complete plan — and enough to demonstrate that the professional is thinking about the client's protection picture completely.</div>
+  </div>
+</div>
+
+<!-- SCREEN 8 — Connecting to values -->
 <div class="screen" id="s7">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')">
@@ -435,7 +475,7 @@
     <span class="audio-label" id="audio-status-s7"></span>
   </div>
 
-  <div class="tag">4F Solution — Lesson 7: Connecting protection to values</div>
+  <div class="tag">4F Solution — Lesson 8: Connecting protection to values</div>
   <h2>Every protection gap is a threat to something the client told you they care about</h2>
   <p class="sub">The protection conversation becomes powerful when it is anchored to what the client already said matters most. This is where the values discovery from Module 2 pays off.</p>
 
@@ -473,22 +513,22 @@
 </div>
 
 <!-- SCREEN 8 — The protection conversation -->
-<div class="screen" id="s8">
+<div class="screen" id="s9">
   <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')">
+    <button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')">
       <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s8" style="display:none">
+        <polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/>
+        <g id="audio-icon-pause-s9" style="display:none">
           <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
           <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
         </g>
       </svg>
-      <span id="audio-btn-label-s8">Listen to this screen</span>
+      <span id="audio-btn-label-s9">Listen to this screen</span>
     </button>
-    <span class="audio-label" id="audio-status-s8"></span>
+    <span class="audio-label" id="audio-status-s9"></span>
   </div>
 
-  <div class="tag">4F Solution — Lesson 8: The protection conversation</div>
+  <div class="tag">4F Solution — Lesson 9: Summary review</div>
   <h2>Summary review — the complete protection picture</h2>
   <p class="sub">Before the knowledge check, consolidate. This is what the protection discovery covers, why it matters, and how the conversation flows.</p>
 
@@ -529,19 +569,19 @@
 </div>
 
 <!-- SCREEN 9 — Knowledge check -->
-<div class="screen" id="s9">
+<div class="screen" id="s10">
   <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')">
+    <button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')">
       <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s9" style="display:none">
+        <polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/>
+        <g id="audio-icon-pause-s10" style="display:none">
           <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
           <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
         </g>
       </svg>
-      <span id="audio-btn-label-s9">Listen to this screen</span>
+      <span id="audio-btn-label-s10">Listen to this screen</span>
     </button>
-    <span class="audio-label" id="audio-status-s9"></span>
+    <span class="audio-label" id="audio-status-s10"></span>
   </div>
 
   <div class="tag">4F Solution — Knowledge check</div>
@@ -590,19 +630,19 @@
 </div>
 
 <!-- SCREEN 10 — Completion -->
-<div class="screen" id="s10">
+<div class="screen" id="s11">
   <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')">
+    <button class="audio-btn" id="audio-btn-s11" onclick="toggleAudio('s11')">
       <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s10" style="display:none">
+        <polygon id="audio-icon-play-s11" points="4,2 16,9 4,16" fill="currentColor"/>
+        <g id="audio-icon-pause-s11" style="display:none">
           <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
           <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
         </g>
       </svg>
-      <span id="audio-btn-label-s10">Listen to this screen</span>
+      <span id="audio-btn-label-s11">Listen to this screen</span>
     </button>
-    <span class="audio-label" id="audio-status-s10"></span>
+    <span class="audio-label" id="audio-status-s11"></span>
   </div>
 
   <div class="tag">4F Solution — Module 4 complete</div>
@@ -641,7 +681,7 @@
 
 <div class="nav">
   <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
-  <span class="counter" id="counter">1 of 11</span>
+  <span class="counter" id="counter">1 of 12</span>
   <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next</button>
 </div>
 
@@ -649,10 +689,10 @@
 </div>
 
 <script>
-var TOTAL_SCREENS = 11;
+var TOTAL_SCREENS = 12;
 var TOTAL_QUESTIONS = 5;
-var QUIZ_SCREEN_INDEX = 9;
-var LAST_LESSON_INDEX = 8;
+var QUIZ_SCREEN_INDEX = 10;
+var LAST_LESSON_INDEX = 9;
 var WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
 var MODULE_NAME = '4F Solution - Module 4: Protection';
 
