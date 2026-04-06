@@ -3,609 +3,472 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>4F Solution — Module 5: Growth</title>
+<title>4F Solution — Module 5: Investments &amp; Wealth</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --color-text-primary: #1a1a18;
-    --color-text-secondary: #5f5e5a;
-    --color-text-tertiary: #888780;
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f5f4f0;
-    --color-border-tertiary: rgba(0,0,0,0.12);
-    --color-border-secondary: rgba(0,0,0,0.22);
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
+    --color-text-primary: #1a1a18; --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780; --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0; --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22); --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius-md: 8px; --border-radius-lg: 12px;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --color-text-primary: #e8e6de;
-      --color-text-secondary: #9c9a92;
-      --color-text-tertiary: #6b6963;
-      --color-background-primary: #1e1e1c;
-      --color-background-secondary: #272724;
-      --color-border-tertiary: rgba(255,255,255,0.10);
-      --color-border-secondary: rgba(255,255,255,0.18);
-    }
+    :root { --color-text-primary: #e8e6de; --color-text-secondary: #9c9a92; --color-text-tertiary: #6b6963; --color-background-primary: #1e1e1c; --color-background-secondary: #272724; --color-border-tertiary: rgba(255,255,255,0.10); --color-border-secondary: rgba(255,255,255,0.18); }
   }
   body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
-  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
-  .mod { width: 100%; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; min-height: 600px; display: flex; flex-direction: column; }
+  .mod { width: 100%; display: flex; flex-direction: column; flex: 1; }
   .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
   .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
-  .prog-step.done { background: #3B6D11; }
-  .prog-step.active { background: #639922; }
+  .prog-step.done { background: #3B6D11; } .prog-step.active { background: #639922; }
   .step-label { font-size: 17px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
-  .screen { display: none; }
-  .screen.active { display: block; }
+  .screen { display: none; } .screen.active { display: block; flex: 1; }
   .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #EAF3DE; color: #27500A; margin-bottom: 1rem; letter-spacing: .03em; }
   h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
-  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
   .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
   .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
-  .card-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
-  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
-  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
-  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
-  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; border-radius: 0; }
-  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; border-radius: 0; }
-  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: 0; }
+  .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
+  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.25rem; }
+  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; } .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; }
+  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; } .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; }
   .hb-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
-  .hb-purple .hb-label { color: #534AB7; }
-  .hb-teal .hb-label { color: #0F6E56; }
-  .hb-coral .hb-label { color: #993C1D; }
-  .hb-green .hb-label { color: #3B6D11; }
-  .hb-amber .hb-label { color: #854F0B; }
+  .hb-purple .hb-label { color: #534AB7; } .hb-green .hb-label { color: #3B6D11; }
+  .hb-amber .hb-label { color: #854F0B; } .hb-teal .hb-label { color: #0F6E56; }
   .hb-text { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+  .q-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #3B6D11; }
+  .q-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #3B6D11; margin-bottom: .4rem; }
+  .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
+  .q-why { font-size: 18px; color: var(--color-text-secondary); line-height: 1.6; margin-top: .4rem; padding-top: .4rem; border-top: 0.5px solid var(--color-border-tertiary); }
   .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 20px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
   .quiz-option:hover { border-color: #639922; background: #EAF3DE; color: #27500A; }
   .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
   .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
   .feedback { font-size: 20px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
-  .feedback.show { display: block; }
-  .fb-correct { background: #E1F5EE; color: #085041; }
-  .fb-wrong { background: #FAECE7; color: #712B13; }
-  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .feedback.show { display: block; } .fb-correct { background: #E1F5EE; color: #085041; } .fb-wrong { background: #FAECE7; color: #712B13; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--color-border-secondary); background: var(--color-background-primary); }
   .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
   .nav-btn:hover { background: var(--color-background-secondary); }
   .nav-btn.primary { background: #3B6D11; border-color: #3B6D11; color: #EAF3DE; font-weight: 600; }
-  .nav-btn.primary:hover { background: #27500A; }
-  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .nav-btn.primary:hover { background: #27500A; } .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
   .counter { font-size: 17px; color: var(--color-text-tertiary); }
-  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-secondary); }
-  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-    .q-card { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-secondary); border-left: 4px solid currentColor; }
-  .q-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #3B6D11; margin-bottom: .4rem; }
-  .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
-    .q-why { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-top: .5rem; padding-top: .5rem; border-top: 0.5px solid var(--color-border-tertiary); }
-  .horizon-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
-  .horizon-card { border-radius: var(--border-radius-md); padding: 1rem; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
-  .horizon-period { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .25rem; }
-  .horizon-range { font-size: 24px; font-weight: 700; margin-bottom: .35rem; }
-  .horizon-body { font-size: 16px; color: var(--color-text-primary); line-height: 1.5; }
-  .vehicle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
-  .vehicle-card { border-radius: var(--border-radius-md); padding: 1rem; border: 0.5px solid var(--color-border-tertiary); }
-  .vehicle-title { font-size: 18px; font-weight: 700; margin-bottom: .3rem; }
-  .vehicle-tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 9px; border-radius: 20px; margin-bottom: .4rem; }
-  .vehicle-body { font-size: 17px; color: var(--color-text-primary); line-height: 1.55; }
-  .risk-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
-  .risk-card { border-radius: var(--border-radius-md); padding: 1rem; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
-  .risk-label { font-size: 16px; font-weight: 700; margin-bottom: .25rem; }
-  .risk-body { font-size: 15px; color: var(--color-text-primary); line-height: 1.5; }
-  .compound-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
-  .compound-card { border-radius: var(--border-radius-md); padding: 1rem; text-align: center; }
-  .compound-num { font-size: 32px; font-weight: 700; margin-bottom: .2rem; }
-  .compound-lbl { font-size: 16px; color: var(--color-text-secondary); line-height: 1.4; }
-  .section-label { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .75rem; margin-top: 1.25rem; }
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
-  .summary-card { border-radius: var(--border-radius-md); padding: 1rem; border-top: 3px solid; }
-  .summary-title { font-size: 18px; font-weight: 700; margin-bottom: .35rem; }
-  .summary-body { font-size: 17px; color: var(--color-text-primary); line-height: 1.55; }
   .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
   .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
-  .audio-btn:hover { background: var(--color-background-primary); }
-  .audio-btn.playing { color: #3B6D11; border-color: #3B6D11; }
-  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
-  .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+  .audio-btn:hover { background: var(--color-background-primary); } .audio-btn.playing { color: #3B6D11; border-color: #3B6D11; }
+  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; } .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+  .lesson-list { display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.25rem; }
+  .lesson-item { display:flex;align-items:center;gap:.85rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.8rem 1rem; }
+  .lesson-num { width:30px;height:30px;border-radius:50%;background:#3B6D11;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .lesson-text { font-size:18px;color:var(--color-text-primary);font-weight:500; }
+  .horizon-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .horizon-card { border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary); }
+  .horizon-period { font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem; }
+  .horizon-range { font-size:22px;font-weight:700;margin-bottom:.35rem; }
+  .horizon-body { font-size:15px;color:var(--color-text-secondary);line-height:1.5; }
+  .vehicle-grid { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem; }
+  .vehicle-card { border-radius:var(--border-radius-md);padding:1rem;border:0.5px solid var(--color-border-tertiary); }
+  .vehicle-tag { display:inline-block;font-size:13px;font-weight:700;padding:2px 9px;border-radius:20px;margin-bottom:.4rem; }
+  .vehicle-title { font-size:17px;font-weight:700;margin-bottom:.3rem; }
+  .vehicle-body { font-size:16px;color:var(--color-text-secondary);line-height:1.5; }
+  .risk-row { display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .risk-card-sm { border-radius:var(--border-radius-md);padding:.9rem;text-align:center;border:0.5px solid var(--color-border-tertiary); }
+  .risk-label { font-size:16px;font-weight:700;margin-bottom:.3rem; }
+  .risk-body-sm { font-size:15px;color:var(--color-text-secondary);line-height:1.5; }
+  .fund-stack { display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem; }
+  .fund-row { display:flex;align-items:center;gap:1rem;border-radius:var(--border-radius-lg);padding:.9rem 1.1rem; }
+  .fund-row.cf { background:#E1F5EE;border-left:4px solid #0F6E56; }
+  .fund-row.pr { background:#FAECE7;border-left:4px solid #993C1D; }
+  .fund-row.tx { background:#FAEEDA;border-left:4px solid #854F0B; }
+  .fund-icon { width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .fund-icon svg { width:22px;height:22px; }
+  .fund-row.cf .fund-icon { background:#0F6E56; } .fund-row.pr .fund-icon { background:#993C1D; } .fund-row.tx .fund-icon { background:#854F0B; }
+  .fund-info { flex:1; }
+  .fund-num { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem; }
+  .fund-row.cf .fund-num { color:#0F6E56; } .fund-row.pr .fund-num { color:#993C1D; } .fund-row.tx .fund-num { color:#854F0B; }
+  .fund-name { font-size:19px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem; }
+  .fund-desc { font-size:17px;color:var(--color-text-secondary);line-height:1.5; }
+  .fund-connector { display:flex;align-items:center;gap:.5rem;padding:.1rem 1.1rem; }
+  .fund-connector-line { flex:1;height:1px;background:var(--color-border-tertiary); }
+  .fund-connector-label { font-size:13px;color:var(--color-text-tertiary);font-style:italic;white-space:nowrap; }
+  .summary-grid { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .summary-card { border-radius:var(--border-radius-md);padding:1rem;border-top:3px solid; }
+  .summary-title { font-size:17px;font-weight:700;margin-bottom:.3rem; }
+  .summary-body { font-size:16px;color:var(--color-text-secondary);line-height:1.5; }
+  .completion-badge { display:flex;flex-direction:column;align-items:center;border-radius:16px;padding:2rem 1.5rem 1.75rem;margin-bottom:1.5rem;text-align:center; }
+  .badge-ring { width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem; }
+  .badge-ring svg { width:40px;height:40px; }
+  .badge-title { font-size:28px;font-weight:700;margin-bottom:.3rem; }
+  .badge-sub { font-size:19px; }
 </style>
 
 <div class="container">
 <div class="mod">
 
 <div class="progress-bar">
-  <div class="prog-step active" id="p0"></div>
-  <div class="prog-step" id="p1"></div>
-  <div class="prog-step" id="p2"></div>
-  <div class="prog-step" id="p3"></div>
-  <div class="prog-step" id="p4"></div>
-  <div class="prog-step" id="p5"></div>
-  <div class="prog-step" id="p6"></div>
-  <div class="prog-step" id="p7"></div>
-  <div class="prog-step" id="p8"></div>
+  <div class="prog-step active" id="p0"></div><div class="prog-step" id="p1"></div><div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div><div class="prog-step" id="p4"></div><div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div><div class="prog-step" id="p7"></div><div class="prog-step" id="p8"></div>
   <div class="prog-step" id="p9"></div>
   <span class="step-label" id="step-label">1 of 11</span>
 </div>
 
-<!-- SCREEN 0 — Welcome -->
+<!-- s0 -->
 <div class="screen active" id="s0">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s0">Listen to this screen</span></button><span class="audio-label" id="audio-status-s0"></span></div>
   <div class="tag">4F Solution — Module 5</div>
-  <h2>Growth — building wealth toward goals</h2>
-  <p class="sub">Cash flow is the engine. Protection ensures nothing derails it. Growth is what the engine funds when the foundation is secure — building toward the goals the client described when you asked what matters most to them.</p>
-  <div class="badge-row">
-    <div class="badge"><div class="badge-dot" style="background:#3B6D11"></div>7 lessons</div>
-    <div class="badge"><div class="badge-dot" style="background:#639922"></div>5 knowledge checks</div>
-  </div>
-  <div class="highlight-box hb-green">
-    <div class="hb-label">What you will learn</div>
-    <div class="hb-text">Why growth comes third in the 4F process. How surplus becomes the foundation of a growth strategy. The growth vehicles available — registered and non-registered. How to align investments to time horizons and goals. How to have the risk tolerance conversation. Why starting early matters more than starting big. How to connect everything back to what the client told you they care about.</div>
+  <h2>Investments &amp; Wealth — building toward goals</h2>
+  <p class="sub">Cash flow is the engine. Protection ensures nothing derails it. Wealth building is what happens when the foundation is secure — directing surplus toward the goals the client described.</p>
+  <div class="lesson-list">
+    <div class="lesson-item"><div class="lesson-num">1</div><div class="lesson-text">Wealth builds on cash flow and protection — not before</div></div>
+    <div class="lesson-item"><div class="lesson-num">2</div><div class="lesson-text">Surplus is what wealth building is built on</div></div>
+    <div class="lesson-item"><div class="lesson-num">3</div><div class="lesson-text">Time horizons — when they need it determines how to invest</div></div>
+    <div class="lesson-item"><div class="lesson-num">4</div><div class="lesson-text">Three investment vehicles — each serving a different purpose</div></div>
+    <div class="lesson-item"><div class="lesson-num">5</div><div class="lesson-text">Risk tolerance is a conversation — not a form</div></div>
+    <div class="lesson-item"><div class="lesson-num">6</div><div class="lesson-text">Starting early matters more than starting big</div></div>
+    <div class="lesson-item"><div class="lesson-num">7</div><div class="lesson-text">Wealth connects to all four Fundamentals</div></div>
+    <div class="lesson-item" style="background:#EAF3DE"><div class="lesson-num" style="background:#27500A">✓</div><div class="lesson-text" style="color:#3B6D11;font-weight:600">5 knowledge checks — 80% required to pass</div></div>
   </div>
 </div>
 
-<!-- SCREEN 1 — Why growth comes third -->
+<!-- s1 -->
 <div class="screen" id="s1">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s1">Listen to this screen</span></button><span class="audio-label" id="audio-status-s1"></span></div>
-  <div class="tag">4F Solution — Lesson 1: Why growth comes third</div>
-  <h2>Growth builds on what cash flow funds and protection preserves</h2>
-  <p class="sub">Growth is not the starting point — it is the reward for getting the foundation right. A growth strategy built without cash flow clarity or protection in place is a structure without a base.</p>
+  <div class="tag">4F Solution — Lesson 1: Why wealth comes third</div>
+  <h2>Wealth builds on what cash flow funds and protection preserves</h2>
+  <p class="sub">Not the starting point — the reward for getting the foundation right. Without cash flow clarity and protection in place, wealth building has no stable base.</p>
   <div class="highlight-box hb-green">
     <div class="hb-label">The logic of the sequence</div>
-    <div class="hb-text">Cash flow identifies what is available. Protection ensures one event cannot erase it. Growth takes what remains — the real surplus after protection is funded — and directs it toward the client's goals over time. Each Fundamental depends on the one before it being stable first.</div>
+    <div class="hb-text">Cash flow identifies what is available. Protection ensures one event cannot erase it. Wealth building takes what remains — real surplus after protection is funded — and directs it toward the client's goals over time.</div>
   </div>
   <div class="card">
-    <div class="card-title">What growth actually means</div>
-    <div class="card-body">Growth is not about chasing returns or picking the right investment. It is about systematically directing surplus toward goals across the right time horizons, in the right vehicles, with the right level of risk for the client's situation. The professional's job is to surface that picture — not to manage the portfolio.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Discovery and education — again</div>
-    <div class="card-body">The same principle applies here as in cash flow and protection. The professional asks and educates simultaneously. Most clients have a vague sense of their growth picture — some savings here, an account there — but have never seen it mapped to their goals and timelines clearly. That mapping is the value the professional brings.</div>
+    <div class="card-title">What building wealth actually means</div>
+    <div class="card-body">Not chasing returns or picking investments. Systematically directing surplus toward goals, across the right time horizons, in the right vehicles, with the right level of risk. The professional surfaces that picture — they do not manage the portfolio.</div>
   </div>
   <div class="highlight-box hb-purple">
     <div class="hb-label">The connection to values</div>
-    <div class="hb-text">Every growth goal is a value in disguise. Retirement at a certain age is freedom. A funded education is family. A paid-off property is security. The professional who connects the growth conversation back to the values conversation makes every recommendation feel inevitable — not incidental.</div>
+    <div class="hb-text">Every wealth goal is a value in disguise. Retirement at a certain age is freedom. A funded education is family. A paid-off property is security. Connect the wealth conversation back to values — every time.</div>
   </div>
 </div>
 
-<!-- SCREEN 2 — Surplus and growth -->
+<!-- s2 -->
 <div class="screen" id="s2">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s2">Listen to this screen</span></button><span class="audio-label" id="audio-status-s2"></span></div>
-  <div class="tag">4F Solution — Lesson 2: Surplus and growth</div>
-  <h2>Surplus is what growth is built on — nothing more, nothing less</h2>
-  <p class="sub">The growth conversation starts exactly where the cash flow conversation left off. What the client has available after income, expenses, debt, and protection is what the entire growth strategy is built around.</p>
+  <div class="tag">4F Solution — Lesson 2: Surplus and wealth</div>
+  <h2>Surplus is what wealth is built on — nothing more, nothing less</h2>
+  <p class="sub">The wealth conversation starts exactly where cash flow left off. A large income with no surplus means no wealth-building capacity. A modest income with meaningful surplus has real options.</p>
   <div class="highlight-box hb-green">
     <div class="hb-label">The direct connection</div>
-    <div class="hb-text">Surplus identified in the cash flow discovery is what funds the growth strategy. There is no growth conversation without first understanding what is available. A client with a large income and no surplus has no growth capacity — regardless of their goals. A client with a modest income and a meaningful surplus has real options.</div>
+    <div class="hb-text">Improving cash flow is always the most immediate wealth-building lever. A small surplus is not a reason to skip the conversation — it is a reason to have it more carefully. Even modest consistent contributions, directed properly, build meaningful wealth over time.</div>
   </div>
   <div class="card">
-    <div class="card-title">Why this matters for the professional</div>
-    <div class="card-body">The growth conversation is not about ambition — it is about what is realistic. The professional's job is to show the client what their actual surplus can build toward over time. Not to overpromise. Not to undersell. To show them the honest picture — and then help them improve it.</div>
+    <div class="card-title">No recommendations during discovery</div>
+    <div class="card-body">Surface the current picture — what the client has, where it sits, what it is aligned to. Specific recommendations come with the complete plan. During discovery: understand and educate, do not allocate.</div>
   </div>
-  <div class="card">
-    <div class="card-title">What to do when surplus is small</div>
-    <div class="card-body">A small surplus is not a reason to skip the growth conversation. It is a reason to have it more carefully. Even a modest consistent allocation, directed properly over time, builds meaningful wealth. The professional who shows a client what their current surplus can realistically become in ten or twenty years builds far more trust than one who waits until the client has "enough."</div>
-  </div>
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">No recommendations during discovery</div>
-    <div class="hb-text">The growth discovery surfaces the client's current picture — what they have, where it sits, what it is aligned to. Specific investment recommendations come when the professional returns with the complete plan. During discovery, the job is to understand and educate — not to allocate.</div>
+  <div class="q-card">
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"Outside of your regular expenses, is there anything left at the end of each month — and if so, where does it go?"</div>
+    <div class="q-why">Opens the surplus conversation without assumption. What they do with leftover money tells you everything about their current wealth-building picture.</div>
   </div>
 </div>
 
-<!-- SCREEN 3 — Time horizons -->
+<!-- s3 -->
 <div class="screen" id="s3">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s3">Listen to this screen</span></button><span class="audio-label" id="audio-status-s3"></span></div>
   <div class="tag">4F Solution — Lesson 3: Time horizons</div>
-  <h2>When the client needs the money determines how it should be invested</h2>
-  <p class="sub">Time horizon is the most important factor in a growth strategy. It determines how much volatility is acceptable, what vehicles are appropriate, and how aggressively surplus can be directed toward a goal.</p>
+  <h2>When they need the money determines how it should be invested</h2>
+  <p class="sub">Time horizon is the single most important factor in any investment strategy. It determines acceptable volatility, appropriate vehicles, and how aggressively surplus can be directed.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.25rem">
 
-  <div class="horizon-grid">
-    <div class="horizon-card" style="border-color:#993C1D;background:#FAECE7">
-      <div class="horizon-period" style="color:#993C1D">Short term</div>
-      <div class="horizon-range" style="color:#993C1D">0–3 years</div>
-      <div class="horizon-body" style="color:#712B13">Needs capital preservation. Low volatility. Liquidity matters. Emergency reserve, near-term purchases, upcoming life events.</div>
+    <!-- Short term -->
+    <div style="background:#FAECE7;border-radius:var(--border-radius-lg);padding:1.1rem .9rem;border-top:4px solid #993C1D;display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#993C1D">Short term</div>
+      <div style="font-size:26px;font-weight:800;color:#712B13;line-height:1.1">0–3<span style="font-size:16px;font-weight:600"> yrs</span></div>
+      <div style="width:100%;height:1px;background:rgba(153,60,29,0.2)"></div>
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.1rem">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#993C1D">Priority</span>
+      </div>
+      <div style="font-size:15px;font-weight:600;color:#712B13;line-height:1.5">Preserve capital</div>
+      <div style="width:100%;height:1px;background:rgba(153,60,29,0.2)"></div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Emergency reserve</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Debt reduction</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Coverage gaps</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Getting organized</span></div>
+      </div>
+      <div style="margin-top:auto;padding-top:.5rem">
+        <div style="background:rgba(153,60,29,0.12);border-radius:4px;padding:.3rem .5rem;font-size:12px;font-weight:700;color:#993C1D;text-align:center">Low volatility only</div>
+      </div>
     </div>
-    <div class="horizon-card" style="border-color:#854F0B;background:#FAEEDA">
-      <div class="horizon-period" style="color:#854F0B">Medium term</div>
-      <div class="horizon-range" style="color:#854F0B">3–10 years</div>
-      <div class="horizon-body" style="color:#633806">Balanced approach. Some volatility acceptable. Education funding, property goals, major purchases, business goals.</div>
+
+    <!-- Medium term -->
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-lg);padding:1.1rem .9rem;border-top:4px solid #854F0B;display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#854F0B">Medium term</div>
+      <div style="font-size:26px;font-weight:800;color:#633806;line-height:1.1">2–10<span style="font-size:16px;font-weight:600"> yrs</span></div>
+      <div style="width:100%;height:1px;background:rgba(133,79,11,0.2)"></div>
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.1rem">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#854F0B">Priority</span>
+      </div>
+      <div style="font-size:15px;font-weight:600;color:#633806;line-height:1.5">Balanced growth</div>
+      <div style="width:100%;height:1px;background:rgba(133,79,11,0.2)"></div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#854F0B;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#633806;line-height:1.4">Home purchase</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#854F0B;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#633806;line-height:1.4">Education savings</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#854F0B;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#633806;line-height:1.4">Business goals</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#854F0B;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#633806;line-height:1.4">Income targets</span></div>
+      </div>
+      <div style="margin-top:auto;padding-top:.5rem">
+        <div style="background:rgba(133,79,11,0.12);border-radius:4px;padding:.3rem .5rem;font-size:12px;font-weight:700;color:#854F0B;text-align:center">Some volatility acceptable</div>
+      </div>
     </div>
-    <div class="horizon-card" style="border-color:#3B6D11;background:#EAF3DE">
-      <div class="horizon-period" style="color:#3B6D11">Long term</div>
-      <div class="horizon-range" style="color:#3B6D11">10+ years</div>
-      <div class="horizon-body" style="color:#27500A">Growth-oriented. Higher volatility tolerable. Time smooths out market fluctuations. Retirement, legacy, financial independence.</div>
+
+    <!-- Long term -->
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-lg);padding:1.1rem .9rem;border-top:4px solid #3B6D11;display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#3B6D11">Long term</div>
+      <div style="font-size:26px;font-weight:800;color:#27500A;line-height:1.1">10+<span style="font-size:16px;font-weight:600"> yrs</span></div>
+      <div style="width:100%;height:1px;background:rgba(59,109,17,0.2)"></div>
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.1rem">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#3B6D11">Priority</span>
+      </div>
+      <div style="font-size:15px;font-weight:600;color:#27500A;line-height:1.5">Maximum growth</div>
+      <div style="width:100%;height:1px;background:rgba(59,109,17,0.2)"></div>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#3B6D11;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#27500A;line-height:1.4">Retirement</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#3B6D11;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#27500A;line-height:1.4">Legacy planning</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#3B6D11;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#27500A;line-height:1.4">Financial independence</span></div>
+        <div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#3B6D11;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#27500A;line-height:1.4">Estate transfer</span></div>
+      </div>
+      <div style="margin-top:auto;padding-top:.5rem">
+        <div style="background:rgba(59,109,17,0.12);border-radius:4px;padding:.3rem .5rem;font-size:12px;font-weight:700;color:#3B6D11;text-align:center">Higher volatility tolerable</div>
+      </div>
     </div>
+
   </div>
-
-  <div class="card">
-    <div class="card-title">Why this matters for the conversation</div>
-    <div class="card-body">Most clients have multiple goals across multiple time horizons simultaneously — and they have never mapped them clearly. The professional who surfaces this picture helps the client see that their growth strategy is not one thing — it is several parallel strategies, each aligned to a specific goal and timeline.</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — time horizon</div>
-    <div class="q-text">"When you think about the goals you described — retirement, the property, the children's education — which of those do you need to fund first, and when? And which ones are further out that we have more time to build toward?"</div>
-    <div class="q-why">Why it works: Connects directly to the values and goals conversation. Makes the abstract concrete. Helps the client prioritize naturally — which goal is most urgent shapes the entire growth strategy.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"Of the goals you described — which do you need to fund first, and when? And which are further out that we have more time to build toward?"</div>
+    <div class="q-why">Most clients have never mapped their goals across timelines. The most urgent goal shapes the entire strategy — and determines which vehicle conversations matter most.</div>
   </div>
 </div>
 
-<!-- SCREEN 4 — Growth vehicles -->
+<!-- s4 -->
 <div class="screen" id="s4">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s4">Listen to this screen</span></button><span class="audio-label" id="audio-status-s4"></span></div>
-  <div class="tag">4F Solution — Lesson 4: Growth vehicles</div>
+  <div class="tag">4F Solution — Lesson 4: Investment vehicles</div>
   <h2>Three categories — each serving a different purpose</h2>
-  <p class="sub">The professional does not need deep investment expertise to have the growth conversation. They need to understand the three broad categories of growth vehicle — and how each one serves different goals, timelines, and client situations.</p>
-
+  <p class="sub">The professional needs to understand three broad categories — enough to map what the client has, identify the gaps, and know which conversation belongs in the complete plan.</p>
   <div class="vehicle-grid">
     <div class="vehicle-card" style="border-color:#3B6D11;background:#EAF3DE">
       <div class="vehicle-tag" style="background:#3B6D11;color:#EAF3DE">Registered accounts</div>
       <div class="vehicle-title" style="color:#27500A">Tax-advantaged</div>
-      <div class="vehicle-body" style="color:#27500A">Government-recognized accounts with specific tax benefits — contributions may reduce taxable income, growth may be sheltered, or withdrawals may be tax-free depending on the account type and jurisdiction. Best suited to long-term goals where tax efficiency compounds over time.</div>
+      <div class="vehicle-body">Government-recognized accounts with tax benefits on contributions, growth, or withdrawals — depending on account type and jurisdiction. Best for long-term goals.</div>
     </div>
     <div class="vehicle-card" style="border-color:#534AB7;background:#EEEDFE">
-      <div class="vehicle-tag" style="background:#534AB7;color:#EEEDFE">Non-registered accounts</div>
+      <div class="vehicle-tag" style="background:#534AB7;color:#EEEDFE">Non-registered</div>
       <div class="vehicle-title" style="color:#3C3489">Flexible, taxable</div>
-      <div class="vehicle-body" style="color:#3C3489">Standard investment accounts with no contribution limits and no restrictions on withdrawal. Growth is subject to tax in the year it is realized. More flexible than registered accounts — better suited to medium-term goals or surplus beyond registered contribution room.</div>
+      <div class="vehicle-body">No contribution limits. No withdrawal restrictions. Growth is taxed when realized. Better for medium-term goals or surplus beyond registered room.</div>
     </div>
   </div>
-
   <div class="vehicle-card" style="border-color:#993C1D;background:#FAECE7;margin-bottom:1.25rem">
     <div class="vehicle-tag" style="background:#993C1D;color:#FAECE7">Cash value life insurance</div>
-    <div class="vehicle-title" style="color:#712B13">Growth + protection in one vehicle</div>
-    <div class="vehicle-body" style="color:#712B13">Permanent life insurance policies — whole life and universal life — accumulate a cash value component alongside the death benefit. That cash value grows on a tax-advantaged basis and can be accessed during the client's lifetime. This makes it one of the few vehicles that simultaneously addresses Protection and Growth — and with the right structure, Tax Efficiency as well.
-    <br><br>
-    Key characteristics: growth is typically guaranteed or indexed depending on policy type; cash value can be borrowed against or withdrawn; the death benefit remains in place throughout; and contributions are made with after-tax dollars but growth and access can be structured to be tax-efficient. <strong>It is not a replacement for registered accounts — it is a complement, particularly for clients who have maximized registered contribution room or who want protection and growth from a single vehicle.</strong></div>
+    <div class="vehicle-title" style="color:#712B13">Wealth + protection in one vehicle</div>
+    <div class="vehicle-body" style="color:#712B13">Whole life and universal life accumulate cash value alongside the death benefit — growing tax-advantaged, accessible during the client's lifetime. The only vehicle that simultaneously addresses Protection, Wealth, and Tax Efficiency. <strong>A complement to registered accounts — not a replacement.</strong></div>
   </div>
-
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">Where cash value life insurance fits in the 4F framework</div>
-    <div class="hb-text">It is the only vehicle that appears in more than one Fundamental. In Protection, it provides the death benefit. In Growth, the cash value builds wealth over time. In Tax Efficiency, the structure can minimize tax at accumulation, access, and transfer. This makes it a powerful tool for the right client — and a compelling reason to have the conversation even when protection needs appear to be met.</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Light product context — enough to have the conversation</div>
-    <div class="card-body">The specific account names, contribution limits, and tax treatment vary by jurisdiction. The professional does not need to know every detail — they need to know which category is most appropriate for this goal and timeline, and whether the client is currently using it. The complete plan brings the specific recommendations.</div>
-  </div>
-
-  <div class="card" style="border-left:4px solid #854F0B">
-    <div class="card-title">Investment costs are part of the picture — not separate from it</div>
-    <div class="card-body">Investment costs attach to the investments held inside an account — not to the account type itself. A registered and a non-registered account holding the same investments carry the same investment costs. The account determines the tax treatment, not the cost. Cash value life insurance is different — its costs include both the investment component and the insurance structure, built-in guarantees, and ongoing professional service. Across all vehicles, those costs compound against the client the same way returns compound for them. Higher cost is not a problem when the value justifies it. The professional's job is to make sure the client understands both.</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — growth vehicles</div>
-    <div class="q-text">"When it comes to savings and investments — where does your money currently sit? Do you have any registered or tax-advantaged accounts? And do you know whether you have contribution room available that you are not currently using?"</div>
-    <div class="q-why">Why it works: Most clients do not know their contribution room. Many are not maximizing it. This question surfaces both what exists and where the gaps are — without requiring the professional to know the client's exact numbers before the meeting.</div>
-  </div>
-
-  <div class="q-card">
-    <div class="q-label">Discovery question — cash value life insurance</div>
-    <div class="q-text">"Do you currently have any permanent life insurance — a whole life or universal life policy? And if so, do you know whether it has accumulated any cash value, and whether you have ever looked at it as part of your overall financial picture?"</div>
-    <div class="q-why">Why it works: Many clients with permanent life insurance have never thought of it as a financial asset — only as protection. This question opens the conversation about what they already have and positions the professional to show them the full picture when they return with the complete plan.</div>
-  </div>
-
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">What to listen for</div>
-    <div class="hb-text">Clients who say "I have savings in the bank" are describing liquidity — not a growth strategy. Clients who say "I have some investments somewhere" often cannot name the accounts, the amounts, or what the money is aligned to. Clients who have permanent life insurance and have never thought of it as a growth vehicle are holding an asset they do not understand. All three are openings for the professional to bring clarity.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"Where does your money currently sit? Do you have registered or tax-advantaged accounts — and do you know whether you have contribution room you are not currently using?"</div>
+    <div class="q-why">Most clients don't know their contribution room. Follow with: "Do you have any permanent life insurance? Have you ever looked at it as part of your financial picture?"</div>
   </div>
 </div>
 
-<!-- SCREEN 5 — Risk tolerance -->
+<!-- s5 -->
 <div class="screen" id="s5">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s5">Listen to this screen</span></button><span class="audio-label" id="audio-status-s5"></span></div>
   <div class="tag">4F Solution — Lesson 5: Risk tolerance</div>
   <h2>Risk tolerance is a conversation — not a form</h2>
-  <p class="sub">Most professionals handle risk tolerance through a questionnaire. The most effective ones have a real conversation. Understanding how a client feels about volatility — not just what they say on a form — changes the entire growth strategy.</p>
-
+  <p class="sub">Understanding how a client actually feels about volatility changes the entire strategy. A questionnaire captures what they say. A conversation surfaces what they do.</p>
   <div class="risk-row">
-    <div class="risk-card" style="border-color:#3B6D11;background:#EAF3DE">
+    <div class="risk-card-sm" style="border-color:#3B6D11;background:#EAF3DE">
       <div class="risk-label" style="color:#3B6D11">Growth-oriented</div>
-      <div class="risk-body" style="color:#27500A">Comfortable with significant fluctuation. Long time horizon. Prioritizes maximum growth over stability. Can ride out downturns without panic.</div>
+      <div class="risk-body-sm">Comfortable with significant fluctuation. Long horizon. Can ride out downturns.</div>
     </div>
-    <div class="risk-card" style="border-color:#854F0B;background:#FAEEDA">
+    <div class="risk-card-sm" style="border-color:#854F0B;background:#FAEEDA">
       <div class="risk-label" style="color:#854F0B">Balanced</div>
-      <div class="risk-body" style="color:#633806">Accepts some volatility for better long-term returns. Medium time horizon. Wants growth but not at the cost of significant short-term losses.</div>
+      <div class="risk-body-sm">Accepts some volatility. Medium horizon. Growth — but not at the cost of large short-term losses.</div>
     </div>
-    <div class="risk-card" style="border-color:#993C1D;background:#FAECE7">
+    <div class="risk-card-sm" style="border-color:#993C1D;background:#FAECE7">
       <div class="risk-label" style="color:#993C1D">Conservative</div>
-      <div class="risk-body" style="color:#712B13">Prioritizes capital preservation. Short time horizon or high emotional sensitivity to loss. Will accept lower returns for greater stability.</div>
+      <div class="risk-body-sm">Prioritizes capital preservation. Short horizon or high sensitivity to loss.</div>
     </div>
   </div>
-
   <div class="card">
     <div class="card-title">Risk capacity vs risk preference</div>
-    <div class="card-body">Risk capacity is what the client's situation can withstand — determined by time horizon, income stability, and financial cushion. Risk preference is how they feel about volatility emotionally. The professional needs to understand both — because a client can have high capacity but low preference, and forcing them into a high-growth strategy creates anxiety that undermines the relationship.</div>
+    <div class="card-body">Capacity is what the situation can structurally handle — time horizon, income stability, financial cushion. Preference is how the client feels emotionally. A client can have high capacity but low preference. Ignoring preference creates anxiety that undermines the relationship.</div>
   </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — risk tolerance</div>
-    <div class="q-text">"If you woke up tomorrow and the value of your investments had dropped by twenty percent — what would your instinct be? Would you leave it, add more, or want to move to something safer? And has that ever happened to you — and what did you do?"</div>
-    <div class="q-why">Why it works: A hypothetical with a real number is far more revealing than "how would you describe your risk tolerance?" Past behaviour is the best predictor of future behaviour — asking what they actually did in a downturn tells you more than any questionnaire.</div>
-  </div>
-
-  <div class="highlight-box hb-green">
-    <div class="hb-label">The professional's job</div>
-    <div class="hb-text">Not to talk a client into more risk than they are comfortable with. Not to accept less risk than their situation requires. To find the intersection of what their goals need and what they can genuinely tolerate — and to help them understand the trade-offs honestly.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"If you woke up and your investments had dropped 20% — would you leave it, add more, or move to something safer? Has that ever happened — and what did you do?"</div>
+    <div class="q-why">Past behaviour is the best predictor. What they actually did in a downturn tells you more than any questionnaire.</div>
   </div>
 </div>
 
-<!-- SCREEN 6 — Compound growth -->
+<!-- s6 -->
 <div class="screen" id="s6">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s6">Listen to this screen</span></button><span class="audio-label" id="audio-status-s6"></span></div>
   <div class="tag">4F Solution — Lesson 6: Compound growth</div>
   <h2>Starting early matters more than starting big</h2>
-  <p class="sub">The single most powerful concept in the growth conversation is compound growth. Most clients understand it in theory. Almost none have seen what it means for their specific situation — and that gap is where the professional adds enormous value.</p>
-
-  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.5rem">
-    <div style="font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">$500/month invested at 7% average annual return</div>
-    <svg id="compound-chart" viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"></svg>
+  <p class="sub">Most clients understand compound growth in theory. Almost none have seen what it means for their specific situation — and that gap is where the professional adds real value.</p>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem">
+    <div style="font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">$500/month at 7% average annual return</div>
+    <svg id="compound-chart" viewBox="0 0 560 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"></svg>
     <div style="display:flex;gap:1.5rem;margin-top:.75rem;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:8px;font-size:16px;color:var(--color-text-secondary)">
-        <div style="width:24px;height:4px;background:#3B6D11;border-radius:2px"></div>
-        Start at 25 — $1,310,000 by 65
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;font-size:16px;color:var(--color-text-secondary)">
-        <div style="width:24px;height:4px;background:#BA7517;border-radius:2px;border-top:2px dashed #BA7517;height:0"></div>
-        Start at 35 — $567,000 by 65
-      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:16px;color:var(--color-text-secondary)"><div style="width:24px;height:3px;background:#3B6D11;border-radius:2px"></div>Start at 25 — $1,310,000 by 65</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:16px;color:var(--color-text-secondary)"><div style="width:24px;border-top:2px dashed #BA7517"></div>Start at 35 — $567,000 by 65</div>
     </div>
   </div>
-
   <script>
   (function(){
-    var svg = document.getElementById('compound-chart');
-    var W = 560, H = 260, padL = 58, padR = 16, padT = 16, padB = 36;
-    var chartW = W - padL - padR, chartH = H - padT - padB;
-
-    function compound(monthly, rate, months) {
-      var r = rate / 12;
-      return monthly * ((Math.pow(1 + r, months) - 1) / r);
-    }
-
-    var ages = [], early = [], late = [];
-    for (var age = 25; age <= 65; age++) {
-      ages.push(age);
-      early.push(compound(500, 0.07, (age - 25) * 12));
-      late.push(age >= 35 ? compound(500, 0.07, (age - 35) * 12) : 0);
-    }
-
-    var maxVal = 1400000;
-
-    function xPos(i)   { return padL + (i / (ages.length - 1)) * chartW; }
-    function yPos(val) { return padT + chartH - (val / maxVal) * chartH; }
-
-    function makePath(data, color, dashed) {
-      var d = '';
-      data.forEach(function(v, i) {
-        d += (i === 0 ? 'M' : 'L') + xPos(i).toFixed(1) + ',' + yPos(v).toFixed(1);
-      });
-      var dash = dashed ? ' stroke-dasharray="6,4"' : '';
-      return '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="2.5"' + dash + '/>';
-    }
-
-    function makeArea(data, color) {
-      var d = 'M' + xPos(0).toFixed(1) + ',' + (padT + chartH).toFixed(1);
-      data.forEach(function(v, i) {
-        d += 'L' + xPos(i).toFixed(1) + ',' + yPos(v).toFixed(1);
-      });
-      d += 'L' + xPos(data.length - 1).toFixed(1) + ',' + (padT + chartH).toFixed(1) + 'Z';
-      return '<path d="' + d + '" fill="' + color + '" opacity="0.12"/>';
-    }
-
-    var yTicks = [0, 250000, 500000, 750000, 1000000, 1250000];
-    var gridLines = '', yLabels = '';
-    yTicks.forEach(function(v) {
-      var y = yPos(v).toFixed(1);
-      gridLines += '<line x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>';
-      var label = v === 0 ? '$0' : '$' + (v / 1000) + 'k';
-      yLabels += '<text x="' + (padL - 8) + '" y="' + (parseFloat(y) + 4) + '" text-anchor="end" font-size="11" fill="#888780">' + label + '</text>';
-    });
-
-    var xLabels = '';
-    [25, 30, 35, 40, 45, 50, 55, 60, 65].forEach(function(age) {
-      var i = age - 25;
-      var x = xPos(i).toFixed(1);
-      xLabels += '<text x="' + x + '" y="' + (H - 6) + '" text-anchor="middle" font-size="11" fill="#888780">' + age + '</text>';
-    });
-
-    var startLine = '<line x1="' + xPos(10).toFixed(1) + '" y1="' + padT + '" x2="' + xPos(10).toFixed(1) + '" y2="' + (padT + chartH) + '" stroke="#BA7517" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>';
-    var startLabel = '<text x="' + (xPos(10) + 4) + '" y="' + (padT + 14) + '" font-size="11" fill="#BA7517">Late start (35)</text>';
-
-    svg.innerHTML =
-      gridLines + yLabels + xLabels +
-      makeArea(early, '#3B6D11') +
-      makeArea(late, '#BA7517') +
-      startLine + startLabel +
-      makePath(early, '#3B6D11', false) +
-      makePath(late, '#BA7517', true) +
-      '<text x="' + (padL + 4) + '" y="' + (padT + 8) + '" font-size="10" fill="#888780">Age</text>';
+    var svg=document.getElementById('compound-chart');
+    var W=560,H=240,padL=56,padR=16,padT=14,padB=34;
+    var chartW=W-padL-padR,chartH=H-padT-padB;
+    function compound(m,r,mo){var rv=r/12;return m*((Math.pow(1+rv,mo)-1)/rv);}
+    var ages=[],early=[],late=[];
+    for(var age=25;age<=65;age++){ages.push(age);early.push(compound(500,0.07,(age-25)*12));late.push(age>=35?compound(500,0.07,(age-35)*12):0);}
+    var maxVal=1400000;
+    function xPos(i){return padL+(i/(ages.length-1))*chartW;}
+    function yPos(v){return padT+chartH-(v/maxVal)*chartH;}
+    function makePath(data,color,dashed){var d='';data.forEach(function(v,i){d+=(i===0?'M':'L')+xPos(i).toFixed(1)+','+yPos(v).toFixed(1);});return'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2.5"'+(dashed?' stroke-dasharray="6,4"':'')+'/>';}
+    function makeArea(data,color){var d='M'+xPos(0).toFixed(1)+','+(padT+chartH).toFixed(1);data.forEach(function(v,i){d+='L'+xPos(i).toFixed(1)+','+yPos(v).toFixed(1);});d+='L'+xPos(data.length-1).toFixed(1)+','+(padT+chartH).toFixed(1)+'Z';return'<path d="'+d+'" fill="'+color+'" opacity="0.12"/>';}
+    var yTicks=[0,250000,500000,750000,1000000,1250000],gl='',yl='';
+    yTicks.forEach(function(v){var y=yPos(v).toFixed(1);gl+='<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>';yl+='<text x="'+(padL-6)+'" y="'+(parseFloat(y)+4)+'" text-anchor="end" font-size="10" fill="#888780">'+(v===0?'$0':'$'+(v/1000)+'k')+'</text>';});
+    var xl='';[25,35,45,55,65].forEach(function(a){var i=a-25;xl+='<text x="'+xPos(i).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#888780">'+a+'</text>';});
+    var sl='<line x1="'+xPos(10).toFixed(1)+'" y1="'+padT+'" x2="'+xPos(10).toFixed(1)+'" y2="'+(padT+chartH)+'" stroke="#BA7517" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/><text x="'+(xPos(10)+4)+'" y="'+(padT+12)+'" font-size="10" fill="#BA7517">Late start (35)</text>';
+    svg.innerHTML=gl+yl+xl+makeArea(early,'#3B6D11')+makeArea(late,'#BA7517')+sl+makePath(early,'#3B6D11',false)+makePath(late,'#BA7517',true);
   })();
   </script>
-
   <div class="highlight-box hb-green">
     <div class="hb-label">The concept to communicate</div>
-    <div class="hb-text">Growth does not come from large lump sums — it comes from consistent contributions over time. A modest amount invested consistently over twenty years will outperform a large amount invested for ten. The professional who helps a client understand this reframes the conversation from "I need more money before I start" to "the best time to start is now."</div>
+    <div class="hb-text">Wealth does not come from large lump sums — it comes from consistent contributions over time. The professional who shows a client what waiting costs them in compounding reframes the conversation from "I need more money before I start" to "the best time to start is now."</div>
   </div>
-
-  <div class="card">
-    <div class="card-title">Cost compounds the same way growth does — in both directions</div>
-    <div class="card-body">Every dollar paid in investment costs is a dollar that stops compounding. This is not an argument against cost — professional advice, active management, insurance guarantees, and ongoing service all have real value and a legitimate cost. It is an argument for clarity. The client who understands what they are paying, why they are paying it, and what they receive in return is a client who trusts the professional. That conversation starts in discovery and continues through the complete plan.</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">How to educate while discovering</div>
-    <div class="card-body">When a client says they are waiting until they have more money to invest, ask: "If you had started five years ago with what you have now — where would that money be today?" Then show them. The same logic applies forward — and applies equally to fees. Most clients have never seen either illustrated for their own numbers. The professional who does it becomes unforgettable.</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — compound growth</div>
-    <div class="q-text">"Is there money you are currently holding in a savings account or sitting uninvested that you do not anticipate needing for more than five years? Because if there is, there may be a meaningful difference between where it is and where it could be — and I want to show you what that looks like when I bring back the complete plan."</div>
-    <div class="q-why">Why it works: Surfaces idle money without being confrontational. Positions the professional as someone who will show the client something valuable — which creates anticipation for the next meeting rather than obligation.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"Is there money sitting uninvested that you will not need for more than five years? There may be a meaningful difference between where it is and where it could be — I want to show you that when I bring back the complete plan."</div>
+    <div class="q-why">Surfaces idle money without pressure. Creates anticipation for the next meeting.</div>
   </div>
 </div>
 
-<!-- SCREEN 7 — Connecting growth to the 4 Fundamentals -->
+<!-- s7 -->
 <div class="screen" id="s7">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s7">Listen to this screen</span></button><span class="audio-label" id="audio-status-s7"></span></div>
-  <div class="tag">4F Solution — Lesson 7: Growth and the 4 Fundamentals</div>
-  <h2>Growth does not stand alone — it connects to everything</h2>
-  <p class="sub">The growth conversation is not a separate discussion. It is the direct output of everything that came before it — and the input to the final Fundamental that follows.</p>
-
-  <div class="highlight-box hb-teal">
-    <div class="hb-label">Cash flow → Growth</div>
-    <div class="hb-text">Surplus from the cash flow discovery is what funds the growth strategy. The size of the growth opportunity is defined entirely by what cash flow makes available after protection is funded. No surplus means no growth capacity — which makes improving cash flow the most immediate growth lever.</div>
+  <div class="tag">4F Solution — Lesson 7: Wealth and the 4 Fundamentals</div>
+  <h2>Wealth does not stand alone — it connects to everything</h2>
+  <p class="sub">The wealth conversation is the direct output of everything before it — and the input to the final Fundamental that follows.</p>
+  <div class="fund-stack">
+    <div class="fund-row cf">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Wealth requires</div><div class="fund-name">Cash Flow</div><div class="fund-desc">Surplus funds wealth building. No surplus means no capacity. Improving cash flow is always the first lever.</div></div>
+    </div>
+    <div class="fund-connector"><div class="fund-connector-line"></div><div class="fund-connector-label">then secured by</div><div class="fund-connector-line"></div></div>
+    <div class="fund-row pr">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Wealth requires</div><div class="fund-name">Protection</div><div class="fund-desc">Without protection, a single event can erase what wealth has built. Protection makes wealth permanent.</div></div>
+    </div>
+    <div class="fund-connector"><div class="fund-connector-line"></div><div class="fund-connector-label">preserved by</div><div class="fund-connector-line"></div></div>
+    <div class="fund-row tx">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Wealth connects to</div><div class="fund-name">Tax Efficiency</div><div class="fund-desc">Where wealth is built determines how much the client keeps. Tax efficiency is the next layer of the same conversation.</div></div>
+    </div>
   </div>
-
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">Protection → Growth</div>
-    <div class="hb-text">Growth is only meaningful if it cannot be erased by an unplanned event. A growth strategy that is not protected by adequate life, disability, or critical illness coverage is a single event away from collapsing. Protection does not compete with growth — it makes growth permanent.</div>
-  </div>
-
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">Growth → Tax efficiency</div>
-    <div class="hb-text">Where growth happens determines how much the client keeps. The same investment in a registered account versus a non-registered one can produce meaningfully different outcomes over time due to tax treatment. Tax efficiency is not separate from the growth conversation — it is the next layer of the same conversation.</div>
-  </div>
-
   <div class="card">
     <div class="card-title">Transitioning to Tax Efficiency</div>
-    <div class="card-body">"Now that I have a picture of your growth situation — what you have, what it is aligned to, and what your timeline looks like — I want to look at one more area before I bring everything back to you. Tax efficiency is about making sure you keep as much of what you build as possible. That affects every decision we have just discussed."</div>
+    <div class="card-body">"Now that I have a picture of your investments and wealth situation, I want to look at one more area. Tax efficiency is about making sure you keep as much of what you build as possible — and it affects every decision we have just discussed."</div>
   </div>
 </div>
 
-<!-- SCREEN 8 — The growth conversation -->
+<!-- s8 — Summary -->
 <div class="screen" id="s8">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
   <div class="tag">4F Solution — Lesson 8: Summary review</div>
-  <h2>The complete growth picture — before the knowledge check</h2>
-  <p class="sub">Consolidate what you have covered before testing your understanding. Growth is the third Fundamental — here is what it covers and how the conversation works.</p>
-
+  <h2>The complete wealth picture — before the knowledge check</h2>
+  <p class="sub">Investments &amp; Wealth is the third Fundamental — the direct output of cash flow and protection, and the input to tax efficiency.</p>
   <div class="highlight-box hb-green">
-    <div class="hb-label">Growth in one sentence</div>
-    <div class="hb-text">Growth takes the surplus that cash flow identifies and protection preserves — and directs it systematically toward the client's goals, across the right time horizons, in the right vehicles, with the right level of risk.</div>
+    <div class="hb-label">Wealth in one sentence</div>
+    <div class="hb-text">Takes the surplus cash flow identifies and protection preserves — and directs it systematically toward the client's goals, across the right time horizons, in the right vehicles, with the right level of risk.</div>
   </div>
-
   <div class="summary-grid">
-    <div class="summary-card" style="border-color:#3B6D11;background:#EAF3DE">
-      <div class="summary-title" style="color:#27500A">Surplus connection</div>
-      <div class="summary-body" style="color:#27500A">Growth is funded by surplus. No surplus means no growth capacity. Improving cash flow is the most immediate growth lever.</div>
-    </div>
-    <div class="summary-card" style="border-color:#854F0B;background:#FAEEDA">
-      <div class="summary-title" style="color:#633806">Time horizons</div>
-      <div class="summary-body" style="color:#633806">Short (0–3 years): preserve capital. Medium (3–10): balanced. Long (10+): growth-oriented. Each goal gets its own strategy.</div>
-    </div>
-    <div class="summary-card" style="border-color:#534AB7;background:#EEEDFE">
-      <div class="summary-title" style="color:#3C3489">Growth vehicles</div>
-      <div class="summary-body" style="color:#3C3489">Registered (tax-advantaged, long-term) vs non-registered (flexible, taxable). The right vehicle depends on the goal and timeline.</div>
-    </div>
-    <div class="summary-card" style="border-color:#993C1D;background:#FAECE7">
-      <div class="summary-title" style="color:#712B13">Risk tolerance</div>
-      <div class="summary-body" style="color:#712B13">Risk capacity (what the situation can handle) plus risk preference (what the client can emotionally tolerate). Both matter.</div>
-    </div>
+    <div class="summary-card" style="border-color:#3B6D11;background:#EAF3DE"><div class="summary-title" style="color:#27500A">Surplus first</div><div class="summary-body">No surplus, no capacity. Cash flow is always the first lever. Even small consistent amounts build real wealth over time.</div></div>
+    <div class="summary-card" style="border-color:#854F0B;background:#FAEEDA"><div class="summary-title" style="color:#633806">Time horizons</div><div class="summary-body">Short (0–3): preserve. Medium (3–10): balanced. Long (10+): growth-oriented. Each goal gets its own strategy.</div></div>
+    <div class="summary-card" style="border-color:#534AB7;background:#EEEDFE"><div class="summary-title" style="color:#3C3489">Vehicles</div><div class="summary-body">Registered (tax-advantaged), non-registered (flexible), cash value life insurance (protection + wealth + tax). Right vehicle follows the goal and timeline.</div></div>
+    <div class="summary-card" style="border-color:#993C1D;background:#FAECE7"><div class="summary-title" style="color:#712B13">Risk tolerance</div><div class="summary-body">Capacity (what the situation handles) + preference (what the client tolerates). Both must be understood. Both matter.</div></div>
   </div>
-
-  <div class="q-card">
-    <div class="q-label">The growth conversation — 5-step sequence</div>
-    <div style="display:flex;flex-direction:column;gap:.65rem;margin-bottom:.3rem">
-      <div style="display:flex;gap:.85rem;align-items:flex-start">
-        <div style="min-width:26px;height:26px;border-radius:50%;background:#3B6D11;color:#EAF3DE;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">1</div>
-        <div style="font-size:20px;font-weight:600;color:var(--color-text-primary);line-height:1.5"><strong>Connect to surplus</strong> — "Based on your cash flow picture, here is what you have available to work with."</div>
-      </div>
-      <div style="display:flex;gap:.85rem;align-items:flex-start">
-        <div style="min-width:26px;height:26px;border-radius:50%;background:#3B6D11;color:#EAF3DE;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">2</div>
-        <div style="font-size:20px;font-weight:600;color:var(--color-text-primary);line-height:1.5"><strong>Map to goals</strong> — "Which goals are most urgent, and when do you need the money?"</div>
-      </div>
-      <div style="display:flex;gap:.85rem;align-items:flex-start">
-        <div style="min-width:26px;height:26px;border-radius:50%;background:#3B6D11;color:#EAF3DE;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">3</div>
-        <div style="font-size:20px;font-weight:600;color:var(--color-text-primary);line-height:1.5"><strong>Explore what exists</strong> — "Where does your money currently sit, and what is it aligned to?"</div>
-      </div>
-      <div style="display:flex;gap:.85rem;align-items:flex-start">
-        <div style="min-width:26px;height:26px;border-radius:50%;background:#3B6D11;color:#EAF3DE;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">4</div>
-        <div style="font-size:20px;font-weight:600;color:var(--color-text-primary);line-height:1.5"><strong>Understand risk</strong> — "How would you react if the value dropped significantly?"</div>
-      </div>
-      <div style="display:flex;gap:.85rem;align-items:flex-start">
-        <div style="min-width:26px;height:26px;border-radius:50%;background:#3B6D11;color:#EAF3DE;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">5</div>
-        <div style="font-size:20px;font-weight:600;color:var(--color-text-primary);line-height:1.5"><strong>Surface compound opportunity</strong> — "Is there idle money that could be working harder?"</div>
-      </div>
-    </div>
-    <div class="q-why">Each step builds on the one before. The conversation is educational at every stage — the client should understand their own picture more clearly by the end of it than they did at the start.</div>
-  </div>
-
-  <div class="highlight-box hb-purple">
+  <div class="highlight-box hb-amber">
     <div class="hb-label">No recommendations during discovery</div>
-    <div class="hb-text">The growth discovery surfaces the picture. Specific vehicle recommendations, contribution amounts, and investment allocations come in the complete plan. During discovery, educate and map — do not allocate.</div>
+    <div class="hb-text">Surface the picture. Specific vehicles, contribution amounts, and allocations come in the complete plan. During discovery — educate and map, do not allocate.</div>
   </div>
 </div>
 
-<!-- SCREEN 9 — Knowledge check -->
+<!-- s9 — Knowledge check -->
 <div class="screen" id="s9">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s9" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s9">Listen to this screen</span></button><span class="audio-label" id="audio-status-s9"></span></div>
   <div class="tag">4F Solution — Knowledge check</div>
   <h2>Knowledge check — 5 questions</h2>
   <p class="sub">Choose the best answer for each question.</p>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the 4F Solution place Growth third — after Cash Flow and Protection?</div>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the 4F Solution place Investments &amp; Wealth third — after Cash Flow and Protection?</div>
     <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because clients are more receptive to investment conversations once trust is established</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because growth requires surplus to fund it and protection to preserve it — without both in place, the growth strategy has no stable foundation</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because growth products typically generate more revenue and should be positioned after needs are understood</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because wealth building requires surplus to fund it and protection to preserve it — without both in place, it has no stable foundation</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because investment products generate more revenue and should be positioned after needs are understood</button>
     <div class="feedback" id="fb-q1"></div>
   </div>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has a goal of funding their child's education in four years. What time horizon does this fall into and what does that mean for the growth strategy?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Long term — four years is enough time to take on significant market risk for higher returns</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client wants to fund their child's education in four years. What time horizon is this and what does it mean?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Long term — four years is enough time to take on significant market risk</button>
     <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">Medium term — a balanced approach with capital preservation becoming more important as the goal approaches</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Short term — the money should be kept in cash to avoid any risk of loss</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Short term — keep it in cash to avoid any risk of loss</button>
     <div class="feedback" id="fb-q2"></div>
   </div>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says they are "waiting until they have more money" before starting to invest. What is the most effective professional response?</div>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says they are "waiting until they have more money" before investing. What is the most effective response?</div>
     <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Agree and revisit when their income increases</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Recommend a low-cost product they can start with immediately</button>
     <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Show them what starting now with what they have would look like over time — and what waiting costs them in compounding they can never recover</button>
     <div class="feedback" id="fb-q3"></div>
   </div>
-
   <div style="margin-bottom:1.5rem">
     <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">What is the difference between risk capacity and risk preference?</div>
     <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">They are the same — both describe how much risk a client is willing to take</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Risk capacity is what the client's situation can structurally withstand — risk preference is how they feel about volatility emotionally. Both must be understood and respected.</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Risk capacity is what the client's situation can structurally handle — risk preference is how they feel about volatility emotionally. Both must be understood and respected.</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Risk capacity is determined by age — risk preference is determined by experience</button>
     <div class="feedback" id="fb-q4"></div>
   </div>
-
   <div style="margin-bottom:1rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has savings in a standard bank account that they will not need for ten years. What should the professional surface?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Nothing — a bank account is a safe and appropriate place for long-term savings</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has savings in a bank account they will not need for ten years. What should the professional surface?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Nothing — a bank account is safe and appropriate for long-term savings</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Recommend moving it to a registered account immediately</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Surface the compound growth opportunity — idle money over a ten-year horizon in a low-interest account may be significantly underperforming what it could become, and the complete plan should address this</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Surface the compound growth opportunity — idle money over ten years in a low-interest account is likely significantly underperforming, and the complete plan should address this</button>
     <div class="feedback" id="fb-q5"></div>
   </div>
 </div>
 
-<!-- SCREEN 10 — Completion -->
+<!-- s10 — Completion -->
 <div class="screen" id="s10">
   <div class="audio-bar"><button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s10" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s10">Listen to this screen</span></button><span class="audio-label" id="audio-status-s10"></span></div>
   <div class="tag">4F Solution — Module 5 complete</div>
   <h2>Module 5 complete</h2>
   <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
-
-  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+  <div class="completion-badge" style="background:#EAF3DE">
+    <div class="badge-ring" style="background:#3B6D11"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="badge-title" style="color:#1E3A08">Module 5 complete</div>
+    <div class="badge-sub" style="color:#3B6D11">Investments &amp; Wealth</div>
+  </div>
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
-      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
-        <div style="font-size:36px;font-weight:700;color:#3B6D11" id="score-display">—</div>
-        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Score</div>
-      </div>
-      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
-        <div style="font-size:36px;font-weight:700;color:#3B6D11" id="correct-display">—</div>
-        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div>
-      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)"><div style="font-size:36px;font-weight:700;color:#3B6D11" id="score-display">—</div><div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Score</div></div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)"><div style="font-size:36px;font-weight:700;color:#3B6D11" id="correct-display">—</div><div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div></div>
     </div>
     <div id="q-breakdown" style="font-size:18px;color:var(--color-text-secondary);line-height:1.8"></div>
   </div>
-
   <div id="submit-section" style="margin-bottom:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">Send results to facilitator</div>
     <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:20px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
@@ -614,7 +477,6 @@
     <div style="font-size:17px;color:var(--color-text-tertiary);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
     <div id="submit-status" style="display:none;margin-top:.75rem;font-size:20px;padding:.85rem 1rem;border-radius:var(--border-radius-md)"></div>
   </div>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.5rem">
     <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
     <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
@@ -631,96 +493,27 @@
 </div>
 
 <script>
-var TOTAL_SCREENS = 11;
-var TOTAL_QUESTIONS = 5;
-var QUIZ_SCREEN_INDEX = 9;
-var LAST_LESSON_INDEX = 8;
-var WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
-var MODULE_NAME = '4F Solution - Module 5: Growth';
-
-var qLabels = {
-  q1: 'Q1 - Why growth comes third in the 4F process',
-  q2: 'Q2 - Time horizon and strategy for a 4-year goal',
-  q3: 'Q3 - Responding to a client who is waiting to invest',
-  q4: 'Q4 - Risk capacity vs risk preference',
-  q5: 'Q5 - Idle savings and compound growth opportunity'
+var TOTAL_SCREENS=11,TOTAL_QUESTIONS=5,QUIZ_SCREEN_INDEX=9,LAST_LESSON_INDEX=8;
+var WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var MODULE_NAME='4F Solution - Module 5: Investments & Wealth';
+var qLabels={q1:'Q1 - Why Investments & Wealth comes third',q2:'Q2 - Time horizon for 4-year education goal',q3:'Q3 - Client waiting to invest',q4:'Q4 - Risk capacity vs risk preference',q5:'Q5 - Idle savings and compound growth'};
+var qMsgs={
+  q1c:'Correct. Wealth building requires surplus to fund it and protection to preserve it. Without both in place, the strategy has no stable foundation. Each Fundamental depends on the one before it being stable.',
+  q1w:'The sequencing is structural. Wealth building literally cannot be sustained without surplus from cash flow and protection from unexpected events. Both are logical dependencies — not relationship steps.',
+  q2c:'Correct. Four years is medium-term — long enough for some growth exposure but close enough that capital preservation becomes increasingly important as the goal approaches. An aggressive strategy risks the fund being significantly down when needed.',
+  q2w:'Four years is a medium-term horizon. A sharp correction in year three would leave insufficient funds when the goal arrives. A balanced approach is appropriate, shifting more conservative as the timeline shortens.',
+  q3c:'Correct. The most powerful response is showing the client what time costs them in compound growth they can never recover. Illustrating this with their own numbers changes the conversation from delay to urgency — without pressure.',
+  q3w:'Agreeing to wait accepts the client\'s framing. The professional\'s job is to reframe: the most valuable thing is not the amount, it is the time. The client needs to understand why starting now matters before any product conversation.',
+  q4c:'Correct. Capacity is structural — time horizon, income stability, financial cushion. Preference is emotional — how the client responds to seeing their portfolio drop. Ignoring preference creates anxiety that undermines the relationship.',
+  q4w:'These are distinct dimensions. A client with high capacity who panics at every dip requires a more conservative strategy. Capacity and preference can conflict, and the professional must navigate both honestly.',
+  q5c:'Correct. Idle money in a low-interest account over ten years is a significant compound growth opportunity. The professional surfaces the gap during discovery and positions the complete plan to address it — without recommending a specific product in the room.',
+  q5w:'A bank account earning minimal interest over ten years meaningfully underperforms what that money could become. The professional\'s job is to surface this during discovery — not to allocate immediately, but to create awareness for the complete plan.'
 };
-
-var qMsgs = {
-  q1c: 'Correct. Growth requires both surplus to fund it and protection to preserve it. Without cash flow clarity there is nothing to direct. Without protection in place a single event can erase what growth has built. The sequence exists because each Fundamental depends on the one before it being stable.',
-  q1w: 'The sequencing is structural, not strategic. Growth comes third because it literally cannot be built without surplus from cash flow and protection from unexpected events. Neither is about trust-building or product positioning — they are about logical dependency.',
-  q2c: 'Correct. Four years falls into the medium-term horizon — long enough for some growth-oriented exposure but close enough that capital preservation becomes increasingly important as the date approaches. A purely aggressive strategy risks the education fund being significantly down when the money is needed.',
-  q2w: 'Four years is a medium-term horizon. It is not long enough to ride out significant market downturns confidently — a sharp correction in year three would leave the client with insufficient funds when the goal arrives. A balanced approach is appropriate, shifting more conservative as the timeline shortens.',
-  q3c: 'Correct. The most powerful response to waiting is showing the client what time costs them in compound growth they can never recover. The professional who illustrates this with the client\'s own numbers — however small the starting amount — changes the conversation from delay to urgency without pressure.',
-  q3w: 'Agreeing to wait accepts the client\'s framing — that they need more money first. The professional\'s job is to reframe: the most valuable thing is not the amount, it is the time. Recommending a product without addressing the underlying belief also misses the point — the client needs to understand why starting now matters.',
-  q4c: 'Correct. Risk capacity is structural — determined by time horizon, income stability, emergency reserves, and dependants. Risk preference is emotional — how the client actually responds to seeing their portfolio drop. A client can have high capacity but low preference, and building a strategy that ignores preference creates anxiety that damages the relationship.',
-  q4w: 'These are distinct dimensions that must both be understood. A young client with stable income and a long time horizon has high risk capacity — but if they panic and sell at every market dip, their preference requires a more conservative strategy. Capacity and preference can conflict, and the professional must navigate both honestly.',
-  q5c: 'Correct. Idle money sitting in a low-interest account over a ten-year horizon is a compound growth opportunity the client may never have seen mapped clearly. The professional does not recommend a specific product during discovery — but they absolutely surface the gap and position it as something the complete plan will address.',
-  q5w: 'A standard bank account earning minimal interest over ten years is a meaningful underperformance relative to what that money could become with appropriate investment. The professional\'s job is to surface this — not to make an immediate product recommendation, but to make the client aware of the opportunity so the complete plan can address it.'
-};
-
-var cur = 0;
-var scores = {};
-var qAnswered = {};
-Object.keys(qLabels).forEach(function(q){ scores[q]=null; qAnswered[q]=false; });
-
-var ttsActive = null;
-
-function getScreenText(sid) {
-  var screen = document.getElementById(sid);
-  if (!screen) return '';
-  var clone = screen.cloneNode(true);
-  var remove = clone.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea');
-  remove.forEach(function(el){ el.parentNode && el.parentNode.removeChild(el); });
-  return clone.innerText || clone.textContent || '';
-}
-
-function stopAudio() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  if (ttsActive) {
-    var btn = document.getElementById('audio-btn-'+ttsActive);
-    var lbl = document.getElementById('audio-btn-label-'+ttsActive);
-    var st  = document.getElementById('audio-status-'+ttsActive);
-    var play  = document.getElementById('audio-icon-play-'+ttsActive);
-    var pause = document.getElementById('audio-icon-pause-'+ttsActive);
-    if (btn)   btn.classList.remove('playing');
-    if (lbl)   lbl.textContent = 'Listen to this screen';
-    if (st)    st.textContent = '';
-    if (play)  play.style.display = '';
-    if (pause) pause.style.display = 'none';
-    ttsActive = null;
-  }
-}
-
-function toggleAudio(sid) {
-  if (ttsActive === sid) { stopAudio(); return; }
-  stopAudio();
-  var text = getScreenText(sid);
-  if (!text.trim() || !window.speechSynthesis) return;
-  ttsActive = sid;
-  var btn   = document.getElementById('audio-btn-'+sid);
-  var lbl   = document.getElementById('audio-btn-label-'+sid);
-  var st    = document.getElementById('audio-status-'+sid);
-  var play  = document.getElementById('audio-icon-play-'+sid);
-  var pause = document.getElementById('audio-icon-pause-'+sid);
-  if (btn)   btn.classList.add('playing');
-  if (lbl)   lbl.textContent = 'Stop';
-  if (st)    st.textContent = 'Playing...';
-  if (play)  play.style.display = 'none';
-  if (pause) pause.style.display = '';
-  var utt = new SpeechSynthesisUtterance(text);
-  utt.rate = 0.92; utt.pitch = 1; utt.lang = 'en-US';
-  utt.onend = stopAudio; utt.onerror = stopAudio;
-  window.speechSynthesis.speak(utt);
-}
-
+var cur=0,scores={},qAnswered={};
+Object.keys(qLabels).forEach(function(q){scores[q]=null;qAnswered[q]=false;});
 function updateUI(){
   document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur)});
-  document.querySelectorAll('.prog-step').forEach(function(p,i){
-    p.classList.remove('done','active');
-    if(i<cur)p.classList.add('done');
-    else if(i===cur)p.classList.add('active');
-  });
+  document.querySelectorAll('.prog-step').forEach(function(p,i){p.classList.remove('done','active');if(i<cur)p.classList.add('done');else if(i===cur)p.classList.add('active');});
   document.getElementById('counter').textContent=(cur+1)+' of '+TOTAL_SCREENS;
   document.getElementById('back-btn').disabled=cur===0;
   var nb=document.getElementById('next-btn');
@@ -729,117 +522,55 @@ function updateUI(){
   document.getElementById('step-label').textContent=(cur+1)+' of '+TOTAL_SCREENS;
   if(cur===TOTAL_SCREENS-1){buildScoreSummary();}
 }
-
-function goNext(){ stopAudio(); if(cur<TOTAL_SCREENS-1){cur++;updateUI();window.scrollTo(0,0);} }
-function goBack(){ stopAudio(); if(cur>0){cur--;updateUI();window.scrollTo(0,0);} }
-
+function goNext(){stopAudio();if(cur<TOTAL_SCREENS-1){cur++;updateUI();window.scrollTo(0,0);}}
+function goBack(){stopAudio();if(cur>0){cur--;updateUI();window.scrollTo(0,0);}}
 function checkQ(el,correct,qid){
   if(qAnswered[qid])return;
-  qAnswered[qid]=true; scores[qid]=correct;
-  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){
-    s.style.pointerEvents='none';
-    s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');
-  });
+  qAnswered[qid]=true;scores[qid]=correct;
+  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){s.style.pointerEvents='none';s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');});
   var fb=document.getElementById('fb-'+qid);
   fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
   fb.textContent=qMsgs[qid+(correct?'c':'w')]||'';
 }
-
 function buildScoreSummary(){
   var qs=Object.keys(qLabels);
   var correct=qs.filter(function(q){return scores[q]===true;}).length;
   var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
   document.getElementById('score-display').textContent=pct+'%';
   document.getElementById('correct-display').textContent=correct+'/'+TOTAL_QUESTIONS;
-  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){
-    var res=scores[q];
-    var icon=res===null?'○':res?'✓':'✗';
-    var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';
-    return '<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';
-  }).join('');
+  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){var res=scores[q];var icon=res===null?'○':res?'✓':'✗';var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';return'<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';}).join('');
   var submitBtn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  if(submitBtn){
-    if(pct<80){
-      submitBtn.disabled=true;
-      var warn=document.getElementById('score-gate-msg');
-      if(!warn){
-        warn=document.createElement('div');
-        warn.id='score-gate-msg';
-        warn.style.cssText='font-size:18px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';
-        submitBtn.parentNode.insertBefore(warn,submitBtn);
-      }
-      warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';
-    } else {
-      submitBtn.disabled=false;
-      var warn=document.getElementById('score-gate-msg');
-      if(warn)warn.remove();
-    }
-  }
+  if(submitBtn){if(pct<80){submitBtn.disabled=true;var warn=document.getElementById('score-gate-msg');if(!warn){warn=document.createElement('div');warn.id='score-gate-msg';warn.style.cssText='font-size:18px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';submitBtn.parentNode.insertBefore(warn,submitBtn);}warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';}else{submitBtn.disabled=false;var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();}}
 }
-
 function retakeQuiz(){
-  Object.keys(qLabels).forEach(function(q){
-    qAnswered[q]=false; scores[q]=null;
-    document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){
-      btn.classList.remove('correct','wrong'); btn.style.pointerEvents='';
-    });
-    var fb=document.getElementById('fb-'+q);
-    if(fb){fb.className='feedback';fb.textContent='';}
-  });
-  document.getElementById('score-display').textContent='—';
-  document.getElementById('correct-display').textContent='—';
-  document.getElementById('q-breakdown').innerHTML='';
-  var st=document.getElementById('submit-status');
-  st.style.display='none'; st.textContent='';
-  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  if(btn){btn.disabled=false;btn.textContent='Submit results';}
-  var warn=document.getElementById('score-gate-msg');
-  if(warn)warn.remove();
-  cur=QUIZ_SCREEN_INDEX; updateUI(); window.scrollTo(0,0);
+  Object.keys(qLabels).forEach(function(q){qAnswered[q]=false;scores[q]=null;document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){btn.classList.remove('correct','wrong');btn.style.pointerEvents='';});var fb=document.getElementById('fb-'+q);if(fb){fb.className='feedback';fb.textContent='';}});
+  document.getElementById('score-display').textContent='—';document.getElementById('correct-display').textContent='—';document.getElementById('q-breakdown').innerHTML='';
+  var st=document.getElementById('submit-status');st.style.display='none';st.textContent='';
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');if(btn){btn.disabled=false;btn.textContent='Submit results';}
+  var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();
+  cur=QUIZ_SCREEN_INDEX;updateUI();window.scrollTo(0,0);
 }
-
 function submitResults(){
   var nm=document.getElementById('participant-name').value.trim();
-  if(!nm){
-    document.getElementById('name-warning').style.display='block';
-    document.getElementById('participant-name').focus(); return;
-  }
+  if(!nm){document.getElementById('name-warning').style.display='block';document.getElementById('participant-name').focus();return;}
   document.getElementById('name-warning').style.display='none';
   var st=document.getElementById('submit-status');
   var qs=Object.keys(qLabels);
   var correct=qs.filter(function(q){return scores[q]===true;}).length;
   var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
-  if(pct<80){
-    st.style.display='block'; st.style.background='#FAECE7'; st.style.color='#712B13';
-    st.textContent='A minimum score of 80% is required. You scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+'). Please retake the quiz.';
-    return;
-  }
+  if(pct<80){st.style.display='block';st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='A minimum score of 80% is required. You scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+'). Please retake the quiz.';return;}
   var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  st.style.display='block'; st.style.background='#EAF3DE'; st.style.color='#27500A';
-  st.textContent='Sending results...';
-  if(btn)btn.disabled=true;
-  var payload={
-    participant_name: nm,
-    module: MODULE_NAME,
-    completed_at: new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),
-    score_percent: pct+'%',
-    correct_of_total: correct+'/'+TOTAL_QUESTIONS
-  };
-  qs.forEach(function(q){ payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect'; });
-  var params=new URLSearchParams(payload);
-  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:params})
-  .then(function(){
-    st.style.background='#E1F5EE'; st.style.color='#085041';
-    st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct). Your facilitator will receive the full breakdown.';
-    if(btn)btn.textContent='Submitted';
-  })
-  .catch(function(){
-    st.style.background='#FAECE7'; st.style.color='#712B13';
-    st.textContent='Submission failed — please check your internet connection and try again.';
-    if(btn)btn.disabled=false;
-  });
+  st.style.display='block';st.style.background='#EAF3DE';st.style.color='#27500A';st.textContent='Sending results...';if(btn)btn.disabled=true;
+  var payload={participant_name:nm,module:MODULE_NAME,completed_at:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),score_percent:pct+'%',correct_of_total:correct+'/'+TOTAL_QUESTIONS};
+  qs.forEach(function(q){payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect';});
+  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(payload)})
+  .then(function(){st.style.background='#E1F5EE';st.style.color='#085041';st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct). Your facilitator will receive the full breakdown.';if(btn)btn.textContent='Submitted';})
+  .catch(function(){st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='Submission failed — please check your internet connection and try again.';if(btn)btn.disabled=false;});
 }
-
 updateUI();
+var ttsActive=null,ttsUtterance=null;
+function getScreenText(sid){var screen=document.getElementById(sid);if(!screen)return'';var clone=screen.cloneNode(true);clone.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea').forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});return clone.innerText||clone.textContent||'';}
+function stopAudio(){if(window.speechSynthesis)window.speechSynthesis.cancel();if(ttsActive){var b=document.getElementById('audio-btn-'+ttsActive);var l=document.getElementById('audio-btn-label-'+ttsActive);var s=document.getElementById('audio-status-'+ttsActive);var p=document.getElementById('audio-icon-play-'+ttsActive);var pa=document.getElementById('audio-icon-pause-'+ttsActive);if(b)b.classList.remove('playing');if(l)l.textContent='Listen to this screen';if(s)s.textContent='';if(p)p.style.display='';if(pa)pa.style.display='none';ttsActive=null;ttsUtterance=null;}}
+function toggleAudio(sid){if(ttsActive===sid){stopAudio();return;}stopAudio();var text=getScreenText(sid);if(!text.trim()||!window.speechSynthesis)return;ttsActive=sid;var b=document.getElementById('audio-btn-'+sid);var l=document.getElementById('audio-btn-label-'+sid);var s=document.getElementById('audio-status-'+sid);var p=document.getElementById('audio-icon-play-'+sid);var pa=document.getElementById('audio-icon-pause-'+sid);if(b)b.classList.add('playing');if(l)l.textContent='Stop';if(s)s.textContent='Playing...';if(p)p.style.display='none';if(pa)pa.style.display='';ttsUtterance=new SpeechSynthesisUtterance(text);ttsUtterance.rate=0.92;ttsUtterance.pitch=1;ttsUtterance.lang='en-US';ttsUtterance.onend=function(){stopAudio();};ttsUtterance.onerror=function(){stopAudio();};window.speechSynthesis.speak(ttsUtterance);}
 </script>
 </html>

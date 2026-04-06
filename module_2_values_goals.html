@@ -101,6 +101,101 @@
   .audio-btn.playing { color: #0F6E56; border-color: #0F6E56; }
   .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
   .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+
+  /* ── Shared visual components (injected) ── */
+  .lesson-list { display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.25rem; }
+  .lesson-item { display:flex;align-items:center;gap:.85rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.8rem 1rem; }
+  .lesson-num { width:30px;height:30px;border-radius:50%;background:#534AB7;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .lesson-num.teal { background:#0F6E56; }
+  .lesson-num.coral { background:#993C1D; }
+  .lesson-num.green { background:#3B6D11; }
+  .lesson-num.amber { background:#854F0B; }
+  .lesson-text { font-size:18px;color:var(--color-text-primary);font-weight:500; }
+  .contrast-panel { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .contrast-col { border-radius:var(--border-radius-lg);padding:1.1rem 1rem; }
+  .contrast-col.bad  { background:#FAECE7;border-top:3px solid #993C1D; }
+  .contrast-col.good { background:#E1F5EE;border-top:3px solid #0F6E56; }
+  .contrast-head { font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem; }
+  .contrast-col.bad  .contrast-head { color:#993C1D; }
+  .contrast-col.good .contrast-head { color:#0F6E56; }
+  .contrast-item { display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.55rem;font-size:17px;color:var(--color-text-primary);line-height:1.4; }
+  .contrast-dot { width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:.45em; }
+  .bad  .contrast-dot { background:#993C1D; }
+  .good .contrast-dot { background:#0F6E56; }
+  .journey { display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.25rem; }
+  .journey-step { display:flex;align-items:stretch;gap:.9rem; }
+  .journey-left { display:flex;flex-direction:column;align-items:center;width:48px;flex-shrink:0; }
+  .journey-node { width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .journey-node svg { width:22px;height:22px; }
+  .journey-line { width:2px;flex:1;margin:3px 0;min-height:12px;background:var(--color-border-tertiary); }
+  .journey-content { flex:1;padding-bottom:.75rem; }
+  .journey-title { font-size:19px;font-weight:700;color:var(--color-text-primary);margin-bottom:.3rem; }
+  .journey-body  { font-size:17px;color:var(--color-text-secondary);line-height:1.55; }
+  .fund-stack { display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem; }
+  .fund-row { display:flex;align-items:center;gap:1rem;border-radius:var(--border-radius-lg);padding:.9rem 1.1rem; }
+  .fund-row.cf { background:#E1F5EE;border-left:4px solid #0F6E56; }
+  .fund-row.pr { background:#FAECE7;border-left:4px solid #993C1D; }
+  .fund-row.gr { background:#EAF3DE;border-left:4px solid #3B6D11; }
+  .fund-row.tx { background:#FAEEDA;border-left:4px solid #854F0B; }
+  .fund-icon { width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .fund-icon svg { width:22px;height:22px; }
+  .fund-row.cf .fund-icon { background:#0F6E56; }
+  .fund-row.pr .fund-icon { background:#993C1D; }
+  .fund-row.gr .fund-icon { background:#3B6D11; }
+  .fund-row.tx .fund-icon { background:#854F0B; }
+  .fund-info { flex:1; }
+  .fund-num  { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem; }
+  .fund-row.cf .fund-num { color:#0F6E56; }
+  .fund-row.pr .fund-num { color:#993C1D; }
+  .fund-row.gr .fund-num { color:#3B6D11; }
+  .fund-row.tx .fund-num { color:#854F0B; }
+  .fund-name { font-size:19px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem; }
+  .fund-desc { font-size:17px;color:var(--color-text-secondary);line-height:1.5; }
+  .risk-visual { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .risk-card { border-radius:var(--border-radius-lg);padding:1rem; }
+  .risk-icon { width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.65rem; }
+  .risk-icon svg { width:20px;height:20px; }
+  .risk-num  { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem; }
+  .risk-name { font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.4rem; }
+  .risk-body { font-size:16px;color:var(--color-text-secondary);line-height:1.55; }
+  .risk-card.death { background:#FAECE7; } .risk-card.death .risk-num { color:#993C1D; } .risk-card.death .risk-icon { background:#993C1D; }
+  .risk-card.disab { background:#FAEEDA; } .risk-card.disab .risk-num { color:#854F0B; } .risk-card.disab .risk-icon { background:#854F0B; }
+  .risk-card.ci    { background:#EAF3DE; } .risk-card.ci   .risk-num { color:#3B6D11; } .risk-card.ci   .risk-icon { background:#3B6D11; }
+  .risk-card.loss  { background:#EEEDFE; } .risk-card.loss .risk-num { color:#534AB7; } .risk-card.loss .risk-icon { background:#534AB7; }
+  .icon-row-cards { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .icon-card { border-radius:var(--border-radius-lg);padding:1rem;background:var(--color-background-secondary); }
+  .icon-card-icon { width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.55rem; }
+  .icon-card-icon svg { width:19px;height:19px; }
+  .icon-card-title { font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:.3rem; }
+  .icon-card-body  { font-size:16px;color:var(--color-text-secondary);line-height:1.5; }
+  .timeline-row { display:flex;gap:.5rem;margin-bottom:1.25rem;overflow-x:auto; }
+  .timeline-node { flex:1;min-width:90px;border-radius:var(--border-radius-md);padding:.8rem .6rem;text-align:center; }
+  .timeline-period { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem; }
+  .timeline-range  { font-size:15px;font-weight:700;margin-bottom:.4rem; }
+  .timeline-body   { font-size:14px;color:var(--color-text-secondary);line-height:1.4; }
+  .step-visual { display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.25rem; }
+  .step-item { display:flex;align-items:flex-start;gap:.85rem;padding:.85rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md); }
+  .step-badge { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;font-weight:700;color:#fff; }
+  .step-title { font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem; }
+  .step-body  { font-size:17px;color:var(--color-text-secondary);line-height:1.55; }
+  .solve-item { display:flex;align-items:flex-start;gap:.85rem;padding:.8rem 0;border-bottom:0.5px solid var(--color-border-tertiary); }
+  .solve-item:last-child { border-bottom:none; }
+  .solve-icon { width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem; }
+  .solve-icon svg { width:17px;height:17px; }
+  .solve-title { font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:.2rem; }
+  .solve-body  { font-size:17px;color:var(--color-text-secondary);line-height:1.55; }
+  .completion-badge { display:flex;flex-direction:column;align-items:center;border-radius:16px;padding:2rem 1.5rem 1.75rem;margin-bottom:1.5rem;text-align:center; }
+  .badge-ring { width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem; }
+  .badge-ring svg { width:40px;height:40px; }
+  .badge-title { font-size:28px;font-weight:700;margin-bottom:.3rem; }
+  .badge-sub   { font-size:19px; }
+  .vf-flow { display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:1.25rem;padding:.9rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg); }
+  .vf-node { background:var(--color-background-primary);border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.5rem .8rem;font-size:15px;font-weight:700;color:var(--color-text-primary); }
+  .vf-node.active { background:#EEEDFE;border-color:#AFA9EC;color:#3C3489; }
+  .vf-arrow { font-size:18px;color:var(--color-text-tertiary); }
+  .hb-blue { background:#E8F4FD;border-left:3px solid #1A6FA8;border-radius:0; }
+  .hb-blue .hb-label { color:#1A6FA8; }
+
 </style>
 
 <div class="container">
@@ -139,9 +234,15 @@
   <div class="tag">4F Solution — Module 2</div>
   <h2>Values and goals discovery</h2>
   <p class="sub">Before any recommendation is made, the professional must understand what the client is actually trying to protect, build, and leave behind. This module teaches you how to uncover that — in their words, not yours.</p>
-  <div class="badge-row">
-    <div class="badge"><div class="badge-dot" style="background:#534AB7"></div>7 lessons</div>
-    <div class="badge"><div class="badge-dot" style="background:#1D9E75"></div>5 knowledge checks</div>
+  <div class="lesson-list">
+    <div class="lesson-item"><div class="lesson-num">1</div><div class="lesson-text">Why products fail when asked too soon</div></div>
+    <div class="lesson-item"><div class="lesson-num">2</div><div class="lesson-text">Values vs goals — the why and the what</div></div>
+    <div class="lesson-item"><div class="lesson-num">3</div><div class="lesson-text">Common client values and what they mean for the plan</div></div>
+    <div class="lesson-item"><div class="lesson-num">4</div><div class="lesson-text">Getting in front of the client — word for word</div></div>
+    <div class="lesson-item"><div class="lesson-num">5</div><div class="lesson-text">Discovery questions — word for word</div></div>
+    <div class="lesson-item"><div class="lesson-num">6</div><div class="lesson-text">Short, medium, and long-term goals</div></div>
+    <div class="lesson-item"><div class="lesson-num">7</div><div class="lesson-text">Connecting what you heard to the 4 Fundamentals</div></div>
+    <div class="lesson-item" style="background:#EEEDFE"><div class="lesson-num" style="background:#3C3489">✓</div><div class="lesson-text" style="color:#534AB7;font-weight:600">5 knowledge checks — 80% required to pass</div></div>
   </div>
   <div class="highlight-box hb-purple">
     <div class="hb-label">What you will learn</div>
@@ -168,6 +269,22 @@
   <div class="tag">4F Solution — Lesson 1: Why values come first</div>
   <h2>Products answer the wrong question if you ask too soon</h2>
   <p class="sub">Every product in financial services exists to solve a problem. The mistake most professionals make is identifying the product before they understand the problem.</p>
+  <div class="contrast-panel">
+    <div class="contrast-col bad">
+      <div class="contrast-head">Lead with products</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Client evaluates the product</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Compares price, not value</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Feels sold to, not advised</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Real issue never surfaced</div>
+    </div>
+    <div class="contrast-col good">
+      <div class="contrast-head">Lead with values</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Client evaluates their situation</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Connects to what already matters</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Feels like planning, not pitching</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Real priorities surface naturally</div>
+    </div>
+  </div>
   <div class="highlight-box hb-coral">
     <div class="hb-label">What happens when you lead with products</div>
     <div class="hb-text">The client evaluates the product — not their situation. They compare price, not value. They feel sold to, not advised. And you miss the real issue because you never asked about it.</div>
@@ -201,6 +318,22 @@
   <div class="tag">4F Solution — Lesson 2: Values vs goals</div>
   <h2>Values are the why. Goals are the what.</h2>
   <p class="sub">These two things are often confused in discovery conversations. Understanding the difference makes your questions sharper and your recommendations more defensible.</p>
+  <div class="contrast-panel" style="margin-bottom:1.25rem">
+    <div class="contrast-col" style="background:#EEEDFE;border-top:3px solid #534AB7">
+      <div class="contrast-head" style="color:#534AB7">Values — the why</div>
+      <div class="contrast-item" style="color:#534AB7"><span class="contrast-dot" style="background:#534AB7"></span>Emotional and enduring</div>
+      <div class="contrast-item" style="color:#534AB7"><span class="contrast-dot" style="background:#534AB7"></span>What the client believes in</div>
+      <div class="contrast-item" style="color:#534AB7"><span class="contrast-dot" style="background:#534AB7"></span>Does not change with markets</div>
+      <div class="contrast-item" style="color:#534AB7"><span class="contrast-dot" style="background:#534AB7"></span>Security, family, legacy, freedom</div>
+    </div>
+    <div class="contrast-col good">
+      <div class="contrast-head">Goals — the what</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Measurable and time-bound</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Specific outcomes to achieve</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Flow from values</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Retire at 60, pay off mortgage</div>
+    </div>
+  </div>
   <div class="highlight-box hb-purple">
     <div class="hb-label">Values — the why</div>
     <div class="hb-text">Values are what the client believes in and wants to protect. They are emotional and enduring. They do not change with market conditions or life circumstances. Examples: family security, independence, legacy, freedom from debt, peace of mind.</div>
@@ -240,19 +373,19 @@
   <p class="sub">Most clients express one or two dominant values that shape every financial decision they make. Tap each value to see what it means for the 4F conversation.</p>
   <div id="values-explorer">
     <button class="value-btn" onclick="showVal('security',this)">Security — protecting what they have built</button>
-    <div class="value-detail" id="val-security">Cash Flow tells you how long they survive without income. Protection closes the gap if something goes wrong. Growth builds the buffer. Tax Efficiency ensures nothing erodes it unnecessarily. The discovery question: "If your income stopped tomorrow, how long could your family maintain their lifestyle?"</div>
+    <div class="value-detail" id="val-security">Cash Flow tells you how long they survive without income. Protection closes the gap if something goes wrong. Wealth builds the buffer. Tax Efficiency ensures nothing erodes it unnecessarily. The discovery question: "If your income stopped tomorrow, how long could your family maintain their lifestyle?"</div>
 
     <button class="value-btn" onclick="showVal('family',this)">Family — providing for the people they love</button>
-    <div class="value-detail" id="val-family">Protection is paramount — their family's lifestyle depends on them. Cash Flow determines what they can sustain today. Growth builds what the family inherits. Tax Efficiency ensures transfers happen cleanly. The discovery question: "If something happened to you unexpectedly, what would you want to make sure was taken care of?"</div>
+    <div class="value-detail" id="val-family">Protection is paramount — their family's lifestyle depends on them. Cash Flow determines what they can sustain today. Wealth builds what the family inherits. Tax Efficiency ensures transfers happen cleanly. The discovery question: "If something happened to you unexpectedly, what would you want to make sure was taken care of?"</div>
 
     <button class="value-btn" onclick="showVal('freedom',this)">Freedom — living life on their own terms</button>
-    <div class="value-detail" id="val-freedom">Cash Flow is the starting point — freedom requires surplus. Growth builds the asset base that creates independence. Protection ensures one event does not eliminate what they have built. Tax Efficiency keeps more of it working for them. The discovery question: "What does financial independence look like to you — and when do you want to achieve it?"</div>
+    <div class="value-detail" id="val-freedom">Cash Flow is the starting point — freedom requires surplus. Wealth builds the asset base that creates independence. Protection ensures one event does not eliminate what they have built. Tax Efficiency keeps more of it working for them. The discovery question: "What does financial independence look like to you — and when do you want to achieve it?"</div>
 
     <button class="value-btn" onclick="showVal('legacy',this)">Legacy — leaving something meaningful behind</button>
-    <div class="value-detail" id="val-legacy">Protection is critical — estate erosion is the biggest threat to what they leave behind. Tax Efficiency determines how much actually transfers. Growth and Cash Flow fund the life they live on the way there. The discovery question: "When you think about what you want to leave behind — whether to family, a cause, or a community — what does that look like?"</div>
+    <div class="value-detail" id="val-legacy">Protection is critical — estate erosion is the biggest threat to what they leave behind. Tax Efficiency determines how much actually transfers. Wealth and Cash Flow fund the life they live on the way there. The discovery question: "When you think about what you want to leave behind — whether to family, a cause, or a community — what does that look like?"</div>
 
     <button class="value-btn" onclick="showVal('independence',this)">Independence — being debt-free and self-reliant</button>
-    <div class="value-detail" id="val-independence">Cash Flow is the engine — eliminating debt requires consistent surplus. Growth accelerates the timeline. Protection ensures a setback does not reset the progress. Tax Efficiency keeps more available to accelerate payoff. The discovery question: "What would it mean to you to have no debt — and what would you do differently if you got there?"</div>
+    <div class="value-detail" id="val-independence">Cash Flow is the engine — eliminating debt requires consistent surplus. Wealth building accelerates the timeline. Protection ensures a setback does not reset the progress. Tax Efficiency keeps more available to accelerate payoff. The discovery question: "What would it mean to you to have no debt — and what would you do differently if you got there?"</div>
 
     <button class="value-btn" onclick="showVal('peaceofmind',this)">Peace of mind — knowing everything is taken care of</button>
     <div class="value-detail" id="val-peaceofmind">All four Fundamentals contribute — but Protection and having a documented plan are often the most powerful for this client. They want to know it is all organized. The discovery question: "Is there anything about your financial situation right now that keeps you up at night — or that you know you should address but haven't?"</div>
@@ -400,22 +533,44 @@
   <h2>Short, medium, and long-term goals — and why all three matter</h2>
   <p class="sub">Goals without a timeline are wishes. Once you understand a client's values, your job is to translate them into specific, time-bound goals across three horizons.</p>
 
-  <div class="goal-grid">
-    <div class="goal-card">
-      <div class="goal-period" style="color:#993C1D">Short term</div>
-      <div class="goal-range" style="color:#993C1D">0–2 years</div>
-      <div class="goal-examples">Emergency fund. Debt reduction. Coverage gaps. Getting organized.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.25rem">
+
+    <div style="background:#FAECE7;border-radius:var(--border-radius-lg);padding:1.1rem .9rem;border-top:4px solid #993C1D;display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#993C1D">Short term</div>
+      <div style="font-size:26px;font-weight:800;color:#712B13;line-height:1.1">0–3<span style="font-size:16px;font-weight:600"> yrs</span></div>
+      <div style="width:100%;height:1px;background:rgba(153,60,29,0.15)"></div>
+      <div style="font-size:15px;font-weight:600;color:#712B13;line-height:1.5">Preserve capital</div>
+      <div style="width:100%;height:1px;background:rgba(153,60,29,0.15)"></div>
+      <div style="display:flex;flex-direction:column;gap:.3rem"><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Emergency reserve</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Debt reduction</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Coverage gaps</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#993C1D;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#712B13;line-height:1.4">Getting organized</span></div></div>
+      <div style="margin-top:auto;padding-top:.5rem">
+        <div style="background:rgba(153,60,29,0.15);border-radius:4px;padding:.3rem .5rem;font-size:12px;font-weight:700;color:#993C1D;text-align:center">Low volatility only</div>
+      </div>
     </div>
-    <div class="goal-card">
-      <div class="goal-period" style="color:#534AB7">Medium term</div>
-      <div class="goal-range" style="color:#534AB7">2–10 years</div>
-      <div class="goal-examples">Home purchase. Education savings. Business goals. Income growth targets.</div>
+
+    <div style="background:#EEEDFE;border-radius:var(--border-radius-lg);padding:1.1rem .9rem;border-top:4px solid #534AB7;display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#534AB7">Medium term</div>
+      <div style="font-size:26px;font-weight:800;color:#3C3489;line-height:1.1">2–10<span style="font-size:16px;font-weight:600"> yrs</span></div>
+      <div style="width:100%;height:1px;background:rgba(83,74,183,0.15)"></div>
+      <div style="font-size:15px;font-weight:600;color:#3C3489;line-height:1.5">Balanced growth</div>
+      <div style="width:100%;height:1px;background:rgba(83,74,183,0.15)"></div>
+      <div style="display:flex;flex-direction:column;gap:.3rem"><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#534AB7;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#3C3489;line-height:1.4">Home purchase</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#534AB7;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#3C3489;line-height:1.4">Education savings</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#534AB7;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#3C3489;line-height:1.4">Business goals</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#534AB7;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#3C3489;line-height:1.4">Income targets</span></div></div>
+      <div style="margin-top:auto;padding-top:.5rem">
+        <div style="background:rgba(83,74,183,0.15);border-radius:4px;padding:.3rem .5rem;font-size:12px;font-weight:700;color:#534AB7;text-align:center">Some volatility acceptable</div>
+      </div>
     </div>
-    <div class="goal-card">
-      <div class="goal-period" style="color:#0F6E56">Long term</div>
-      <div class="goal-range" style="color:#0F6E56">10+ years</div>
-      <div class="goal-examples">Retirement. Legacy planning. Financial independence. Estate transfer.</div>
+
+    <div style="background:#E1F5EE;border-radius:var(--border-radius-lg);padding:1.1rem .9rem;border-top:4px solid #0F6E56;display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0F6E56">Long term</div>
+      <div style="font-size:26px;font-weight:800;color:#085041;line-height:1.1">10+<span style="font-size:16px;font-weight:600"> yrs</span></div>
+      <div style="width:100%;height:1px;background:rgba(15,110,86,0.15)"></div>
+      <div style="font-size:15px;font-weight:600;color:#085041;line-height:1.5">Maximum growth</div>
+      <div style="width:100%;height:1px;background:rgba(15,110,86,0.15)"></div>
+      <div style="display:flex;flex-direction:column;gap:.3rem"><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#0F6E56;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#085041;line-height:1.4">Retirement</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#0F6E56;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#085041;line-height:1.4">Legacy planning</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#0F6E56;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#085041;line-height:1.4">Financial independence</span></div><div style="display:flex;align-items:flex-start;gap:.5rem"><span style="color:#0F6E56;font-size:14px;margin-top:1px">▸</span><span style="font-size:14px;color:#085041;line-height:1.4">Estate transfer</span></div></div>
+      <div style="margin-top:auto;padding-top:.5rem">
+        <div style="background:rgba(15,110,86,0.15);border-radius:4px;padding:.3rem .5rem;font-size:12px;font-weight:700;color:#0F6E56;text-align:center">Higher volatility tolerable</div>
+      </div>
     </div>
+
   </div>
 
   <div class="highlight-box hb-purple">
@@ -424,7 +579,7 @@
   </div>
   <div class="card">
     <div class="card-title">How goals connect to the 4 Fundamentals</div>
-    <div class="card-body">Short-term goals often reveal Cash Flow and Protection gaps. Medium-term goals drive Growth conversations. Long-term goals bring in Tax Efficiency — how money is structured today determines how much is available at retirement and transfer. Every goal the client names maps to at least one Fundamental.</div>
+    <div class="card-body">Short-term goals often reveal Cash Flow and Protection gaps. Medium-term goals drive Wealth conversations. Long-term goals bring in Tax Efficiency — how money is structured today determines how much is available at retirement and transfer. Every goal the client names maps to at least one Fundamental.</div>
   </div>
 </div>
 
@@ -447,21 +602,23 @@
   <div class="tag">4F Solution — Lesson 7: Connecting to the 4 Fundamentals</div>
   <h2>What you heard — and where it goes in the plan</h2>
   <p class="sub">Once the discovery conversation is complete, the professional's job is to map what the client said to the 4 Fundamentals. This is what turns a conversation into a plan.</p>
-  <div class="highlight-box hb-teal">
-    <div class="hb-label">Cash flow</div>
-    <div class="hb-text">What they said about income, expenses, debt, and how much is left at the end of the month. Any goal that depends on surplus — which is all of them — starts here.</div>
-  </div>
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">Protection</div>
-    <div class="hb-text">What they said about fears, risks, and what they cannot afford to have happen. Every gap between where they are and where they want to be is a protection conversation waiting to happen.</div>
-  </div>
-  <div class="highlight-box hb-green">
-    <div class="hb-label">Growth</div>
-    <div class="hb-text">What they said about goals, timelines, and what they are building toward. Medium and long-term goals almost always require a growth strategy — registered accounts, investments, or both.</div>
-  </div>
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">Tax efficiency</div>
-    <div class="hb-text">What they said about what they want to keep, transfer, or leave behind. Tax efficiency is the difference between what they earn and what they actually get to use — at every stage of life.</div>
+  <div class="fund-stack">
+    <div class="fund-row cf">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Maps from discovery</div><div class="fund-name">Cash Flow</div><div class="fund-desc">What they said about income, expenses, debt, and what's left. Every goal that depends on surplus starts here.</div></div>
+    </div>
+    <div class="fund-row pr">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Maps from discovery</div><div class="fund-name">Protection</div><div class="fund-desc">What they said about fears and risks. Every gap between where they are and where they want to be is a protection conversation.</div></div>
+    </div>
+    <div class="fund-row gr">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Maps from discovery</div><div class="fund-name">Wealth</div><div class="fund-desc">What they said about goals and timelines. Medium and long-term goals almost always require a wealth strategy.</div></div>
+    </div>
+    <div class="fund-row tx">
+      <div class="fund-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <div class="fund-info"><div class="fund-num">Maps from discovery</div><div class="fund-name">Tax Efficiency</div><div class="fund-desc">What they said about keeping, transferring, or leaving behind. Tax efficiency preserves the output of every other Fundamental.</div></div>
+    </div>
   </div>
   <div class="card">
     <div class="card-title">The bridging statement</div>
@@ -507,7 +664,7 @@
 
   <div style="margin-bottom:1.5rem">
     <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says: "I just want to make sure my family is taken care of if something happens to me." Which Fundamental does this most directly point to?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Growth — they want to build wealth for their family</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Wealth — they want to build wealth for their family</button>
     <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Protection — they are expressing a fear of leaving their family exposed to a risk</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Tax Efficiency — estate transfer planning is the priority</button>
     <div class="feedback" id="fb-q3"></div>
@@ -523,7 +680,7 @@
 
   <div style="margin-bottom:1rem">
     <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client's short-term goal is to build a 3-month emergency fund. Which Fundamental does this primarily address?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Growth — building assets is always a Growth conversation</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Wealth — building assets is always a Wealth conversation</button>
     <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Both Cash Flow and Protection — surplus funds the reserve, and the reserve protects the plan from income disruption</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Tax Efficiency — the funds should be in a tax-advantaged account for tax-free growth</button>
     <div class="feedback" id="fb-q5"></div>
@@ -550,7 +707,15 @@
   <h2>Module 2 complete</h2>
   <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
 
-  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+  <div class="completion-badge" style="background:#EEEDFE">
+    <div class="badge-ring" style="background:#534AB7">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="badge-title" style="color:#26215C">Module 2 complete</div>
+    <div class="badge-sub" style="color:#534AB7">Values &amp; Goals Discovery</div>
+  </div>
+
+    <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
       <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">

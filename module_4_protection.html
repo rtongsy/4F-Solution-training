@@ -7,672 +7,374 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --color-text-primary: #1a1a18;
-    --color-text-secondary: #5f5e5a;
-    --color-text-tertiary: #888780;
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f5f4f0;
-    --color-border-tertiary: rgba(0,0,0,0.12);
-    --color-border-secondary: rgba(0,0,0,0.22);
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
+    --color-text-primary: #1a1a18; --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780; --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0; --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22); --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius-md: 8px; --border-radius-lg: 12px;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --color-text-primary: #e8e6de;
-      --color-text-secondary: #9c9a92;
-      --color-text-tertiary: #6b6963;
-      --color-background-primary: #1e1e1c;
-      --color-background-secondary: #272724;
-      --color-border-tertiary: rgba(255,255,255,0.10);
-      --color-border-secondary: rgba(255,255,255,0.18);
-    }
+    :root { --color-text-primary: #e8e6de; --color-text-secondary: #9c9a92; --color-text-tertiary: #6b6963; --color-background-primary: #1e1e1c; --color-background-secondary: #272724; --color-border-tertiary: rgba(255,255,255,0.10); --color-border-secondary: rgba(255,255,255,0.18); }
   }
   body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
-  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
-  .mod { width: 100%; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; min-height: 600px; display: flex; flex-direction: column; }
+  .mod { width: 100%; display: flex; flex-direction: column; flex: 1; }
   .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
   .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
-  .prog-step.done { background: #993C1D; }
-  .prog-step.active { background: #D85A30; }
+  .prog-step.done { background: #993C1D; } .prog-step.active { background: #D85A30; }
   .step-label { font-size: 17px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
-  .screen { display: none; }
-  .screen.active { display: block; }
+  .screen { display: none; } .screen.active { display: block; flex: 1; }
   .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #FAECE7; color: #712B13; margin-bottom: 1rem; letter-spacing: .03em; }
   h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
-  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
   .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
   .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
-  .card-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
-  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
-  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
-  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
-  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; border-radius: 0; }
-  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; border-radius: 0; }
-  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: 0; }
+  .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
+  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.25rem; }
+  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; } .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; }
+  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; } .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; }
   .hb-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
-  .hb-purple .hb-label { color: #534AB7; }
-  .hb-teal .hb-label { color: #0F6E56; }
-  .hb-coral .hb-label { color: #993C1D; }
-  .hb-green .hb-label { color: #3B6D11; }
-  .hb-amber .hb-label { color: #854F0B; }
+  .hb-purple .hb-label { color: #534AB7; } .hb-coral .hb-label { color: #993C1D; } .hb-teal .hb-label { color: #0F6E56; } .hb-amber .hb-label { color: #854F0B; }
   .hb-text { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+  .q-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #993C1D; }
+  .q-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #993C1D; margin-bottom: .4rem; }
+  .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
+  .q-why { font-size: 18px; color: var(--color-text-secondary); line-height: 1.6; margin-top: .4rem; padding-top: .4rem; border-top: 0.5px solid var(--color-border-tertiary); }
   .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 20px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
   .quiz-option:hover { border-color: #D85A30; background: #FAECE7; color: #712B13; }
   .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
   .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
   .feedback { font-size: 20px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
-  .feedback.show { display: block; }
-  .fb-correct { background: #E1F5EE; color: #085041; }
-  .fb-wrong { background: #FAECE7; color: #712B13; }
-  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .feedback.show { display: block; } .fb-correct { background: #E1F5EE; color: #085041; } .fb-wrong { background: #FAECE7; color: #712B13; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--color-border-secondary); background: var(--color-background-primary); }
   .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
   .nav-btn:hover { background: var(--color-background-secondary); }
   .nav-btn.primary { background: #993C1D; border-color: #993C1D; color: #FAECE7; font-weight: 600; }
-  .nav-btn.primary:hover { background: #712B13; }
-  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .nav-btn.primary:hover { background: #712B13; } .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
   .counter { font-size: 17px; color: var(--color-text-tertiary); }
-  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-secondary); }
-  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-    .q-card { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-secondary); border-left: 4px solid currentColor; }
-  .q-label { font-size: 26px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #993C1D; margin-bottom: .4rem; }
-  .q-text { font-size: 21px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
-      .q-why { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-top: .5rem; padding-top: .5rem; border-top: 0.5px solid var(--color-border-tertiary); }
-  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
-  .risk-card { border-radius: var(--border-radius-md); padding: 1rem; border: 0.5px solid var(--color-border-tertiary); }
-  .risk-title { font-size: 26px; font-weight: 700; margin-bottom: .3rem; }
-  .risk-body { font-size: 21px; color: var(--color-text-primary); line-height: 1.55; }
-  .risk-tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .04em; }
-  .section-label { font-size: 21px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .75rem; margin-top: 1.25rem; }
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
-  .summary-card { border-radius: var(--border-radius-md); padding: 1rem; border-top: 3px solid; }
-  .summary-title { font-size: 21px; font-weight: 700; margin-bottom: .35rem; }
-  .summary-body { font-size: 26px; color: var(--color-text-primary); line-height: 1.55; }
-
   .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
   .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
-  .audio-btn:hover { background: var(--color-background-primary); }
-  .audio-btn.playing { color: #0F6E56; border-color: #0F6E56; }
-  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
-  .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+  .audio-btn:hover { background: var(--color-background-primary); } .audio-btn.playing { color: #993C1D; border-color: #993C1D; }
+  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; } .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+  .lesson-list { display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.25rem; }
+  .lesson-item { display:flex;align-items:center;gap:.85rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.8rem 1rem; }
+  .lesson-num { width:30px;height:30px;border-radius:50%;background:#993C1D;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .lesson-text { font-size:18px;color:var(--color-text-primary);font-weight:500; }
+  .risk-visual { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .risk-card { border-radius:var(--border-radius-lg);padding:1rem; }
+  .risk-icon { width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.65rem; }
+  .risk-icon svg { width:20px;height:20px; }
+  .risk-num { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem; }
+  .risk-name { font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.4rem; }
+  .risk-body { font-size:16px;color:var(--color-text-secondary);line-height:1.55; }
+  .risk-card.death { background:#FAECE7; } .risk-card.death .risk-num { color:#993C1D; } .risk-card.death .risk-icon { background:#993C1D; }
+  .risk-card.disab { background:#FAEEDA; } .risk-card.disab .risk-num { color:#854F0B; } .risk-card.disab .risk-icon { background:#854F0B; }
+  .risk-card.ci    { background:#EAF3DE; } .risk-card.ci   .risk-num { color:#3B6D11; } .risk-card.ci   .risk-icon { background:#3B6D11; }
+  .risk-card.loss  { background:#EEEDFE; } .risk-card.loss .risk-num { color:#534AB7; } .risk-card.loss .risk-icon { background:#534AB7; }
+  .completion-badge { display:flex;flex-direction:column;align-items:center;border-radius:16px;padding:2rem 1.5rem 1.75rem;margin-bottom:1.5rem;text-align:center; }
+  .badge-ring { width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem; }
+  .badge-ring svg { width:40px;height:40px; }
+  .badge-title { font-size:28px;font-weight:700;margin-bottom:.3rem; }
+  .badge-sub { font-size:19px; }
 </style>
 
 <div class="container">
 <div class="mod">
 
 <div class="progress-bar">
-  <div class="prog-step active" id="p0"></div>
-  <div class="prog-step" id="p1"></div>
-  <div class="prog-step" id="p2"></div>
-  <div class="prog-step" id="p3"></div>
-  <div class="prog-step" id="p4"></div>
-  <div class="prog-step" id="p5"></div>
-  <div class="prog-step" id="p6"></div>
-  <div class="prog-step" id="p7"></div>
-  <div class="prog-step" id="p8"></div>
-  <div class="prog-step" id="p9"></div>
-  <div class="prog-step" id="p10"></div>
-  <span class="step-label" id="step-label">1 of 10</span>
+  <div class="prog-step active" id="p0"></div><div class="prog-step" id="p1"></div><div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div><div class="prog-step" id="p4"></div><div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div><div class="prog-step" id="p7"></div><div class="prog-step" id="p8"></div>
+  <div class="prog-step" id="p9"></div><div class="prog-step" id="p10"></div>
+  <span class="step-label" id="step-label">1 of 12</span>
 </div>
 
-<!-- SCREEN 0 — Welcome -->
+<!-- s0 -->
 <div class="screen active" id="s0">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s0" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s0">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s0"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s0">Listen to this screen</span></button><span class="audio-label" id="audio-status-s0"></span></div>
   <div class="tag">4F Solution — Module 4</div>
   <h2>Protection — ensuring nothing derails the plan</h2>
-  <p class="sub">A plan without protection is a wish. One unexpected event — death, disability, critical illness, or income loss — can erase everything built across Cash Flow, Growth, and Tax Efficiency. This module teaches you how to surface those risks and have the conversation that most professionals avoid.</p>
-  <div class="badge-row">
-    <div class="badge"><div class="badge-dot" style="background:#993C1D"></div>8 lessons</div>
-    <div class="badge"><div class="badge-dot" style="background:#D85A30"></div>5 knowledge checks</div>
-  </div>
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">What you will learn</div>
-    <div class="hb-text">Why protection comes second in the 4F process. The four risks that can derail any plan. How to frame each risk in the client's language without creating fear. How life insurance, disability coverage, and critical illness protection work — just enough to have the conversation. Why income loss has no insurance product. How to connect every protection gap directly to the client's stated values.</div>
+  <p class="sub">A plan without protection is a wish. One event — death, disability, critical illness, or income loss — can erase everything built across the other three Fundamentals.</p>
+  <div class="lesson-list">
+    <div class="lesson-item"><div class="lesson-num">1</div><div class="lesson-text">You cannot grow what you cannot protect</div></div>
+    <div class="lesson-item"><div class="lesson-num">2</div><div class="lesson-text">Four risks — any one can erase the plan</div></div>
+    <div class="lesson-item"><div class="lesson-num">3</div><div class="lesson-text">Life insurance — protecting what depends on you</div></div>
+    <div class="lesson-item"><div class="lesson-num">4</div><div class="lesson-text">Disability — the most overlooked risk</div></div>
+    <div class="lesson-item"><div class="lesson-num">5</div><div class="lesson-text">Critical illness — the financial cost of surviving</div></div>
+    <div class="lesson-item"><div class="lesson-num">6</div><div class="lesson-text">Income loss — the risk with no insurance product</div></div>
+    <div class="lesson-item"><div class="lesson-num">7</div><div class="lesson-text">Will, POA, and Health directive — the missing documents</div></div>
+    <div class="lesson-item"><div class="lesson-num">8</div><div class="lesson-text">Connecting every gap to what the client told you they care about</div></div>
+    <div class="lesson-item" style="background:#FAECE7"><div class="lesson-num" style="background:#712B13">✓</div><div class="lesson-text" style="color:#993C1D;font-weight:600">5 knowledge checks — 80% required to pass</div></div>
   </div>
 </div>
 
-<!-- SCREEN 1 — Why protection comes second -->
+<!-- s1 -->
 <div class="screen" id="s1">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s1" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s1">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s1"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s1">Listen to this screen</span></button><span class="audio-label" id="audio-status-s1"></span></div>
   <div class="tag">4F Solution — Lesson 1: Why protection comes second</div>
   <h2>You cannot grow what you cannot protect</h2>
-  <p class="sub">Cash flow tells you what is available. Protection ensures it stays available. Without protection in place, everything built through growth and tax efficiency can be erased by a single unplanned event.</p>
+  <p class="sub">Cash flow tells you what is available. Protection ensures it stays available. A single unplanned event can erase everything built across the other three Fundamentals.</p>
   <div class="highlight-box hb-coral">
     <div class="hb-label">The logic of the sequence</div>
-    <div class="hb-text">Cash flow comes first because it defines what the client has to work with. Protection comes second because it ensures nothing eliminates that foundation before the plan can deliver on it. Growth and Tax Efficiency come after — because they build on a base that has to be stable first.</div>
+    <div class="hb-text">Cash flow defines the foundation. Protection ensures nothing eliminates it before the plan delivers on it. Investments &amp; Wealth and Tax Efficiency build on a base that must be stable first.</div>
   </div>
   <div class="card">
     <div class="card-title">What protection actually is</div>
-    <div class="card-body">Protection is not insurance. Insurance is one of the tools. Protection is the conversation about what could go wrong — and what happens to the client's financial plan, their family, and their goals if it does. The professional's job is to surface that conversation clearly and without judgement.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Discovery and education — again</div>
-    <div class="card-body">The same principle from cash flow applies here. The professional asks and educates simultaneously. Most clients have never had someone map their protection picture clearly. Many assume they are covered when they are not. The conversation itself is the value — before a single product is discussed.</div>
+    <div class="card-body">Protection is not insurance. Insurance is one of the tools. Protection is the conversation about what could go wrong — and what happens to the client's plan, their family, and their goals if it does.</div>
   </div>
   <div class="highlight-box hb-purple">
     <div class="hb-label">The connection to values</div>
-    <div class="hb-text">Every protection gap is a threat to something the client told you they care about. A family security value with no life insurance is a contradiction. An independence value with no disability coverage is a vulnerability. The professional's job is to surface that connection — clearly, respectfully, and without fear tactics.</div>
+    <div class="hb-text">Every protection gap is a threat to something the client told you they care about. A family security value with no life insurance is a contradiction. An independence value with no disability coverage is a vulnerability. Surface the connection — clearly, and without fear tactics.</div>
   </div>
 </div>
 
-<!-- SCREEN 2 — The four risks -->
+<!-- s2 -->
 <div class="screen" id="s2">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s2" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s2">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s2"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s2">Listen to this screen</span></button><span class="audio-label" id="audio-status-s2"></span></div>
   <div class="tag">4F Solution — Lesson 2: The four risks</div>
   <h2>Four events. Any one of them can erase the plan.</h2>
-  <p class="sub">The protection conversation is built around four specific risks. The professional needs to understand each one clearly before they can surface it effectively in a client conversation.</p>
-
-  <div class="risk-grid">
-    <div class="risk-card" style="border-color:#712B13;background:#FAECE7">
-      <div class="risk-tag" style="background:#993C1D;color:#FAECE7">Death</div>
-      <div class="risk-title" style="color:#712B13">Dying too soon</div>
-      <div class="risk-body" style="color:#712B13">Income stops. Dependants are exposed. Debt remains. Plans dissolve. The client is no longer there to rebuild.</div>
-    </div>
-    <div class="risk-card" style="border-color:#854F0B;background:#FAEEDA">
-      <div class="risk-tag" style="background:#BA7517;color:#FAEEDA">Disability</div>
-      <div class="risk-title" style="color:#633806">Unable to work</div>
-      <div class="risk-body" style="color:#633806">Income stops but expenses continue. The client is still there — and still needs everything they needed before, often more.</div>
-    </div>
-    <div class="risk-card" style="border-color:#3C3489;background:#EEEDFE">
-      <div class="risk-tag" style="background:#534AB7;color:#EEEDFE">Critical illness</div>
-      <div class="risk-title" style="color:#3C3489">Surviving a serious diagnosis</div>
-      <div class="risk-body" style="color:#3C3489">Income may stop. Treatment costs emerge. Recovery takes time. The financial impact of surviving a serious illness is often larger than the medical cost itself.</div>
-    </div>
-    <div class="risk-card" style="border-color:#085041;background:#E1F5EE">
-      <div class="risk-tag" style="background:#0F6E56;color:#E1F5EE">Income loss</div>
-      <div class="risk-title" style="color:#085041">Job loss or business disruption</div>
-      <div class="risk-body" style="color:#085041">No insurance product exists for this risk. Cash reserves are the only buffer — unless the client qualifies for government benefits.</div>
-    </div>
+  <p class="sub">Each one stops or reduces income while life continues — and the plan assumes income keeps coming.</p>
+  <div class="risk-visual">
+    <div class="risk-card death"><div class="risk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><div class="risk-num">Risk 1</div><div class="risk-name">Death</div><div class="risk-body">Income stops permanently. Everything that depended on it is immediately at risk.</div></div>
+    <div class="risk-card disab"><div class="risk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="risk-num">Risk 2</div><div class="risk-name">Disability</div><div class="risk-body">Income stops but expenses continue — often increase. More likely than premature death.</div></div>
+    <div class="risk-card ci"><div class="risk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="risk-num">Risk 3</div><div class="risk-name">Critical Illness</div><div class="risk-body">Surviving a serious diagnosis creates a financial crisis the medical system does not solve.</div></div>
+    <div class="risk-card loss"><div class="risk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div><div class="risk-num">Risk 4</div><div class="risk-name">Income Loss</div><div class="risk-body">Job loss or business disruption. No insurance product covers this — cash reserves only.</div></div>
   </div>
-
   <div class="highlight-box hb-coral">
     <div class="hb-label">What all four have in common</div>
-    <div class="hb-text">Each one stops or reduces income while life continues. The plan the client built around their cash flow assumes income keeps coming. Protection planning is the answer to what happens when it does not — for whatever reason.</div>
+    <div class="hb-text">Each disrupts income while life — and its costs — continues. Protection planning is the answer to what happens when income stops, for whatever reason.</div>
   </div>
 </div>
 
-<!-- SCREEN 3 — Life insurance -->
+<!-- s3 -->
 <div class="screen" id="s3">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s3" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s3">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s3"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s3">Listen to this screen</span></button><span class="audio-label" id="audio-status-s3"></span></div>
   <div class="tag">4F Solution — Lesson 3: Life insurance</div>
   <h2>Life insurance — protecting what depends on you</h2>
-  <p class="sub">Life insurance is the most commonly understood protection tool — and the most commonly misunderstood. The professional's job is not to explain policy types. It is to surface the conversation about what the client would leave behind.</p>
-
+  <p class="sub">Not about death. About what the client's income currently makes possible — and what happens to all of that when it stops permanently.</p>
   <div class="highlight-box hb-coral">
     <div class="hb-label">What it does</div>
-    <div class="hb-text">Life insurance replaces income, pays off debt, and funds future goals when the client is no longer there to do it. It is not about death — it is about what the client's income currently makes possible, and what happens to all of that when it stops permanently.</div>
+    <div class="hb-text">Replaces income, pays off debt, and funds future goals when the client is no longer there to do it. Term covers a defined period. Permanent covers a lifetime and can build cash value. The need drives the choice.</div>
   </div>
-
-  <div class="card">
-    <div class="card-title">Light product context — enough to have the conversation</div>
-    <div class="card-body">Term insurance covers a defined period — typically aligned to a specific need like a mortgage, raising children, or income replacement during working years. Permanent insurance covers a lifetime and builds cash value. The right product depends on the need — which is why the values and goals conversation always comes first.</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">How to connect it to values</div>
-    <div class="card-body">If a client values family security, ask: "If you were no longer here tomorrow, what would you want to make sure was taken care of — and for how long?" If they value legacy, ask: "What do you want to leave behind — and what is currently in place to make sure that happens regardless of when you die?"</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — life insurance</div>
-    <div class="q-text">"If something happened to you unexpectedly — do you know what your family's financial picture would look like? Would they be able to maintain their lifestyle, cover the mortgage, and stay on track with the goals you have been building toward?"</div>
-    <div class="q-why">Why it works: It makes the risk personal and concrete without being morbid. Most clients have never thought through the actual financial impact — the conversation itself is educational.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"If you were no longer here tomorrow — what would you want to make sure was taken care of, and for how long?"</div>
+    <div class="q-why">What to listen for: "I have coverage through work" — usually far less than they think, and none that follows them if they leave. An opening, not an objection.</div>
   </div>
-
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">What to listen for</div>
-    <div class="hb-text">Clients who say "I have some coverage through work" often have far less than they think — and none that follows them if they leave. Clients who say "my spouse would figure it out" have not thought through what figuring it out actually looks like. Both are openings, not objections.</div>
+  <div class="card">
+    <div class="card-title">No recommendations during discovery</div>
+    <div class="card-body">The professional surfaces the gap and connects it to values. What closes it — which product, what coverage amount — comes at the solution delivery meeting.</div>
   </div>
 </div>
 
-<!-- SCREEN 4 — Disability -->
+<!-- s4 -->
 <div class="screen" id="s4">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s4" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s4">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s4"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s4">Listen to this screen</span></button><span class="audio-label" id="audio-status-s4"></span></div>
   <div class="tag">4F Solution — Lesson 4: Disability</div>
   <h2>Disability — the most overlooked risk in financial planning</h2>
-  <p class="sub">Most clients plan for death. Almost none plan for the possibility that they survive but cannot work. Disability is statistically far more likely than premature death — and financially more complex.</p>
-
+  <p class="sub">Most clients plan for death. Almost none plan for surviving but being unable to work. Disability is more likely than premature death — and financially more complex.</p>
   <div class="highlight-box hb-coral">
-    <div class="hb-label">Why it is more complex than life insurance</div>
-    <div class="hb-text">When someone dies, expenses largely go with them. When someone becomes disabled, their expenses continue — often increase — while their income disappears. The financial gap is larger, lasts longer, and is harder to plan for after the fact.</div>
+    <div class="hb-label">Why it is more complex</div>
+    <div class="hb-text">When someone dies, expenses largely go with them. When someone becomes disabled, expenses continue — often increase — while income disappears. The gap is larger, lasts longer, and is harder to plan for after the fact.</div>
   </div>
-
   <div class="card">
-    <div class="card-title">Light product context — enough to have the conversation</div>
-    <div class="card-body">Disability insurance replaces a percentage of income — typically 60 to 70 percent — when the client cannot work due to illness or injury. Key variables are the definition of disability used in the policy, the waiting period before benefits begin, and the benefit period. Group coverage through an employer is often partial and not portable. Most clients are significantly underprotected here.</div>
+    <div class="card-title">Enough to have the conversation</div>
+    <div class="card-body">Disability insurance replaces 60–70% of income when the client cannot work. Group coverage is partial and not portable. Self-employed and incorporated clients typically have no employer coverage at all.</div>
   </div>
-
-  <div class="card">
-    <div class="card-title">How to connect it to values</div>
-    <div class="card-body">Every client who values security, family, or independence is exposed to disability risk. The question is whether they have ever connected those two things. Most have not — because most professionals never ask.</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — disability</div>
-    <div class="q-text">"If you woke up tomorrow and could not work for six months — not because you passed away but because you were ill or injured — what would your financial situation look like after thirty days? After ninety?"</div>
-    <div class="q-why">Why it works: The specificity of the timeline makes it real. Most clients have never run this number. The professional who asks this question and then helps them run it becomes immediately indispensable.</div>
-  </div>
-
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">What to listen for</div>
-    <div class="hb-text">Clients who say "I have sick days" or "my employer covers me" often have 30 to 90 days of coverage — after which they are unprotected. Clients who are self-employed or incorporated typically have no employer coverage at all. Both situations require a clear, honest conversation about the gap.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"If you could not work for six months — how long could your household maintain its current lifestyle? And do you have coverage that would kick in?"</div>
+    <div class="q-why">What to listen for: "I have sick days" or "my employer covers me" — usually 30–90 days, then nothing. Both need an honest conversation about the gap.</div>
   </div>
 </div>
 
-<!-- SCREEN 5 — Critical illness -->
+<!-- s5 -->
 <div class="screen" id="s5">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s5" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s5">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s5"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s5">Listen to this screen</span></button><span class="audio-label" id="audio-status-s5"></span></div>
   <div class="tag">4F Solution — Lesson 5: Critical illness</div>
   <h2>Critical illness — the financial cost of surviving</h2>
-  <p class="sub">Most clients think about critical illness in medical terms. The professional's job is to help them see it in financial terms — because surviving a serious diagnosis often creates a financial crisis that the medical system does not solve.</p>
-
+  <p class="sub">Surviving a serious diagnosis is increasingly common. But recovery takes months — and the financial impact is often larger than the medical event itself.</p>
   <div class="highlight-box hb-coral">
     <div class="hb-label">What most clients do not realize</div>
-    <div class="hb-text">Surviving cancer, a heart attack, or a stroke is increasingly common. But recovery takes time — often months. During that time income may stop, treatment costs emerge, lifestyle adjustments are required, and caregiving demands increase. The financial impact of surviving a serious illness is often larger and longer than the medical event itself.</div>
+    <div class="hb-text">During recovery, income may stop, treatment costs emerge, and caregiving demands increase — all at once. The medical system treats the illness. It does not solve the financial crisis that comes with it.</div>
   </div>
-
   <div class="card">
-    <div class="card-title">Light product context — enough to have the conversation</div>
-    <div class="card-body">Critical illness insurance pays a lump sum on diagnosis of a covered condition — regardless of whether the client can work or not. It is not income replacement. It is financial flexibility at a moment when every decision matters and options are limited. The client can use it however they need to — treatment, time off, debt, or simply peace of mind.</div>
+    <div class="card-title">Enough to have the conversation</div>
+    <div class="card-body">Critical illness pays a tax-free lump sum on diagnosis of a covered condition — regardless of whether the client can work. It is not income replacement. It is financial flexibility at the moment options are most limited.</div>
   </div>
-
-  <div class="card">
-    <div class="card-title">How to connect it to values</div>
-    <div class="card-body">For clients who value family, ask: "If you were diagnosed with something serious tomorrow, would you want your family focused on supporting you — or on managing the financial pressure that comes with it?" For clients who value independence, ask: "Would a serious illness force you into decisions you would not choose to make if money were not a factor?"</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — critical illness</div>
-    <div class="q-text">"If you were diagnosed with a serious illness and needed six months away from work to recover — setting aside the medical care itself — what would the financial impact look like for your family? And what would you want to be different about that picture?"</div>
-    <div class="q-why">Why it works: Separates the medical from the financial. Most clients conflate the two — they assume healthcare covers the financial impact. It does not. This question makes the gap visible.</div>
-  </div>
-
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">What to listen for</div>
-    <div class="hb-text">Clients who say "I would use my savings" are describing a plan that depletes the asset base they have been building — and sets back every other goal. Clients who say "we would manage" have usually not run the numbers. Both responses invite the professional to help them see what managing actually looks like.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"If you were diagnosed with something serious tomorrow — would you want your family focused on supporting you, or managing the financial pressure that comes with it?"</div>
+    <div class="q-why">What to listen for: "I would use my savings" — depletes the asset base and sets back every other goal. "We would manage" — they have not run the numbers. Both are openings.</div>
   </div>
 </div>
 
-<!-- SCREEN 6 — Income loss -->
+<!-- s6 -->
 <div class="screen" id="s6">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s6" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s6">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s6"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s6">Listen to this screen</span></button><span class="audio-label" id="audio-status-s6"></span></div>
   <div class="tag">4F Solution — Lesson 6: Income loss</div>
   <h2>Income loss — the risk with no insurance product</h2>
-  <p class="sub">Job loss and business disruption are among the most common financial disruptions clients face. Unlike the other three risks, there is no insurance product that covers this. Cash reserves are the only tool.</p>
-
+  <p class="sub">Job loss and business disruption can derail a plan just as completely as any other risk — and they are far more common. Cash reserves are the only tool.</p>
   <div class="highlight-box hb-coral">
-    <div class="hb-label">Why most professionals never raise it</div>
-    <div class="hb-text">There is nothing to sell. No product, no premium, no commission. So the conversation rarely happens. But income loss can derail a plan just as completely as death or disability — and it is far more likely. The professional who raises it builds trust. The one who skips it leaves a visible gap.</div>
+    <div class="hb-label">Why this conversation rarely happens</div>
+    <div class="hb-text">There is nothing to sell — no product, no premium. So most professionals skip it. The professional who raises it builds trust. The one who skips it leaves a visible gap in the client's picture.</div>
   </div>
-
   <div class="card">
-    <div class="card-title">Cash reserves — the only tool</div>
-    <div class="card-body">The protection conversation for income loss is simple: does the client have enough cash set aside to sustain their lifestyle if income stopped tomorrow? Most do not. The professional's job is to surface that gap, help the client understand what an adequate reserve looks like, and connect it back to the cash flow conversation.</div>
+    <div class="card-title">The cash flow connection</div>
+    <div class="card-body">The surplus identified in the cash flow discovery is what funds the reserve that protects against income loss. This is the clearest example of how the Fundamentals build on each other.</div>
   </div>
-
-  <div class="card">
-    <div class="card-title">Government benefits — know the limitations</div>
-    <div class="card-body">Some clients may qualify for government unemployment or employment benefits depending on their jurisdiction and employment status. These benefits are often partial, time-limited, and not available to self-employed or incorporated individuals. They are a factor — not a plan.</div>
-  </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — income loss</div>
-    <div class="q-text">"If your income stopped today — not because of illness or injury, but simply because your role ended or your business lost its primary revenue — how long could you sustain your current lifestyle before something had to change?"</div>
-    <div class="q-why">Why it works: Forces the client to think about the specific number rather than answering abstractly. Most will pause. That pause is the opening. The professional follows with: "Most financial professionals recommend three to six months of expenses — where does your current situation sit relative to that?"</div>
-  </div>
-
-  <div class="highlight-box hb-teal">
-    <div class="hb-label">Connecting back to cash flow</div>
-    <div class="hb-text">The income loss conversation and the cash flow conversation are directly linked. The surplus identified in the cash flow discovery is exactly what funds the reserve that protects against income loss. This is the clearest example of how the 4F Fundamentals build on each other — cash flow enables protection.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"If your income stopped tomorrow — how many months could your household sustain its current lifestyle without any changes?"</div>
+    <div class="q-why">Government benefits are a factor for some — not a plan. Most are partial, time-limited, and unavailable to self-employed or incorporated individuals.</div>
   </div>
 </div>
 
-<!-- SCREEN 7 — Living documents -->
-<div class="screen" id="s8">
-  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
+<!-- s7 -->
+<div class="screen" id="s7">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s7">Listen to this screen</span></button><span class="audio-label" id="audio-status-s7"></span></div>
   <div class="tag">4F Solution — Lesson 7: Living documents</div>
   <h2>Will, Power of Attorney, and Health directive — the documents most clients do not have</h2>
-  <p class="sub">Insurance addresses the financial consequences of a risk event. Living documents address who makes the decisions — and what happens to what the client has built. Without them, protection is incomplete regardless of how much coverage is in place.</p>
-
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">Why these belong in the protection conversation</div>
-    <div class="hb-text">A client with life insurance but no Will has protected their family's income — but left them to navigate the legal system to access it. A client with no Power of Attorney has no one legally authorized to manage their affairs if they become incapacitated. A client with no Health directive has left critical medical decisions to whoever happens to be present. These gaps are protection gaps — not legal technicalities.</div>
-  </div>
-
+  <p class="sub">Insurance addresses the financial consequences of a risk event. Living documents address who makes the decisions. Without both, protection is incomplete.</p>
   <div class="card">
     <div class="card-title">Will — directing what you leave behind</div>
-    <div class="card-body">A Will is the legal document that directs how the client's estate is distributed after death. Without one, the estate is distributed according to the jurisdiction's default rules — which may not reflect the client's wishes. A Will also names the executor who administers the estate, and for clients with children, names a guardian. It is the most fundamental estate document — and a significant proportion of clients either do not have one or have not reviewed it since a major life event. The professional surfaces the question. The recommendation to act belongs to the complete plan.</div>
+    <div class="card-body">Without a Will, the estate follows the jurisdiction's default rules — which may not reflect the client's wishes. Names the executor, directs assets, and for clients with children, names a guardian. Most clients either don't have one or haven't reviewed it since a major life event.</div>
   </div>
-
   <div class="card">
-    <div class="card-title">Power of Attorney — who acts when you cannot</div>
-    <div class="card-body">A Power of Attorney (POA) authorizes a trusted person to manage financial and legal affairs on behalf of the client if they become unable to do so — through incapacity, illness, or injury. Without one, family members may have no legal authority to access accounts, pay bills, or make financial decisions even in a genuine emergency. The professional asks whether one is in place and whether it is current. An outdated POA — naming someone who is deceased, estranged, or no longer trusted — is as problematic as having none at all.</div>
+    <div class="card-title">Power of Attorney — who manages your affairs</div>
+    <div class="card-body">Without a POA, no one is legally authorized to manage the client's financial affairs if they become incapacitated. This gap creates enormous stress for families at the worst possible moment.</div>
   </div>
-
   <div class="card">
-    <div class="card-title">Health directive — who speaks for you medically</div>
-    <div class="card-body">A Health directive (also called an Advance directive or Living Will depending on jurisdiction) documents the client's wishes regarding medical treatment if they are unable to communicate them. It may also designate a healthcare proxy — a person authorized to make medical decisions on the client's behalf. Without one, critical decisions are made by medical professionals and family members without guidance — often in situations of extreme stress and disagreement. This is a deeply personal document and the professional's role is simply to surface whether it exists, not to draft it.</div>
+    <div class="card-title">Health directive — who makes medical decisions</div>
+    <div class="card-body">Specifies the client's medical wishes and names someone to act on them. Without one, critical decisions are left to whoever is present — or to the legal system.</div>
   </div>
-
   <div class="q-card">
-    <div class="q-label">Discovery question — living documents</div>
-    <div class="q-text">"Do you currently have a Will, a Power of Attorney, and a Health directive in place? And if so — when were they last reviewed? Because a document that was written before a major life change may no longer reflect your actual wishes."</div>
-    <div class="q-why">Why it works: Most clients either do not have all three or have not reviewed them recently. The question surfaces the gap without requiring the professional to act as a legal professional — the complete plan notes what is missing and includes a referral to the appropriate legal professional where needed.</div>
-  </div>
-
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">The professional's role</div>
-    <div class="hb-text">The professional does not draft these documents — that is the role of a lawyer. The professional surfaces whether they exist, whether they are current, and whether they reflect the client's current wishes and circumstances. That discovery is enough to include a clear action item in the complete plan — and enough to demonstrate that the professional is thinking about the client's protection picture completely.</div>
+    <div class="q-label">Discovery question</div>
+    <div class="q-text">"Do you have a current Will, a Power of Attorney, and a Health directive in place? And when were they last reviewed?"</div>
+    <div class="q-why">The professional surfaces the gap. Recommendations go in the complete plan.</div>
   </div>
 </div>
 
-<!-- SCREEN 8 — Connecting to values -->
-<div class="screen" id="s7">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s7" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s7">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s7"></span>
-  </div>
-
-  <div class="tag">4F Solution — Lesson 8: Connecting protection to values</div>
+<!-- s8 -->
+<div class="screen" id="s8">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
+  <div class="tag">4F Solution — Lesson 8: Connecting gaps to values</div>
   <h2>Every protection gap is a threat to something the client told you they care about</h2>
-  <p class="sub">The protection conversation becomes powerful when it is anchored to what the client already said matters most. This is where the values discovery from Module 2 pays off.</p>
-
-  <div class="section-label" style="color:#993C1D">Value → Protection gap → The conversation</div>
-
+  <p class="sub">A gap without a values connection is a product pitch. Connected to what the client told you matters — it is financial advice.</p>
   <div class="card">
-    <div class="card-title" style="color:#993C1D">Family security</div>
-    <div class="card-body">"You told me that making sure your family is taken care of is what matters most. Based on what you have shared with me — if something happened to you tomorrow, I want to show you what that actually looks like for them. There are some gaps here we need to look at."</div>
+    <div class="card-title" style="color:#993C1D">Family security — no disability coverage</div>
+    <div class="card-body">"You told me your family's security is what matters most. Right now, if you became unable to work, your income stops and their lifestyle is immediately at risk. That is the gap we need to close."</div>
   </div>
-
   <div class="card">
-    <div class="card-title" style="color:#993C1D">Independence and freedom</div>
-    <div class="card-body">"You told me that financial independence is what you are building toward. One thing that can eliminate independence faster than anything else is losing the ability to work. Have you thought about what your picture looks like if that happens — and how long your current plan could sustain itself?"</div>
+    <div class="card-title" style="color:#993C1D">Independence — no income reserve</div>
+    <div class="card-body">"You told me financial independence is the goal. Right now, one disruption to your income puts everything you have built at risk. The plan needs a buffer before it can build toward independence."</div>
   </div>
-
   <div class="card">
-    <div class="card-title" style="color:#993C1D">Legacy</div>
-    <div class="card-body">"You told me you want to leave something behind. The biggest threat to that is not investment performance — it is an event that depletes what you have built before you can transfer it. Let me show you where the gaps are and what it would take to close them."</div>
+    <div class="card-title" style="color:#993C1D">Legacy — no permanent coverage</div>
+    <div class="card-body">"You told me you want to leave something behind for your children. Right now, there is nothing in place to ensure that happens regardless of when you die. That is a gap the complete plan needs to address."</div>
   </div>
-
-  <div class="card">
-    <div class="card-title" style="color:#993C1D">Peace of mind</div>
-    <div class="card-body">"You told me you want to know everything is taken care of. Right now, based on what I can see, it is not — and I want to be honest with you about that. Here is what is missing and what we can do about it."</div>
-  </div>
-
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">The professional's principle</div>
-    <div class="hb-text">Never present a protection gap without connecting it to a value the client expressed. A gap without context is just a product pitch. A gap connected to something the client told you they care about is advice. That difference is everything.</div>
-  </div>
-
   <div class="highlight-box hb-purple">
     <div class="hb-label">No recommendations during discovery</div>
-    <div class="hb-text">As with cash flow, the protection conversation during discovery is about surfacing the picture — not closing solutions. The professional notes the gaps, helps the client understand what they mean, and brings the complete plan back with recommendations. The exception remains: if a critical and obvious gap exists, it may be surfaced directly.</div>
+    <div class="hb-text">Surface the gap. Connect it to values. What closes it comes at the solution delivery meeting — after the full picture across all four Fundamentals is built.</div>
   </div>
 </div>
 
-<!-- SCREEN 8 — The protection conversation -->
+<!-- s9 -->
 <div class="screen" id="s9">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s9" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s9">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s9"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s9" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s9">Listen to this screen</span></button><span class="audio-label" id="audio-status-s9"></span></div>
   <div class="tag">4F Solution — Lesson 9: Summary review</div>
-  <h2>Summary review — the complete protection picture</h2>
-  <p class="sub">Before the knowledge check, consolidate. This is what the protection discovery covers, why it matters, and how the conversation flows.</p>
-
+  <h2>The complete protection picture — before the knowledge check</h2>
+  <p class="sub">Protection ensures the cash flow foundation cannot be erased before the plan delivers on it.</p>
   <div class="highlight-box hb-coral">
     <div class="hb-label">Protection in one sentence</div>
-    <div class="hb-text">Protection ensures that one unexpected event cannot erase everything built through cash flow, growth, and tax efficiency — by addressing the four risks that most commonly derail a financial plan.</div>
+    <div class="hb-text">Four risks can stop income while life continues. Every gap across them is a threat to something the client told you they care about.</div>
   </div>
-
-  <div class="summary-grid">
-    <div class="summary-card" style="border-color:#993C1D;background:#FAECE7">
-      <div class="summary-title" style="color:#712B13">Death</div>
-      <div class="summary-body" style="color:#712B13">Tool: life insurance. Conversation: what does the client leave behind — and what is currently in place to protect it?</div>
-    </div>
-    <div class="summary-card" style="border-color:#BA7517;background:#FAEEDA">
-      <div class="summary-title" style="color:#633806">Disability</div>
-      <div class="summary-body" style="color:#633806">Tool: disability insurance. Conversation: what happens to income and expenses if the client cannot work — and for how long?</div>
-    </div>
-    <div class="summary-card" style="border-color:#534AB7;background:#EEEDFE">
-      <div class="summary-title" style="color:#3C3489">Critical illness</div>
-      <div class="summary-body" style="color:#3C3489">Tool: critical illness insurance. Conversation: what is the financial impact of surviving a serious diagnosis — beyond the medical?</div>
-    </div>
-    <div class="summary-card" style="border-color:#0F6E56;background:#E1F5EE">
-      <div class="summary-title" style="color:#085041">Income loss</div>
-      <div class="summary-body" style="color:#085041">Tool: cash reserves only. Conversation: how many months can the client sustain their lifestyle if income stops unexpectedly?</div>
-    </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem">
+    <div class="card" style="margin-bottom:0;border-top:3px solid #993C1D"><div class="card-title" style="color:#993C1D">Life insurance</div><div class="card-body">Replaces income permanently. Term or permanent — the need drives the choice.</div></div>
+    <div class="card" style="margin-bottom:0;border-top:3px solid #854F0B"><div class="card-title" style="color:#854F0B">Disability</div><div class="card-body">Replaces 60–70% of income when the client cannot work. Group coverage is partial and not portable.</div></div>
+    <div class="card" style="margin-bottom:0;border-top:3px solid #3B6D11"><div class="card-title" style="color:#3B6D11">Critical illness</div><div class="card-body">Lump sum on diagnosis. Financial flexibility at the worst moment — not income replacement.</div></div>
+    <div class="card" style="margin-bottom:0;border-top:3px solid #534AB7"><div class="card-title" style="color:#534AB7">Income loss</div><div class="card-body">No insurance product. Cash reserves are the only tool — funded by surplus from cash flow.</div></div>
   </div>
-
-  <div class="q-card">
-    <div class="q-label">The protection conversation — opening</div>
-    <div class="q-text">"Now that I have a clear picture of your cash flow, I want to look at the four things that could erase it. I am going to ask about each one briefly — not to sell you anything today, but so I can understand where you are currently protected and where the gaps are. That will be part of the complete plan I bring back to you."</div>
-    <div class="q-why">Sets the expectation. No decisions today. Positions the professional as thorough and client-centred. Connects directly to the cash flow conversation that just happened.</div>
+  <div class="card">
+    <div class="card-title">Living documents</div>
+    <div class="card-body">Will, Power of Attorney, and Health directive. Insurance protects the finances. These protect the decisions. Without both, protection is incomplete.</div>
   </div>
-
-  <div class="highlight-box hb-purple">
-    <div class="hb-label">Always connect back to values</div>
-    <div class="hb-text">Every protection gap should be named in the context of a value the client expressed. A gap without that connection is a product observation. A gap connected to what the client told you they care about is financial advice. The difference is everything.</div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">Transitioning to Wealth</div>
+    <div class="hb-text">"Now that I understand your protection picture, I want to look at Investments &amp; Wealth — what your surplus can realistically build toward once the foundation is secure."</div>
   </div>
 </div>
 
-<!-- SCREEN 9 — Knowledge check -->
+<!-- s10 -->
 <div class="screen" id="s10">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s10" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s10">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s10"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s10" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s10">Listen to this screen</span></button><span class="audio-label" id="audio-status-s10"></span></div>
   <div class="tag">4F Solution — Knowledge check</div>
   <h2>Knowledge check — 5 questions</h2>
   <p class="sub">Choose the best answer for each question.</p>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the 4F Solution place Protection second — after Cash Flow but before Growth?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because protection products are easier to sell before growth conversations</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because growth builds on a foundation — and protection ensures one event cannot eliminate that foundation before the plan delivers</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because clients are more emotionally engaged by risk than by investment returns</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the 4F Solution place Protection second — immediately after Cash Flow?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because clients are more emotionally ready to discuss risk after they understand their income picture</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because a single unplanned event can erase everything cash flow has made possible — protection secures the foundation before growth builds on it</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because protection products generate revenue that funds the practice's growth strategy</button>
     <div class="feedback" id="fb-q1"></div>
   </div>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says they have disability coverage through their employer. What should the professional explore next?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Move on — employer coverage is typically sufficient</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">Explore how much it covers, how long it lasts, and whether it follows the client if they leave their employer</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Recommend a personal disability policy immediately to top up the group plan</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says "my employer covers me" for disability. What should the professional explore?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Accept it and move on — employer coverage is typically adequate</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">How much it replaces, how long it lasts, and what happens to the coverage if they leave their employer</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Whether the client wants to upgrade to a private policy immediately</button>
     <div class="feedback" id="fb-q2"></div>
   </div>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">What is the primary financial tool for protecting against income loss from job loss or business disruption?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Income replacement insurance — designed specifically for employment disruption</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Disability insurance — it covers all forms of income loss</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Cash reserves — there is no insurance product for this risk, unless the client qualifies for government benefits</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client loses their job. What is the primary protection tool for this risk?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Disability insurance — it replaces income when the client cannot work</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Cash reserves — there is no insurance product for income loss from job loss or business disruption</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Critical illness coverage — it provides a lump sum to cover the gap</button>
     <div class="feedback" id="fb-q3"></div>
   </div>
-
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says their top value is family security but has no life insurance. How should the professional frame the protection gap?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Present the cost of life insurance and ask if the client wants to proceed</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Wait until the complete plan is presented before raising the gap</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Connect the gap directly to the value: "You told me family security is what matters most — let me show you what your family's picture actually looks like today if something happened to you"</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client who values family security has no life insurance. How should the professional frame this gap?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Present the most cost-effective term policy available and explain its features</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Connect the gap directly to what the client said — "You told me family security is what matters most. Right now, if something happened to you, your family has no financial protection."</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Ask the client how much life insurance they think they need and work from there</button>
     <div class="feedback" id="fb-q4"></div>
   </div>
-
   <div style="margin-bottom:1rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">What makes critical illness insurance different from disability insurance?</div>
-    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Critical illness pays a lump sum on diagnosis regardless of whether the client can work — disability replaces a portion of income when the client cannot work</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Critical illness only covers cancer — disability covers all conditions</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">They are effectively the same product with different names</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">What is the key difference between critical illness insurance and disability insurance?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">They cover the same risk — critical illness is just a newer product name</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Critical illness pays a lump sum on diagnosis regardless of whether the client can work — disability replaces income when the client cannot work</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Disability is for physical injuries only — critical illness covers all serious medical conditions</button>
     <div class="feedback" id="fb-q5"></div>
   </div>
 </div>
 
-<!-- SCREEN 10 — Completion -->
+<!-- s11 -->
 <div class="screen" id="s11">
-  <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s11" onclick="toggleAudio('s11')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s11" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s11" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s11">Listen to this screen</span>
-    </button>
-    <span class="audio-label" id="audio-status-s11"></span>
-  </div>
-
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s11" onclick="toggleAudio('s11')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s11" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s11" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s11">Listen to this screen</span></button><span class="audio-label" id="audio-status-s11"></span></div>
   <div class="tag">4F Solution — Module 4 complete</div>
   <h2>Module 4 complete</h2>
   <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
-
-  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+  <div class="completion-badge" style="background:#FAECE7">
+    <div class="badge-ring" style="background:#993C1D"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="badge-title" style="color:#5C1F08">Module 4 complete</div>
+    <div class="badge-sub" style="color:#993C1D">Protection — The Shield</div>
+  </div>
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
-      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
-        <div style="font-size:36px;font-weight:700;color:#993C1D" id="score-display">—</div>
-        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Score</div>
-      </div>
-      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
-        <div style="font-size:36px;font-weight:700;color:#993C1D" id="correct-display">—</div>
-        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div>
-      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)"><div style="font-size:36px;font-weight:700;color:#993C1D" id="score-display">—</div><div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Score</div></div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)"><div style="font-size:36px;font-weight:700;color:#993C1D" id="correct-display">—</div><div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div></div>
     </div>
     <div id="q-breakdown" style="font-size:18px;color:var(--color-text-secondary);line-height:1.8"></div>
   </div>
-
   <div id="submit-section" style="margin-bottom:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">Send results to facilitator</div>
-    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:26px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
+    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:20px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
     <div id="name-warning" style="display:none;font-size:17px;color:#993C1D;margin-bottom:.75rem">Please enter your name before submitting.</div>
     <button class="nav-btn primary" onclick="submitResults()" style="width:100%;padding:.85rem 1.25rem;margin-bottom:.75rem">Submit results</button>
     <div style="font-size:17px;color:var(--color-text-tertiary);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
     <div id="submit-status" style="display:none;margin-top:.75rem;font-size:21px;padding:.85rem 1rem;border-radius:var(--border-radius-md)"></div>
   </div>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.5rem">
     <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
     <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
@@ -689,46 +391,27 @@
 </div>
 
 <script>
-var TOTAL_SCREENS = 12;
-var TOTAL_QUESTIONS = 5;
-var QUIZ_SCREEN_INDEX = 10;
-var LAST_LESSON_INDEX = 9;
-var WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
-var MODULE_NAME = '4F Solution - Module 4: Protection';
-
-var qLabels = {
-  q1: 'Q1 - Why protection comes second in the 4F process',
-  q2: 'Q2 - Employer disability coverage — what to explore',
-  q3: 'Q3 - The only tool for income loss protection',
-  q4: 'Q4 - Connecting a protection gap to client values',
-  q5: 'Q5 - Critical illness vs disability insurance'
+var TOTAL_SCREENS=12,TOTAL_QUESTIONS=5,QUIZ_SCREEN_INDEX=10,LAST_LESSON_INDEX=9;
+var WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var MODULE_NAME='4F Solution - Module 4: Protection';
+var qLabels={q1:'Q1 - Why protection comes second',q2:'Q2 - Employer disability coverage',q3:'Q3 - Income loss protection tool',q4:'Q4 - Connecting gap to values',q5:'Q5 - Critical illness vs disability'};
+var qMsgs={
+  q1c:'Correct. Protection comes second because growth requires a stable foundation. A single unplanned event can erase what cash flow has made possible. Protection ensures the foundation holds before anything is built on it.',
+  q1w:'The sequencing is structural logic, not sales strategy. Protection comes second because it secures the cash flow foundation before growth begins. Without it, growth is vulnerable to complete erasure by a single event.',
+  q2c:'Correct. Employer disability coverage is often partial, time-limited, and not portable. How much, for how long, and what happens if they leave — those are the three critical questions.',
+  q2w:'Most group plans replace only 60–70% of income, have limited benefit periods, and stop if the client leaves. The professional needs to understand the actual coverage — not accept a general statement.',
+  q3c:'Correct. Income loss from job loss has no insurance product. Cash reserves are the only tool — supplemented by government benefits where the client qualifies.',
+  q3w:'Disability insurance covers inability to work due to illness or injury — not job loss. There is no insurance product for employment income loss. Cash reserves are the only tool.',
+  q4c:'Correct. A gap connected to a stated value is financial advice. Without that connection it is a product pitch. Anchor every gap to what the client said matters.',
+  q4w:'Presenting a product without anchoring it to the client\'s values turns advice into selling. The connection to what they said matters is what makes the conversation meaningful.',
+  q5c:'Correct. Critical illness pays a lump sum at diagnosis — the client does not have to be unable to work. Disability pays income replacement when the client cannot work. A client could receive a serious diagnosis, keep working, and benefit from CI but not disability.',
+  q5w:'Critical illness pays a lump sum at diagnosis regardless of ability to work. Disability pays income replacement when the client cannot work. They address different financial realities and a client may need both.'
 };
-
-var qMsgs = {
-  q1c: 'Correct. Protection comes second because growth requires a stable foundation. A single unplanned event — death, disability, critical illness, or income loss — can erase what cash flow has made possible. Protection ensures the foundation holds before anything is built on it.',
-  q1w: 'The sequencing is about structural logic, not sales strategy or client emotion. Protection comes second because it secures the cash flow foundation before growth begins to build on it. Without protection in place, growth is vulnerable to complete erasure by a single event.',
-  q2c: 'Correct. Employer disability coverage is often partial, time-limited, and not portable. The professional\'s job is to understand what the client actually has — not accept a general statement of coverage. How much, for how long, and what happens if they leave their employer are the three critical questions.',
-  q2w: 'Employer disability coverage is frequently misunderstood by clients. Most group plans replace only 60 to 70 percent of income, have limited benefit periods, and stop entirely if the client leaves the employer. The professional needs to understand the actual coverage — not take the client\'s summary at face value.',
-  q3c: 'Correct. Income loss from job loss or business disruption has no insurance product. Cash reserves are the only protection tool — supplemented by government benefits where the client qualifies. This is exactly why the cash flow conversation matters: the surplus it identifies is what funds the reserve that covers this risk.',
-  q3w: 'Disability insurance covers inability to work due to illness or injury — not job loss or business disruption. There is no insurance product for employment income loss. Cash reserves are the only tool, which is why building them is a protection priority, not just a savings goal.',
-  q4c: 'Correct. A protection gap connected to a stated value is financial advice. A protection gap presented without that connection is a product pitch. The professional\'s job is always to anchor the gap to what the client said matters — making the conversation personal and purposeful, not transactional.',
-  q4w: 'Presenting a product and its cost without anchoring it to the client\'s values turns advice into selling. The protection conversation is most effective — and most compliant — when the gap is connected to something the client told you they care about. That connection is what makes the conversation meaningful.',
-  q5c: 'Correct. Critical illness pays a lump sum on diagnosis of a covered condition — regardless of whether the client can work. Disability replaces a portion of income when the client cannot work. They address different financial realities. A client could receive a serious diagnosis, continue working, and still benefit from critical illness coverage — but not disability.',
-  q5w: 'These are distinct products addressing different risks. Critical illness pays a lump sum at diagnosis — the client does not have to be unable to work to qualify. Disability pays income replacement when the client cannot work — regardless of diagnosis. A client may need both, and understanding the difference determines which gap the professional is addressing.'
-};
-
-var cur = 0;
-var scores = {};
-var qAnswered = {};
-Object.keys(qLabels).forEach(function(q){ scores[q]=null; qAnswered[q]=false; });
-
+var cur=0,scores={},qAnswered={};
+Object.keys(qLabels).forEach(function(q){scores[q]=null;qAnswered[q]=false;});
 function updateUI(){
   document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur)});
-  document.querySelectorAll('.prog-step').forEach(function(p,i){
-    p.classList.remove('done','active');
-    if(i<cur)p.classList.add('done');
-    else if(i===cur)p.classList.add('active');
-  });
+  document.querySelectorAll('.prog-step').forEach(function(p,i){p.classList.remove('done','active');if(i<cur)p.classList.add('done');else if(i===cur)p.classList.add('active');});
   document.getElementById('counter').textContent=(cur+1)+' of '+TOTAL_SCREENS;
   document.getElementById('back-btn').disabled=cur===0;
   var nb=document.getElementById('next-btn');
@@ -737,196 +420,56 @@ function updateUI(){
   document.getElementById('step-label').textContent=(cur+1)+' of '+TOTAL_SCREENS;
   if(cur===TOTAL_SCREENS-1){buildScoreSummary();}
 }
-
 function goNext(){if(cur<TOTAL_SCREENS-1){cur++;updateUI();window.scrollTo(0,0);}}
 function goBack(){if(cur>0){cur--;updateUI();window.scrollTo(0,0);}}
-
 function checkQ(el,correct,qid){
   if(qAnswered[qid])return;
-  qAnswered[qid]=true;
-  scores[qid]=correct;
-  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){
-    s.style.pointerEvents='none';
-    s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');
-  });
+  qAnswered[qid]=true;scores[qid]=correct;
+  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){s.style.pointerEvents='none';s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');});
   var fb=document.getElementById('fb-'+qid);
   fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
   fb.textContent=qMsgs[qid+(correct?'c':'w')]||'';
 }
-
 function buildScoreSummary(){
   var qs=Object.keys(qLabels);
   var correct=qs.filter(function(q){return scores[q]===true;}).length;
   var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
   document.getElementById('score-display').textContent=pct+'%';
   document.getElementById('correct-display').textContent=correct+'/'+TOTAL_QUESTIONS;
-  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){
-    var res=scores[q];
-    var icon=res===null?'○':res?'✓':'✗';
-    var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';
-    return '<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';
-  }).join('');
+  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){var res=scores[q];var icon=res===null?'○':res?'✓':'✗';var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';return'<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';}).join('');
   var submitBtn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  if(submitBtn){
-    if(pct<80){
-      submitBtn.disabled=true;
-      var warn=document.getElementById('score-gate-msg');
-      if(!warn){
-        warn=document.createElement('div');
-        warn.id='score-gate-msg';
-        warn.style.cssText='font-size:21px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';
-        submitBtn.parentNode.insertBefore(warn,submitBtn);
-      }
-      warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';
-    } else {
-      submitBtn.disabled=false;
-      var warn=document.getElementById('score-gate-msg');
-      if(warn)warn.remove();
-    }
-  }
+  if(submitBtn){if(pct<80){submitBtn.disabled=true;var warn=document.getElementById('score-gate-msg');if(!warn){warn=document.createElement('div');warn.id='score-gate-msg';warn.style.cssText='font-size:21px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';submitBtn.parentNode.insertBefore(warn,submitBtn);}warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';}else{submitBtn.disabled=false;var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();}}
 }
-
 function retakeQuiz(){
-  Object.keys(qLabels).forEach(function(q){
-    qAnswered[q]=false; scores[q]=null;
-    document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){
-      btn.classList.remove('correct','wrong');
-      btn.style.pointerEvents='';
-    });
-    var fb=document.getElementById('fb-'+q);
-    if(fb){fb.className='feedback';fb.textContent='';}
-  });
-  document.getElementById('score-display').textContent='—';
-  document.getElementById('correct-display').textContent='—';
-  document.getElementById('q-breakdown').innerHTML='';
-  var st=document.getElementById('submit-status');
-  st.style.display='none'; st.textContent='';
-  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  if(btn){btn.disabled=false;btn.textContent='Submit results';}
-  var warn=document.getElementById('score-gate-msg');
-  if(warn)warn.remove();
-  cur=QUIZ_SCREEN_INDEX;
-  updateUI();
-  window.scrollTo(0,0);
+  Object.keys(qLabels).forEach(function(q){qAnswered[q]=false;scores[q]=null;document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){btn.classList.remove('correct','wrong');btn.style.pointerEvents='';});var fb=document.getElementById('fb-'+q);if(fb){fb.className='feedback';fb.textContent='';}});
+  document.getElementById('score-display').textContent='—';document.getElementById('correct-display').textContent='—';document.getElementById('q-breakdown').innerHTML='';
+  var st=document.getElementById('submit-status');st.style.display='none';st.textContent='';
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');if(btn){btn.disabled=false;btn.textContent='Submit results';}
+  var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();
+  cur=QUIZ_SCREEN_INDEX;updateUI();window.scrollTo(0,0);
 }
-
 function submitResults(){
   var nm=document.getElementById('participant-name').value.trim();
-  if(!nm){
-    document.getElementById('name-warning').style.display='block';
-    document.getElementById('participant-name').focus();
-    return;
-  }
+  if(!nm){document.getElementById('name-warning').style.display='block';document.getElementById('participant-name').focus();return;}
   document.getElementById('name-warning').style.display='none';
   var st=document.getElementById('submit-status');
   var qs=Object.keys(qLabels);
   var correct=qs.filter(function(q){return scores[q]===true;}).length;
   var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
-  if(pct<80){
-    st.style.display='block';
-    st.style.background='#FAECE7';
-    st.style.color='#712B13';
-    st.textContent='A minimum score of 80% is required to submit. You scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+'). Please retake the quiz.';
-    return;
-  }
+  if(pct<80){st.style.display='block';st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='A minimum score of 80% is required. You scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+'). Please retake the quiz.';return;}
   var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  st.style.display='block';
-  st.style.background='#FAECE7';
-  st.style.color='#712B13';
-  st.textContent='Sending results...';
-  if(btn)btn.disabled=true;
-  var payload={
-    participant_name: nm,
-    module: MODULE_NAME,
-    completed_at: new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),
-    score_percent: pct+'%',
-    correct_of_total: correct+'/'+TOTAL_QUESTIONS
-  };
-  qs.forEach(function(q){ payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect'; });
-  var params=new URLSearchParams(payload);
-  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:params})
-  .then(function(){
-    st.style.background='#E1F5EE';
-    st.style.color='#085041';
-    st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct). Your facilitator will receive the full breakdown.';
-    if(btn)btn.textContent='Submitted';
-  })
-  .catch(function(){
-    st.style.background='#FAECE7';
-    st.style.color='#712B13';
-    st.textContent='Submission failed — please check your internet connection and try again.';
-    if(btn)btn.disabled=false;
-  });
+  st.style.display='block';st.style.background='#EEEDFE';st.style.color='#3C3489';st.textContent='Sending results...';if(btn)btn.disabled=true;
+  var payload={participant_name:nm,module:MODULE_NAME,completed_at:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),score_percent:pct+'%',correct_of_total:correct+'/'+TOTAL_QUESTIONS};
+  qs.forEach(function(q){payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect';});
+  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(payload)})
+  .then(function(){st.style.background='#E1F5EE';st.style.color='#085041';st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct). Your facilitator will receive the full breakdown.';if(btn)btn.textContent='Submitted';})
+  .catch(function(){st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='Submission failed — please check your internet connection and try again.';if(btn)btn.disabled=false;});
 }
-
 updateUI();
-
-var ttsActive = null;
-var ttsUtterance = null;
-
-function getScreenText(screenId) {
-  var screen = document.getElementById(screenId);
-  if (!screen) return '';
-  var clone = screen.cloneNode(true);
-  // Remove audio bar, buttons, feedback divs from the clone
-  var remove = clone.querySelectorAll('.audio-bar, button, .feedback, .nav, input, textarea');
-  remove.forEach(function(el){ el.parentNode && el.parentNode.removeChild(el); });
-  return clone.innerText || clone.textContent || '';
-}
-
-function stopAudio() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  if (ttsActive) {
-    var btn = document.getElementById('audio-btn-' + ttsActive);
-    var lbl = document.getElementById('audio-btn-label-' + ttsActive);
-    var st  = document.getElementById('audio-status-' + ttsActive);
-    var play = document.getElementById('audio-icon-play-' + ttsActive);
-    var pause = document.getElementById('audio-icon-pause-' + ttsActive);
-    if (btn) btn.classList.remove('playing');
-    if (lbl) lbl.textContent = 'Listen to this screen';
-    if (st)  st.textContent = '';
-    if (play)  play.style.display = '';
-    if (pause) pause.style.display = 'none';
-    ttsActive = null;
-    ttsUtterance = null;
-  }
-}
-
-function toggleAudio(screenId) {
-  if (ttsActive === screenId) { stopAudio(); return; }
-  stopAudio();
-  var text = getScreenText(screenId);
-  if (!text.trim()) return;
-  if (!window.speechSynthesis) {
-    var st = document.getElementById('audio-status-' + screenId);
-    if (st) st.textContent = 'Audio not supported in this browser.';
-    return;
-  }
-  ttsActive = screenId;
-  var btn   = document.getElementById('audio-btn-' + screenId);
-  var lbl   = document.getElementById('audio-btn-label-' + screenId);
-  var st    = document.getElementById('audio-status-' + screenId);
-  var play  = document.getElementById('audio-icon-play-' + screenId);
-  var pause = document.getElementById('audio-icon-pause-' + screenId);
-  if (btn)   btn.classList.add('playing');
-  if (lbl)   lbl.textContent = 'Stop';
-  if (st)    st.textContent = 'Playing...';
-  if (play)  play.style.display = 'none';
-  if (pause) pause.style.display = '';
-  ttsUtterance = new SpeechSynthesisUtterance(text);
-  ttsUtterance.rate = 0.92;
-  ttsUtterance.pitch = 1;
-  ttsUtterance.lang = 'en-US';
-  ttsUtterance.onend = function() { stopAudio(); };
-  ttsUtterance.onerror = function() { stopAudio(); };
-  window.speechSynthesis.speak(ttsUtterance);
-}
-
-// Stop audio when screen changes
-var _origGoNext = goNext;
-goNext = function(){ stopAudio(); _origGoNext(); };
-var _origGoBack = goBack;
-goBack = function(){ stopAudio(); _origGoBack(); };
-
+var ttsActive=null,ttsUtterance=null;
+function getScreenText(sid){var screen=document.getElementById(sid);if(!screen)return'';var clone=screen.cloneNode(true);clone.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea').forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});return clone.innerText||clone.textContent||'';}
+function stopAudio(){if(window.speechSynthesis)window.speechSynthesis.cancel();if(ttsActive){var b=document.getElementById('audio-btn-'+ttsActive);var l=document.getElementById('audio-btn-label-'+ttsActive);var s=document.getElementById('audio-status-'+ttsActive);var p=document.getElementById('audio-icon-play-'+ttsActive);var pa=document.getElementById('audio-icon-pause-'+ttsActive);if(b)b.classList.remove('playing');if(l)l.textContent='Listen to this screen';if(s)s.textContent='';if(p)p.style.display='';if(pa)pa.style.display='none';ttsActive=null;ttsUtterance=null;}}
+function toggleAudio(sid){if(ttsActive===sid){stopAudio();return;}stopAudio();var text=getScreenText(sid);if(!text.trim())return;if(!window.speechSynthesis)return;ttsActive=sid;var b=document.getElementById('audio-btn-'+sid);var l=document.getElementById('audio-btn-label-'+sid);var s=document.getElementById('audio-status-'+sid);var p=document.getElementById('audio-icon-play-'+sid);var pa=document.getElementById('audio-icon-pause-'+sid);if(b)b.classList.add('playing');if(l)l.textContent='Stop';if(s)s.textContent='Playing...';if(p)p.style.display='none';if(pa)pa.style.display='';ttsUtterance=new SpeechSynthesisUtterance(text);ttsUtterance.rate=0.92;ttsUtterance.pitch=1;ttsUtterance.lang='en-US';ttsUtterance.onend=function(){stopAudio();};ttsUtterance.onerror=function(){stopAudio();};window.speechSynthesis.speak(ttsUtterance);}
+var _gn=goNext;goNext=function(){stopAudio();_gn();};var _gb=goBack;goBack=function(){stopAudio();_gb();};
 </script>
 </html>

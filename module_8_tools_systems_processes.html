@@ -30,21 +30,21 @@
     }
   }
   body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
-  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
-  .mod { width: 100%; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; min-height: 600px; display: flex; flex-direction: column; }
+  .mod { width: 100%; display: flex; flex-direction: column; flex: 1; }
   .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
   .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
   .prog-step.done { background: #185FA5; }
   .prog-step.active { background: #378ADD; }
   .step-label { font-size: 17px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
   .screen { display: none; }
-  .screen.active { display: block; }
+  .screen.active { display: block; flex: 1; }
   .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #E6F1FB; color: #0C447C; margin-bottom: 1rem; letter-spacing: .03em; }
   h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
-  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
   .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
   .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
-  .card-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
+  .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
   .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
   .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
   .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
@@ -68,7 +68,7 @@
   .feedback.show { display: block; }
   .fb-correct { background: #E1F5EE; color: #085041; }
   .fb-wrong { background: #FAECE7; color: #712B13; }
-  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--color-border-secondary); background: var(--color-background-primary); }
   .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
   .nav-btn:hover { background: var(--color-background-secondary); }
   .nav-btn.primary { background: #185FA5; border-color: #185FA5; color: #E6F1FB; font-weight: 600; }
@@ -81,24 +81,79 @@
   .q-card { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-secondary); border-left: 4px solid #185FA5; }
   .q-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #185FA5; margin-bottom: .4rem; }
   .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
-  .q-why { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.65; margin-top: .5rem; padding-top: .5rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .q-why { font-size: 18px; color: var(--color-text-secondary); line-height: 1.65; margin-top: .5rem; padding-top: .5rem; border-top: 0.5px solid var(--color-border-tertiary); }
   .system-card { border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border: 0.5px solid var(--color-border-tertiary); border-top: 3px solid #185FA5; }
   .system-title { font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .35rem; }
-  .system-body { font-size: 20px; color: var(--color-text-primary); line-height: 1.65; }
+  .system-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
   .mvp-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
   .mvp-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
   .mvp-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #185FA5; margin-bottom: .35rem; }
-  .mvp-body { font-size: 18px; color: var(--color-text-primary); line-height: 1.55; }
+  .mvp-body { font-size: 18px; color: var(--color-text-secondary); line-height: 1.55; }
   .stage-row { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.25rem; }
   .stage-item { display: flex; gap: .85rem; align-items: flex-start; }
   .stage-dot { width: 12px; height: 12px; border-radius: 50%; background: #185FA5; flex-shrink: 0; margin-top: 6px; }
-  .stage-content { font-size: 20px; color: var(--color-text-primary); line-height: 1.55; }
+  .stage-content { font-size: 20px; color: var(--color-text-secondary); line-height: 1.55; }
   .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
   .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
   .audio-btn:hover { background: var(--color-background-primary); }
   .audio-btn.playing { color: #185FA5; border-color: #185FA5; }
   .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
   .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+
+  /* ── Shared visual components ── */
+  .lesson-list { display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.25rem; }
+  .lesson-item { display:flex;align-items:center;gap:.85rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.8rem 1rem; }
+  .lesson-num { width:30px;height:30px;border-radius:50%;background:#185FA5;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .lesson-text { font-size:18px;color:var(--color-text-primary);font-weight:500; }
+  .fund-stack { display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem; }
+  .fund-row { display:flex;align-items:center;gap:1rem;border-radius:var(--border-radius-lg);padding:.9rem 1.1rem; }
+  .fund-row.cf { background:#E1F5EE;border-left:4px solid #0F6E56; }
+  .fund-row.pr { background:#FAECE7;border-left:4px solid #993C1D; }
+  .fund-row.gr { background:#EAF3DE;border-left:4px solid #3B6D11; }
+  .fund-row.tx { background:#FAEEDA;border-left:4px solid #854F0B; }
+  .fund-icon { width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .fund-icon svg { width:22px;height:22px; }
+  .fund-row.cf .fund-icon { background:#0F6E56; }
+  .fund-row.pr .fund-icon { background:#993C1D; }
+  .fund-row.gr .fund-icon { background:#3B6D11; }
+  .fund-row.tx .fund-icon { background:#854F0B; }
+  .fund-info { flex:1; }
+  .fund-num { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.15rem; }
+  .fund-row.cf .fund-num { color:#0F6E56; }
+  .fund-row.pr .fund-num { color:#993C1D; }
+  .fund-row.gr .fund-num { color:#3B6D11; }
+  .fund-row.tx .fund-num { color:#854F0B; }
+  .fund-name { font-size:19px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem; }
+  .fund-desc { font-size:17px;color:var(--color-text-secondary);line-height:1.5; }
+  .fund-connector { display:flex;align-items:center;gap:.5rem;padding:.1rem 1.1rem; }
+  .fund-connector-line { flex:1;height:1px;background:var(--color-border-tertiary); }
+  .fund-connector-label { font-size:13px;color:var(--color-text-tertiary);font-style:italic;white-space:nowrap; }
+  .risk-visual { display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem; }
+  .risk-card { border-radius:var(--border-radius-lg);padding:1rem; }
+  .risk-icon { width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:.65rem; }
+  .risk-icon svg { width:20px;height:20px; }
+  .risk-num { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem; }
+  .risk-name { font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.4rem; }
+  .risk-body { font-size:16px;color:var(--color-text-secondary);line-height:1.55; }
+  .risk-card.death { background:#FAECE7; } .risk-card.death .risk-num { color:#993C1D; } .risk-card.death .risk-icon { background:#993C1D; }
+  .risk-card.disab { background:#FAEEDA; } .risk-card.disab .risk-num { color:#854F0B; } .risk-card.disab .risk-icon { background:#854F0B; }
+  .risk-card.ci    { background:#EAF3DE; } .risk-card.ci   .risk-num { color:#3B6D11; } .risk-card.ci   .risk-icon { background:#3B6D11; }
+  .risk-card.loss  { background:#EEEDFE; } .risk-card.loss .risk-num { color:#534AB7; } .risk-card.loss .risk-icon { background:#534AB7; }
+  .timeline-row { display:flex;gap:.5rem;margin-bottom:1.25rem; }
+  .timeline-node { flex:1;border-radius:var(--border-radius-md);padding:.8rem .6rem;text-align:center; }
+  .timeline-arrow { display:flex;align-items:center;color:var(--color-text-tertiary);font-size:20px;padding:0 .2rem;flex-shrink:0; }
+  .timeline-period { font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem; }
+  .timeline-range  { font-size:15px;font-weight:700;margin-bottom:.4rem; }
+  .timeline-body   { font-size:14px;color:var(--color-text-secondary);line-height:1.4; }
+  .vf-flow { display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:1.25rem;padding:.9rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg); }
+  .vf-node { background:var(--color-background-primary);border:1.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.5rem .8rem;font-size:15px;font-weight:700;color:var(--color-text-primary); }
+  .vf-arrow { font-size:18px;color:var(--color-text-tertiary); }
+  .completion-badge { display:flex;flex-direction:column;align-items:center;border-radius:16px;padding:2rem 1.5rem 1.75rem;margin-bottom:1.5rem;text-align:center; }
+  .badge-ring { width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem; }
+  .badge-ring svg { width:40px;height:40px; }
+  .badge-title { font-size:28px;font-weight:700;margin-bottom:.3rem; }
+  .badge-sub { font-size:19px; }
+
 </style>
 
 <div class="container">
@@ -124,14 +179,18 @@
   <div class="tag">4F Solution — Module 8</div>
   <h2>Tools, systems and processes</h2>
   <p class="sub">The 4F Solution is only as consistent as the systems behind it. This module covers the minimum viable setup every professional needs to deliver the process reliably — and how to scale it across a team.</p>
-  <div class="badge-row">
-    <div class="badge"><div class="badge-dot" style="background:#185FA5"></div>8 lessons</div>
-    <div class="badge"><div class="badge-dot" style="background:#378ADD"></div>5 knowledge checks</div>
+  <div class="lesson-list">
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">1</div><div class="lesson-text">A great conversation not captured is a missed opportunity</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">2</div><div class="lesson-text">The CRM — the memory of the practice</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">3</div><div class="lesson-text">Capture the discovery conversation every time, the same way</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">4</div><div class="lesson-text">The plan template and the calendar — closing the loop</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">5</div><div class="lesson-text">Documentation is the record of advice given</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">6</div><div class="lesson-text">The first experience sets every expectation that follows</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">7</div><div class="lesson-text">Know where every prospect and client sits — at all times</div></div>
+    <div class="lesson-item"><div class="lesson-num" style="background:#185FA5">8</div><div class="lesson-text">Scaling the 4F Solution across a team</div></div>
+    <div class="lesson-item" style="background:#E6F1FB"><div class="lesson-num" style="background:#0C447C">✓</div><div class="lesson-text" style="color:#185FA5;font-weight:600">5 knowledge checks — 80% required to pass</div></div>
   </div>
-  <div class="highlight-box hb-blue">
-    <div class="hb-label">What you will learn</div>
-    <div class="hb-text">Why systems matter as much as skills. How to set up a CRM that supports the 4F process. The tools for capturing the discovery conversation. How to build and store the one-page plan. Calendar and follow-up cadence. Compliance and documentation minimums. A consistent client onboarding experience. Pipeline management. And how to run this across a team or agency.</div>
-  </div>
+
 </div>
 
 <!-- SCREEN 1 — Why systems matter -->
@@ -148,9 +207,34 @@
     <div class="card-title">Systems do not replace the relationship — they protect it</div>
     <div class="card-body">A CRM that reminds you to follow up is not impersonal. It is what allows the professional to be present in the meeting rather than trying to remember what to do next. Systems handle the logistics so the professional can focus on the client. That is the point.</div>
   </div>
-  <div class="card">
-    <div class="card-title">The minimum viable system</div>
-    <div class="card-body">The professional does not need complex software to run the 4F process well. They need six things: a way to capture discovery conversations, a place to store and access client information, a method to build and share the one-page plan, a calendar system with structured follow-up, a compliance record, and a pipeline view of where every client and prospect sits in the process. The tool matters less than the discipline of using it.</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.75rem">The six things every professional needs</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.7rem .9rem;border-left:3px solid #185FA5;display:flex;align-items:center;gap:.6rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">CRM</div><div style="font-size:13px;color:var(--color-text-secondary)">Store &amp; access client info</div></div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.7rem .9rem;border-left:3px solid #185FA5;display:flex;align-items:center;gap:.6rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Intake form</div><div style="font-size:13px;color:var(--color-text-secondary)">Capture discovery every time</div></div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.7rem .9rem;border-left:3px solid #185FA5;display:flex;align-items:center;gap:.6rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Plan template</div><div style="font-size:13px;color:var(--color-text-secondary)">Build &amp; share the one page</div></div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.7rem .9rem;border-left:3px solid #185FA5;display:flex;align-items:center;gap:.6rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Calendar</div><div style="font-size:13px;color:var(--color-text-secondary)">Structured follow-up cadence</div></div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.7rem .9rem;border-left:3px solid #185FA5;display:flex;align-items:center;gap:.6rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Compliance record</div><div style="font-size:13px;color:var(--color-text-secondary)">Document every recommendation</div></div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.7rem .9rem;border-left:3px solid #185FA5;display:flex;align-items:center;gap:.6rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Pipeline view</div><div style="font-size:13px;color:var(--color-text-secondary)">Know where everyone sits</div></div>
+      </div>
+    </div>
   </div>
   <div class="highlight-box hb-blue">
     <div class="hb-label">For the team or agency leader</div>
@@ -164,21 +248,62 @@
   <div class="tag">4F Solution — Lesson 2: CRM</div>
   <h2>The CRM is the memory of the practice</h2>
   <p class="sub">A client relationship management system is not a database — it is the infrastructure that ensures every client receives the same standard of care regardless of how many clients the professional is managing.</p>
-  <div class="highlight-box hb-blue">
-    <div class="hb-label">What every client record must contain</div>
-    <div class="hb-text">Contact details and household information. The client's stated values from the discovery conversation. A summary of each Fundamental — current picture and identified gaps. The one-page plan — current version with date. Every recommendation made and its status. All meeting dates, notes, and next steps. Policy and account details. Review dates — 90-day and annual.</div>
+  <div style="background:#E6F1FB;border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.65rem">What every client record must contain</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem"><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Contact details & household</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Stated values — in client's own words</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Each Fundamental — picture & gaps</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">One-page plan — current version & date</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">All recommendations & status</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Meeting dates, notes & next steps</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Policy & account details</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Implementation status</div><div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.45rem .75rem;font-size:14px;font-weight:600;color:#185FA5;border:0.5px solid #A8C8EF">Review dates — 90-day & annual</div></div>
   </div>
-  <div class="card">
-    <div class="card-title">The 4F fields every CRM record needs</div>
-    <div class="card-body">Build or configure your CRM so that every client record has a dedicated section for each Fundamental. Values. Cash Flow summary. Protection gaps and coverage in place. Growth vehicles and goal alignment. Tax efficiency picture. This structure mirrors the discovery conversation and makes it easy to see at a glance where the client stands — and what still needs to be addressed.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Minimum viable CRM — what you actually need</div>
-    <div class="card-body">The tool itself can be simple. A purpose-built financial services CRM, a well-structured spreadsheet, or a general CRM configured for the 4F framework will all work. What matters is that it is used consistently — every client record updated after every conversation, every next step logged, every review date set. A CRM that is not updated is worse than no CRM at all — it creates false confidence.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">For the team or agency</div>
-    <div class="card-body">Every professional in the agency must maintain a system that captures the full 4F client picture — values, discovery notes, the one-page plan, recommendations, and review dates. The specific tool is secondary. What matters is that the system is structured around the 4F framework, consistently maintained, and transferable. If a professional is ever unable to serve their clients, another professional should be able to step in with full context — not start from scratch.<br><br>A central shared CRM is the ideal solution and the agency's preferred standard where possible. It gives the leader visibility across the team, supports peer review, and makes transfers seamless. But where professionals use their own tools, the non-negotiable requirement is that those tools are 4F-structured, current, and accessible if needed. The system belongs to the professional. The standard belongs to the agency.</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.75rem">Recommended CRM setup — by stage</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+
+      <!-- Level 1 -->
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);border-left:4px solid #5B9BD5;padding:.9rem 1rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem">
+          <div style="background:#E6F1FB;border-radius:4px;padding:.2rem .6rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#185FA5">Level 1</div>
+          <div style="font-size:18px;font-weight:700;color:var(--color-text-primary)">Just starting out — under 25 clients</div>
+        </div>
+        <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.5rem">A well-structured spreadsheet or simple notes app configured around the 4F framework. One tab or page per client. Enough to capture values, Fundamentals, the one-page plan, and review dates.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+          <div style="background:#E6F1FB;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#185FA5">Spreadsheet with 4F template</div>
+          <div style="background:#E6F1FB;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#185FA5">Digital notes — one client per page</div>
+          <div style="background:#E6F1FB;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#185FA5">Simple database tool</div>
+        </div>
+      </div>
+
+      <!-- Level 2 -->
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);border-left:4px solid #185FA5;padding:.9rem 1rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem">
+          <div style="background:#185FA5;border-radius:4px;padding:.2rem .6rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff">Level 2</div>
+          <div style="font-size:18px;font-weight:700;color:var(--color-text-primary)">Growing practice — 25 to 100 clients</div>
+        </div>
+        <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.5rem">A general-purpose CRM configured with 4F fields, or a purpose-built financial services CRM. Enables pipeline tracking, automated reminders, and structured follow-up. The tool should mirror the discovery conversation — one section per Fundamental per client record.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+          <div style="background:#185FA5;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#fff">General CRM configured for 4F</div>
+          <div style="background:#185FA5;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#fff">Financial services CRM</div>
+          <div style="background:#185FA5;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#fff">Pipeline + reminder tool</div>
+        </div>
+      </div>
+
+      <!-- Level 3 -->
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);border-left:4px solid #0C447C;padding:.9rem 1rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem">
+          <div style="background:#0C447C;border-radius:4px;padding:.2rem .6rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff">Level 3</div>
+          <div style="font-size:18px;font-weight:700;color:var(--color-text-primary)">Team or agency — multiple professionals</div>
+        </div>
+        <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.5rem">A shared CRM with team visibility — the agency standard. Every professional's clients visible to the leader. Pipeline across the full team. Supports peer review, coaching, and continuity if a professional cannot serve their clients. This is non-negotiable at scale.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+          <div style="background:#0C447C;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#fff">Shared CRM — full team access</div>
+          <div style="background:#0C447C;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#fff">Pipeline visible to agency leader</div>
+          <div style="background:#0C447C;border-radius:4px;padding:.2rem .6rem;font-size:12px;font-weight:600;color:#fff">Transferable client records</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="border-left:4px solid #0C447C;background:#E6F1FB;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:.9rem 1.1rem;margin-top:.75rem">
+      <div style="font-size:17px;font-weight:700;color:#0C447C;line-height:1.6;margin-bottom:.35rem">The tool matters less than the discipline of using it. A CRM that is not updated is worse than no CRM at all — it creates false confidence.</div>
+      <div style="width:100%;height:1px;background:rgba(12,68,124,0.2);margin-bottom:.5rem"></div>
+      <div style="font-size:17px;color:#185FA5;line-height:1.55"><strong>Talk to other 4F professionals.</strong> Ask what they use, how they have it configured, and what they wish they had set up differently from the start. The most practical CRM advice comes from professionals running the same process at a similar scale — not from vendor demos.</div>
+    </div>
   </div>
 </div>
 
@@ -190,15 +315,17 @@
   <p class="sub">The discovery conversation surfaces the most important information the professional will ever gather about a client. The tool used to capture it must be fast, structured, and consistent — so that nothing important is missed and the output is always usable.</p>
   <div class="card">
     <div class="card-title">The 4F discovery intake form</div>
-    <div class="card-body">Every professional needs a structured intake form that mirrors the 4F conversation. One section per Fundamental, with fields for the client's responses, identified gaps, and any immediate concerns. This is not a questionnaire the client fills in — it is a note-taking guide the professional uses during the conversation. It ensures the same questions are asked every time and the same information is captured every time.</div>
+    <div class="card-body">Every professional needs a structured intake form that mirrors the 4F conversation. One section per Fundamental, with fields for the client's responses, identified gaps, and any immediate concerns. <strong>This is not a questionnaire the client fills in — it is a note-taking guide the professional uses during the conversation.</strong> It ensures the same questions are asked every time and the same information is captured every time.</div>
   </div>
-  <div class="card">
-    <div class="card-title">What the intake form must capture</div>
-    <div class="card-body">Values section: the client's stated values in their own words. Cash flow section: income sources, monthly expenses, surplus, debt. Protection section: current coverage for each of the four risks, identified gaps. Growth section: existing accounts and vehicles, goal timelines, risk profile. Tax efficiency section: current structure at accumulation, any distribution planning in place, estate picture. Space for any critical or obvious issues that require immediate attention.</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.65rem">What the intake form must capture</div>
+    <div style="display:flex;flex-direction:column;gap:.35rem"><div style="display:flex;align-items:center;gap:.75rem;background:#EEEDFE;border-radius:var(--border-radius-md);padding:.6rem .9rem"><div style="font-size:14px;font-weight:700;color:#534AB7;min-width:90px">Values</div><div style="width:1px;height:20px;background:#534AB7;opacity:.3"></div><div style="font-size:17px;color:#534AB7;opacity:.85;line-height:1.4">Stated values in the client's own words</div></div><div style="display:flex;align-items:center;gap:.75rem;background:#E1F5EE;border-radius:var(--border-radius-md);padding:.6rem .9rem"><div style="font-size:14px;font-weight:700;color:#0F6E56;min-width:90px">Cash Flow</div><div style="width:1px;height:20px;background:#0F6E56;opacity:.3"></div><div style="font-size:14px;color:#0F6E56;opacity:.85;line-height:1.4">Income sources, expenses, surplus, debt</div></div><div style="display:flex;align-items:center;gap:.75rem;background:#FAECE7;border-radius:var(--border-radius-md);padding:.6rem .9rem"><div style="font-size:14px;font-weight:700;color:#993C1D;min-width:90px">Protection</div><div style="width:1px;height:20px;background:#993C1D;opacity:.3"></div><div style="font-size:14px;color:#993C1D;opacity:.85;line-height:1.4">Coverage for each of the four risks, gaps</div></div><div style="display:flex;align-items:center;gap:.75rem;background:#EAF3DE;border-radius:var(--border-radius-md);padding:.6rem .9rem"><div style="font-size:14px;font-weight:700;color:#3B6D11;min-width:90px">Wealth</div><div style="width:1px;height:20px;background:#3B6D11;opacity:.3"></div><div style="font-size:14px;color:#3B6D11;opacity:.85;line-height:1.4">Accounts, vehicles, goal timelines, risk profile</div></div><div style="display:flex;align-items:center;gap:.75rem;background:#FAEEDA;border-radius:var(--border-radius-md);padding:.6rem .9rem"><div style="font-size:14px;font-weight:700;color:#854F0B;min-width:90px">Tax Efficiency</div><div style="width:1px;height:20px;background:#854F0B;opacity:.3"></div><div style="font-size:14px;color:#854F0B;opacity:.85;line-height:1.4">Accumulation structure, distribution plan, estate picture</div></div>
+      <div style="display:flex;align-items:center;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.6rem .9rem;border:0.5px dashed var(--color-border-secondary)"><div style="font-size:14px;font-weight:700;color:var(--color-text-tertiary);min-width:90px">Flags</div><div style="width:1px;height:20px;background:var(--color-border-secondary)"></div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.4">Critical or obvious issues requiring immediate attention</div></div>
+    </div>
   </div>
   <div class="card">
     <div class="card-title">Format — paper, tablet, or digital</div>
-    <div class="card-body">The format matters less than the consistency. A printed form the professional completes by hand works. A tablet with a structured digital form works. A laptop with a CRM open works. What does not work is trying to remember everything mentally and reconstruct notes afterward — the detail that makes the plan compelling is lost. The professional who takes visible notes during the discovery conversation also signals to the client that what they are saying matters.</div>
+    <div class="card-body">The format matters less than the consistency. A printed form the professional completes by hand works. A tablet with a structured digital form works. A laptop with a CRM open works. <strong>What does not work is trying to remember everything mentally and reconstruct notes afterward — the detail that makes the plan compelling is lost.</strong> The professional who takes visible notes during the discovery conversation also signals to the client that what they are saying matters.</div>
   </div>
   <div class="highlight-box hb-blue">
     <div class="hb-label">For the team or agency</div>
@@ -212,26 +339,99 @@
   <div class="tag">4F Solution — Lesson 4: Plan template and calendar</div>
   <h2>The plan template and the calendar — together they close the loop</h2>
   <p class="sub">The one-page plan is the client-facing output of the discovery. The calendar is what ensures it gets built, delivered, and followed up on. Neither works without the other.</p>
-  <div class="card">
-    <div class="card-title">The one-page plan template</div>
-    <div class="card-body">Every professional needs a standard template that produces a consistent one-page output from the discovery notes. The template has five fixed sections: values, current picture across the four Fundamentals, identified gaps, recommendations with values connections, and next steps. It should be fillable in under 30 minutes from well-captured discovery notes. The output is saved to the client record in the CRM and given to the client at the solution delivery meeting.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Version control — the plan is a living document</div>
-    <div class="card-body">Every time the plan is reviewed and updated, the new version is saved with a date and the previous version is retained. This creates a record of how the client's situation has evolved — and demonstrates the ongoing value the professional has delivered. At the annual review, comparing the current plan to the one from a year ago is one of the most powerful ways to show a client how much their situation has improved.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">The meeting cadence — non-negotiable dates</div>
-    <div class="card-body">Three calendar events must be booked for every client before the professional leaves the solution delivery meeting: the 90-day review, the annual review, and a mid-year check-in call. These are not optional. They are the infrastructure of the ongoing relationship. A professional who books them immediately signals that this is not a transactional engagement — and a professional who fails to book them almost always fails to conduct them.</div>
-  </div>
-  <div class="mvp-row">
-    <div class="mvp-card">
-      <div class="mvp-label">Solo professional</div>
-      <div class="mvp-body">A shared calendar with automated reminders 2 weeks before each review date. Block the time before you need it.</div>
+  <!-- One-page plan template — mini section preview -->
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5">The one-page plan template — five fixed sections</div>
+      <div style="font-size:12px;color:var(--color-text-tertiary);font-style:italic">fillable in under 30 min</div>
     </div>
-    <div class="mvp-card">
-      <div class="mvp-label">Team or agency</div>
-      <div class="mvp-body">Centralized calendar visibility so the leader can see upcoming reviews across all professionals and ensure none are missed.</div>
+    <div style="display:flex;flex-direction:column;gap:.35rem">
+      <div style="display:flex;align-items:center;gap:.75rem;background:#EEEDFE;border-radius:var(--border-radius-md);padding:.55rem .9rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:#534AB7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <div style="font-size:14px;font-weight:700;color:#3C3489">Values</div>
+        <div style="font-size:13px;color:#534AB7;margin-left:auto">What matters most — in the client's own words</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.55rem .9rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:#185FA5;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Current picture</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);margin-left:auto">Across all four Fundamentals</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.55rem .9rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:#185FA5;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Identified gaps</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);margin-left:auto">What is missing or unaddressed</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.55rem .9rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:#185FA5;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+        <div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Recommendations</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);margin-left:auto">Each connected to a stated value</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.55rem .9rem">
+        <div style="width:22px;height:22px;border-radius:50%;background:#185FA5;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</div>
+        <div style="font-size:14px;font-weight:700;color:var(--color-text-primary)">Next steps</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);margin-left:auto">Agreed actions with owner and timing</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--color-text-tertiary);margin-top:.6rem">Saved to the CRM. Given to the client at the solution delivery meeting. Updated at every review.</div>
+  </div>
+
+  <!-- Version control -->
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem;border-left:4px solid #185FA5">
+    <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.3rem">Version control — the plan is a living document</div>
+    <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.6">Save every updated version with a date. Retain the previous version. At the annual review, <strong>comparing the current plan to the one from a year ago is one of the most powerful ways to show a client how much their situation has improved.</strong></div>
+  </div>
+
+  <!-- Meeting cadence — numbered structure -->
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.7rem">The meeting cadence — non-negotiable structure</div>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;gap:.75rem;align-items:flex-start;background:#E6F1FB;border-radius:var(--border-radius-md);padding:.8rem .9rem">
+        <div style="min-width:52px;text-align:center;flex-shrink:0">
+          <div style="font-size:14px;font-weight:700;color:#185FA5">Until done</div>
+          <div style="font-size:11px;color:#5B9BD5;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Active phase</div>
+        </div>
+        <div style="width:1px;background:rgba(24,95,165,0.25);align-self:stretch;flex-shrink:0"></div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#0C447C;margin-bottom:.15rem">Active implementation</div>
+          <div style="font-size:13px;color:#185FA5;line-height:1.5">Constant contact until every recommendation is fully in place. Does not end at the meeting.</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div>
+      <div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.8rem .9rem">
+        <div style="min-width:52px;text-align:center;flex-shrink:0">
+          <div style="font-size:14px;font-weight:700;color:#185FA5">90 days</div>
+          <div style="font-size:11px;color:#5B9BD5;font-weight:600;text-transform:uppercase;letter-spacing:.04em">First check-in</div>
+        </div>
+        <div style="width:1px;background:var(--color-border-tertiary);align-self:stretch;flex-shrink:0"></div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">90-day check-in</div>
+          <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.5">Booked before leaving the solution delivery meeting. First structured review once implementation is complete.</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div>
+      <div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.8rem .9rem">
+        <div style="min-width:52px;text-align:center;flex-shrink:0">
+          <div style="font-size:14px;font-weight:700;color:#185FA5">Annual</div>
+          <div style="font-size:11px;color:#5B9BD5;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Full review</div>
+        </div>
+        <div style="width:1px;background:var(--color-border-tertiary);align-self:stretch;flex-shrink:0"></div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Annual 4F conversation</div>
+          <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.5">Full values-to-fundamentals review every year. Not a portfolio report — the complete conversation again.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Solo vs Agency calendar -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.5rem">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem;border-top:3px solid #5B9BD5">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5B9BD5;margin-bottom:.35rem">Solo professional</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55">Calendar with automated reminders 2 weeks before each review. Block the time before you need it.</div>
+    </div>
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem;border-top:3px solid #185FA5">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#185FA5;margin-bottom:.35rem">Team or agency</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55">Centralised visibility so the leader can see upcoming reviews across all professionals — none missed.</div>
     </div>
   </div>
 </div>
@@ -242,21 +442,49 @@
   <div class="tag">4F Solution — Lesson 5: Compliance and documentation</div>
   <h2>Documentation is not bureaucracy — it is the record of advice given</h2>
   <p class="sub">Good documentation protects the client, the professional, and the agency. It also creates the evidence base that demonstrates the ongoing value of the relationship. The 4F process naturally generates strong documentation — if the professional captures it correctly.</p>
-  <div class="highlight-box hb-blue">
-    <div class="hb-label">What must be documented — always</div>
-    <div class="hb-text">The discovery conversation — what was discussed and what was captured across each Fundamental. Every recommendation made — what was recommended, why, and the values connection. Every recommendation declined — the client's reason and the professional's response. Every meeting — date, who attended, what was discussed, what was agreed. Every change to the plan — what changed, why, and when.</div>
+  <div style="background:#E6F1FB;border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.75rem">What must be documented — always</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem"><div style="display:flex;align-items:flex-start;gap:.6rem"><div style="width:18px;height:18px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Discovery conversation — what was discussed across each Fundamental</div></div><div style="display:flex;align-items:flex-start;gap:.6rem"><div style="width:18px;height:18px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Every recommendation made — what, why, and the values connection</div></div><div style="display:flex;align-items:flex-start;gap:.6rem"><div style="width:18px;height:18px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Every recommendation declined — reason and professional's response</div></div><div style="display:flex;align-items:flex-start;gap:.6rem"><div style="width:18px;height:18px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Every meeting — date, attendees, discussion, decisions agreed</div></div><div style="display:flex;align-items:flex-start;gap:.6rem"><div style="width:18px;height:18px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Every plan change — what changed, why, and when</div></div></div>
   </div>
-  <div class="card">
-    <div class="card-title">Why the values connection protects the professional</div>
-    <div class="card-body">A recommendation documented with its values connection is not just good advice — it is defensible advice. "I recommended this coverage because the client stated that family security was their primary value and their current employer group coverage would not follow them if they changed roles" is a clear record that a professional judgment was made in the client's interest. That record is protection for the professional if a recommendation is ever questioned.</div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;margin-bottom:.65rem;border-left:4px solid #185FA5">
+    <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.35rem">Why the values connection protects the professional</div>
+    <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.5rem">A recommendation documented with its values connection is defensible advice — not just good advice.</div>
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:17px;color:#185FA5;line-height:1.6;font-style:italic">"I recommended this coverage because the client stated that family security was their primary value and their current employer group coverage would not follow them if they changed roles."</div>
+    <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55;margin-top:.5rem">That record is protection if a recommendation is ever questioned.</div>
   </div>
-  <div class="card">
-    <div class="card-title">Minimum documentation standard</div>
-    <div class="card-body">After every client interaction: update the CRM with a meeting note that includes the date, what was discussed, any decisions made, and the next scheduled contact. This does not need to be lengthy. A consistent three to five line update after every interaction builds a complete client history over time — and takes less than five minutes.</div>
+
+  <div style="background:#E6F1FB;border-radius:var(--border-radius-lg);padding:1rem 1.1rem;margin-bottom:.65rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.6rem">Minimum documentation standard — after every interaction</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
+      <div style="display:flex;align-items:center;gap:.5rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .75rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Date of interaction</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .75rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">What was discussed</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .75rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Decisions made</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .75rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Next scheduled contact</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#185FA5;margin-top:.6rem;font-weight:500">Three to five lines. Less than five minutes. Every time.</div>
   </div>
-  <div class="card">
-    <div class="card-title">For the team or agency</div>
-    <div class="card-body">Documentation standards must be set at the agency level and applied consistently across all professionals. The leader who can review any client file and see a complete, current record of the advice given and the rationale behind it has a compliant and defensible practice. The leader who cannot has a liability.</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.5rem">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem;border-top:3px solid #5B9BD5">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5B9BD5;margin-bottom:.35rem">Solo professional</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55">Update the CRM immediately after every interaction. Do not reconstruct from memory later.</div>
+    </div>
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem;border-top:3px solid #0C447C">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#0C447C;margin-bottom:.35rem">Team or agency</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55"><strong>The leader who can review any file and see complete, current advice has a defensible practice. The leader who cannot has a liability.</strong></div>
+    </div>
   </div>
 </div>
 
@@ -272,23 +500,23 @@
       <div style="display:flex;flex-direction:column;gap:.65rem;margin-top:.25rem">
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">1</div>
-          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Confirmation</strong> — Immediately after booking the discovery meeting, the client receives a confirmation with the meeting details, a brief description of what to expect, and any information they should have on hand.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Confirmation</strong> — Immediately after booking the discovery meeting, the client receives a confirmation with the meeting details, a brief description of what to expect, and any information they should have on hand.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">2</div>
-          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Pre-meeting framing</strong> — 24 to 48 hours before the meeting, a brief message reminding the client of the meeting and setting the tone: "This conversation is about understanding what matters most to you — not about products."</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Pre-meeting framing</strong> — 24 to 48 hours before the meeting, a brief message reminding the client of the meeting and setting the tone: "This conversation is about understanding what matters most to you — not about products."</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">3</div>
-          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>The discovery meeting</strong> — The 4F conversation, conducted consistently using the structured intake form.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>The discovery meeting</strong> — The 4F conversation, conducted consistently using the structured intake form.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">4</div>
-          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Post-meeting summary</strong> — Within 48 hours, the client receives a brief written summary of what was discussed and when the solution delivery meeting is scheduled.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Post-meeting summary</strong> — Within 48 hours, the client receives a brief written summary of what was discussed and when the solution delivery meeting is scheduled — if not already booked, book it now.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">5</div>
-          <div style="font-size:19px;color:var(--color-text-primary);line-height:1.5"><strong>Solution delivery meeting</strong> — The complete plan presented. Every recommendation values-connected. The 90-day review and annual review booked before the client leaves.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Solution delivery meeting</strong> — The complete plan presented. Every recommendation values-connected. Active implementation begins immediately. The 90-day check-in and annual review booked before the client leaves.</div>
         </div>
       </div>
     </div>
@@ -309,35 +537,33 @@
     <div class="hb-label">The 4F pipeline stages</div>
     <div class="hb-text">Every prospect and client sits in one of six stages at any given time. The pipeline makes this visible — and makes it actionable.</div>
   </div>
-  <div class="stage-row">
-    <div class="stage-item">
-      <div class="stage-dot"></div>
-      <div class="stage-content"><strong>Stage 1 — Prospect</strong> — A potential client has been identified. Outreach has been initiated or is planned. No meeting booked yet.</div>
+  <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.25rem"><div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.65rem .9rem"><div style="min-width:24px;height:24px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">1</div><div><div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Prospect</div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.45">Identified. Outreach initiated. No meeting booked yet.</div></div></div><div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div><div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.65rem .9rem"><div style="min-width:24px;height:24px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">2</div><div><div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Discovery booked</div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.45">First meeting scheduled. Onboarding sequence in motion. Intake form ready.</div></div></div><div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div><div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.65rem .9rem"><div style="min-width:24px;height:24px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">3</div><div><div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Discovery complete</div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.45">4F conversation done. Notes captured. Plan being built. Solution delivery to be booked.</div></div></div><div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div><div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.65rem .9rem"><div style="min-width:24px;height:24px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">4</div><div><div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Solution delivery booked</div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.45">Plan complete. One-page summary ready. Meeting scheduled.</div></div></div><div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div><div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.65rem .9rem"><div style="min-width:24px;height:24px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">5</div><div><div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Active client</div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.45">Plan accepted. Active implementation underway. 90-day check-in and annual review booked.</div></div></div><div style="display:flex;justify-content:flex-start;padding-left:15px"><div style="width:2px;height:7px;background:var(--color-border-tertiary)"></div></div><div style="display:flex;gap:.75rem;align-items:flex-start;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.65rem .9rem"><div style="min-width:24px;height:24px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">6</div><div><div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.15rem">Review due</div><div style="font-size:17px;color:var(--color-text-secondary);line-height:1.45">Scheduled review approaching. Confirm, prepare, and conduct.</div></div></div></div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.5rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.65rem">For the team or agency — pipeline visibility</div>
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.85rem 1rem;margin-bottom:.5rem;border-left:3px solid #185FA5">
+      <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.3rem">Why the leader needs to see the pipeline</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.6">Not to manage the professional — to identify where support is needed. <strong>A team where every professional has multiple prospects stalled in Stage 3 for more than two weeks has a plan-building problem, not a prospecting problem.</strong> The leader who can see that intervenes with the right coaching at the right time.</div>
     </div>
-    <div class="stage-item">
-      <div class="stage-dot"></div>
-      <div class="stage-content"><strong>Stage 2 — Discovery booked</strong> — The first meeting is scheduled. Onboarding sequence in motion. Intake form ready.</div>
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#185FA5;margin-bottom:.45rem">How visibility is achieved — pick one</div>
+    <div style="display:flex;flex-direction:column;gap:.35rem">
+      <div style="display:flex;align-items:center;gap:.6rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .8rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Shared CRM — visibility is automatic</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.6rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .8rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Weekly or bi-weekly pipeline report</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.6rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .8rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Team meeting — each professional walks through their stages</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.6rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .8rem">
+        <div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div>
+        <div style="font-size:17px;color:var(--color-text-secondary)">Simple shared tracking document</div>
+      </div>
     </div>
-    <div class="stage-item">
-      <div class="stage-dot"></div>
-      <div class="stage-content"><strong>Stage 3 — Discovery complete</strong> — The 4F conversation has happened. Notes captured. Plan being built. Solution delivery meeting to be booked.</div>
-    </div>
-    <div class="stage-item">
-      <div class="stage-dot"></div>
-      <div class="stage-content"><strong>Stage 4 — Solution delivery booked</strong> — Plan complete. One-page summary ready. Meeting scheduled.</div>
-    </div>
-    <div class="stage-item">
-      <div class="stage-dot"></div>
-      <div class="stage-content"><strong>Stage 5 — Active client</strong> — Plan accepted. Implementation in progress. 90-day review and annual review booked. Relationship ongoing.</div>
-    </div>
-    <div class="stage-item">
-      <div class="stage-dot"></div>
-      <div class="stage-content"><strong>Stage 6 — Review due</strong> — A scheduled review is approaching. Action required to confirm, prepare, and conduct the meeting.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">For the team or agency</div>
-    <div class="card-body">The agency leader needs visibility across the full team pipeline — not to manage the professional, but to identify where support is needed. A team where every professional has multiple prospects stalled in Stage 3 for more than two weeks has a plan-building problem, not a prospecting problem. The leader who can see that can intervene with the right coaching at the right time.<br><br>How that visibility is achieved is flexible. A shared CRM gives it automatically. Where professionals use independent systems, a regular pipeline review — a weekly or bi-weekly report, a team meeting where each professional walks through their stages, or a simple shared tracking document — achieves the same outcome. The method matters less than the discipline. The leader who does not have regular visibility into pipeline health across the team cannot lead effectively — regardless of how strong each individual professional is.</div>
+    <div style="border-left:4px solid #0C447C;background:#E6F1FB;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:.9rem 1.1rem;margin-top:.75rem"><div style="font-size:17px;font-weight:700;color:#0C447C;line-height:1.6">The method matters less than the discipline. A leader without regular pipeline visibility cannot lead effectively — regardless of how strong each individual professional is.</div></div>
   </div>
 </div>
 
@@ -351,17 +577,34 @@
     <div class="hb-label">What the agency leader must put in place</div>
     <div class="hb-text">A CRM or client system structured around the 4F framework — shared is ideal but individual tools are acceptable if they meet the standard. A standard discovery intake form used by every professional. A plan template that produces a consistent one-page output. A process for pipeline visibility across the team — shared system, regular review meeting, or tracking report. A documentation standard applied consistently. A pipeline with defined stages that the leader can see at all times.</div>
   </div>
-  <div class="card">
-    <div class="card-title">Onboarding new professionals to the system</div>
-    <div class="card-body">A new professional joining the team should be able to run their first discovery meeting using the agency's intake form, build the one-page plan using the agency's template, and book follow-ups using the agency's calendar system — without needing to invent any of it themselves. The system is what allows a new professional to deliver a professional client experience from day one. It is also what allows the agency to maintain standards as the team grows.</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.65rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.65rem">Onboarding new professionals — from day one</div>
+    <div style="display:flex;flex-direction:column;gap:.35rem">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.65rem .9rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">1</div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.1rem">Run the first discovery meeting</div><div style="font-size:13px;color:var(--color-text-secondary)">Using the agency intake form — no invention required</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.65rem .9rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">2</div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.1rem">Build the one-page plan</div><div style="font-size:13px;color:var(--color-text-secondary)">Using the agency template — consistent output from day one</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.65rem .9rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#185FA5;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">3</div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.1rem">Book all follow-ups</div><div style="font-size:13px;color:var(--color-text-secondary)">Using the agency calendar system — cadence maintained from the start</div></div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#185FA5;margin-top:.6rem;font-weight:500">The system is what allows a new professional to deliver a professional client experience from day one — and the agency to maintain standards as the team grows.</div>
   </div>
-  <div class="card">
-    <div class="card-title">Peer review and quality control</div>
-    <div class="card-body">The agency leader who can read any professional's discovery notes and one-page plan and immediately assess quality is running a compliant and consistent practice. Build a peer review cadence — monthly or quarterly — where discovery notes and plans are reviewed together as a team. This is the most effective professional development tool the agency has. It surfaces gaps in discovery skills, plan-building, and values connections — and it normalizes a standard of excellence across the whole team.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">The client relationship follows the professional — the system ensures continuity if it cannot</div>
-    <div class="card-body">The client's relationship is with their professional — and it stays that way as long as that professional is able to serve them. What good systems protect against is the gap that occurs when a professional is no longer able to do so — through departure, illness, or transition. In a well-systemized agency, if that situation arises, the CRM holds the full client history, the one-page plan is current and stored, and another professional can step in without the client starting from scratch. The system does not claim the client — it protects the client's continuity of service when circumstances require it.</div>
+
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;border-left:4px solid #0C447C">
+    <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);margin-bottom:.35rem">The system ensures continuity</div>
+    <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.5rem">The client's relationship is with their professional — and stays that way as long as that professional can serve them. Good systems protect against the gap when they cannot.</div>
+    <div style="display:flex;flex-direction:column;gap:.3rem">
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#0C447C;flex-shrink:0"></div><div style="font-size:17px;color:var(--color-text-secondary)">CRM holds the full client history</div></div>
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#0C447C;flex-shrink:0"></div><div style="font-size:17px;color:var(--color-text-secondary)">One-page plan is current and stored</div></div>
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#0C447C;flex-shrink:0"></div><div style="font-size:17px;color:var(--color-text-secondary)">Another professional can step in without the client starting from scratch</div></div>
+    </div>
+    <div style="font-size:13px;color:#0C447C;margin-top:.6rem;font-style:italic">The system does not claim the client — it protects the client's continuity of service when circumstances require it.</div>
   </div>
 </div>
 
@@ -377,38 +620,68 @@
       <div style="display:flex;flex-direction:column;gap:.65rem">
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">1</div>
-          <div style="font-size:19px;line-height:1.5"><strong>CRM</strong> — Client records with 4F fields, meeting notes, recommendation history, and review dates.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>CRM</strong> — Client records with 4F fields, meeting notes, recommendation history, and review dates.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">2</div>
-          <div style="font-size:19px;line-height:1.5"><strong>Discovery intake form</strong> — Structured note-taking guide that mirrors the 4F conversation. One section per Fundamental.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Discovery intake form</strong> — Structured note-taking guide that mirrors the 4F conversation. One section per Fundamental.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">3</div>
-          <div style="font-size:19px;line-height:1.5"><strong>One-page plan template</strong> — Standard fillable template that produces a consistent client-facing output from the discovery notes.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>One-page plan template</strong> — Standard fillable template that produces a consistent client-facing output from the discovery notes.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">4</div>
-          <div style="font-size:19px;line-height:1.5"><strong>Calendar system</strong> — Non-negotiable review dates booked at the solution delivery meeting. 90-day, mid-year, and annual.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Calendar system</strong> — Active implementation phase tracked to completion. 90-day check-in and annual review booked at the solution delivery meeting.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">5</div>
-          <div style="font-size:19px;line-height:1.5"><strong>Compliance record</strong> — Every meeting noted. Every recommendation documented with its values connection. Every client decision recorded.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Compliance record</strong> — Every meeting noted. Every recommendation documented with its values connection. Every client decision recorded.</div>
         </div>
         <div style="display:flex;gap:.85rem;align-items:flex-start">
           <div style="min-width:26px;height:26px;border-radius:50%;background:#185FA5;color:#E6F1FB;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">6</div>
-          <div style="font-size:19px;line-height:1.5"><strong>Pipeline view</strong> — Six stages, every prospect and client visible, bottlenecks surfaced before opportunities are lost.</div>
+          <div style="font-size:20px;color:var(--color-text-secondary);line-height:1.5"><strong>Pipeline view</strong> — Six stages, every prospect and client visible, bottlenecks surfaced before opportunities are lost.</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">The discipline matters more than the tool</div>
-    <div class="card-body">Any reasonably configured system will work. What makes the difference is using it consistently — updating records after every conversation, capturing discovery notes in full, booking reviews before leaving the meeting, and treating documentation as part of the professional standard rather than an afterthought.</div>
+  <!-- Discipline card -->
+  <div style="border-left:4px solid #0C447C;background:#E6F1FB;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:.9rem 1.1rem;margin-bottom:.65rem">
+    <div style="font-size:17px;font-weight:700;color:#0C447C;line-height:1.6;margin-bottom:.45rem">The discipline matters more than the tool.</div>
+    <div style="display:flex;flex-direction:column;gap:.3rem">
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div><div style="font-size:17px;color:#185FA5">Update records after every conversation</div></div>
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div><div style="font-size:17px;color:#185FA5">Capture discovery notes in full</div></div>
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div><div style="font-size:17px;color:#185FA5">Book reviews before leaving the meeting</div></div>
+      <div style="display:flex;align-items:center;gap:.6rem"><div style="width:6px;height:6px;border-radius:50%;background:#185FA5;flex-shrink:0"></div><div style="font-size:17px;color:#185FA5">Treat documentation as the professional standard — not an afterthought</div></div>
+    </div>
   </div>
-  <div class="card">
-    <div class="card-title">For the agency</div>
-    <div class="card-body">Standard tools, standard templates, standard process. Every professional may work independently — but every professional works to the same 4F standard. A new professional can deliver a professional client experience from day one because the system defines what that looks like. A leader can review quality across the whole team because the discovery notes, plans, and pipeline stages follow a consistent structure. And when a professional can no longer serve their clients, continuity of service is possible because the information exists in a transferable format. The agency's strength is not in owning the client relationships — it is in owning the standard that makes every professional within it trusted, consistent, and effective.</div>
+
+  <!-- For the agency -->
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.5rem">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185FA5;margin-bottom:.65rem">For the agency — the standard is the brand</div>
+    <div style="display:flex;flex-direction:column;gap:.35rem">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.65rem .9rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#185FA5;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.1rem">Consistent from day one</div><div style="font-size:13px;color:var(--color-text-secondary)">A new professional can deliver a professional client experience immediately — because the system defines what that looks like.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.65rem .9rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#185FA5;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.1rem">Reviewable across the whole team</div><div style="font-size:13px;color:var(--color-text-secondary)">Discovery notes, plans, and pipeline stages follow a consistent structure — the leader can assess quality at a glance.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.75rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.65rem .9rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#185FA5;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:.1rem">Continuity when it matters most</div><div style="font-size:13px;color:var(--color-text-secondary)">When a professional can no longer serve their clients, continuity is possible because the information exists in a transferable format.</div></div>
+      </div>
+    </div>
+    <div style="border-left:4px solid #0C447C;background:#E6F1FB;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:.75rem 1rem;margin-top:.65rem">
+      <div style="font-size:17px;font-weight:700;color:#0C447C;line-height:1.55">The agency's strength is not in owning the client relationships — it is in owning the standard that makes every professional within it trusted, consistent, and effective.</div>
+    </div>
   </div>
 </div>
 
@@ -436,10 +709,10 @@
   </div>
 
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">When must the 90-day review, mid-year check-in, and annual review be booked?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Within one week of the solution delivery meeting once the client has confirmed they are satisfied</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Before the professional leaves the solution delivery meeting — the dates must be in the calendar before the client walks out the door</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">At the 90-day review, once the professional knows the client relationship is solid</button>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">After the solution delivery meeting, what is the correct sequence for the professional?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Send a summary within 48 hours, then wait for the client to follow up on next steps</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Enter active implementation immediately — stay in constant contact until every recommendation is in place, then conduct the 90-day check-in once implementation is complete</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Book the annual review first, then address paperwork when the client asks about it</button>
     <div class="feedback" id="fb-q3"></div>
   </div>
 
@@ -466,7 +739,15 @@
   <div class="tag">4F Solution — Module 8 complete</div>
   <h2>Module 8 complete</h2>
   <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
-  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+  <div class="completion-badge" style="background:#E6F1FB">
+    <div class="badge-ring" style="background:#185FA5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="badge-title" style="color:#0C447C">Module 8 complete</div>
+    <div class="badge-sub" style="color:#185FA5">Tools, Systems &amp; Processes</div>
+  </div>
+
+    <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
       <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
@@ -514,7 +795,7 @@ var MODULE_NAME = '4F Solution - Module 8: Tools, Systems and Processes';
 var qLabels = {
   q1: 'Q1 - Why an outdated CRM is worse than no CRM',
   q2: 'Q2 - Purpose of the discovery intake form',
-  q3: 'Q3 - When review meetings must be booked',
+  q3: 'Q3 - Post-plan implementation and 90-day check-in sequence',
   q4: 'Q4 - Why values-connected documentation protects the professional',
   q5: 'Q5 - Client relationship continuity when a professional leaves'
 };
@@ -525,7 +806,7 @@ var qMsgs = {
   q2c: 'Correct. The intake form is a professional tool — a structured note-taking guide that ensures the same quality of discovery is conducted with every client. It is used during the conversation, not before it. The professional who uses it captures everything. The one who tries to remember mentally loses the detail that makes the plan compelling.',
   q2w: 'The intake form is not completed by the client and is not a consent or compliance document. It is a structured guide the professional uses during the discovery conversation to ensure they ask the same questions in the same order and capture the same information every time. Consistency in what is captured is what makes the plan-building step reliable.',
   q3c: 'Correct. Review dates must be booked before the client walks out of the solution delivery meeting. A professional who plans to book them "later" almost always fails to do so — and the reviews that do not get booked almost never happen. The calendar is the commitment.',
-  q3w: 'Waiting to book reviews — whether for a week, until satisfaction is confirmed, or until the next meeting — dramatically reduces the probability they will actually happen. The professional who books all three dates before the client leaves the solution delivery meeting has an ongoing relationship. The one who plans to do it later usually does not.',
+  q3w: 'A written summary alone is not follow-through. The professional\'s job after the plan is accepted is to stay actively present until every recommendation is implemented — paperwork, applications, account setups, everything. Waiting for the client to follow up, or treating it as done once the meeting ends, is how plans stall and relationships erode.',
   q4c: 'Correct. A recommendation documented with its values connection is advice, not just a product sale. The record shows that the professional understood the client\'s situation, identified a specific risk, and recommended a specific solution because of what the client said matters to them. That documentation is defensible if any recommendation is later questioned.',
   q4w: 'The values connection in documentation does more than meet a technical standard. It creates a clear narrative of professional judgment — showing that the recommendation was made in the client\'s interest and connected to what they told the professional they valued. That narrative is what makes the documentation genuinely protective.',
   q5c: 'Correct. The client\'s relationship is with their professional — and that does not change unless the professional can no longer serve them. What good systems ensure is that if that situation occurs, the client does not start from scratch. The full history, the current plan, and the booked reviews are all accessible — protecting the client\'s continuity of service.',

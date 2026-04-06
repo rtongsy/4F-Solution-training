@@ -17,6 +17,17 @@
     --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --border-radius-md: 8px;
     --border-radius-lg: 12px;
+    --purple: #534AB7;
+    --purple-light: #EEEDFE;
+    --purple-mid: #7F77DD;
+    --teal: #0F6E56;
+    --teal-light: #E1F5EE;
+    --coral: #993C1D;
+    --coral-light: #FAECE7;
+    --green: #3B6D11;
+    --green-light: #EAF3DE;
+    --amber: #854F0B;
+    --amber-light: #FAEEDA;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -66,16 +77,16 @@
   .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
   .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
   .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; border-radius: 0; }
-  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
-  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; border-radius: 0; }
-  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; border-radius: 0; }
-  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: 0; }
+  .hb-teal   { background: #E1F5EE; border-left: 3px solid #0F6E56; border-radius: 0; }
+  .hb-coral  { background: #FAECE7; border-left: 3px solid #993C1D; border-radius: 0; }
+  .hb-green  { background: #EAF3DE; border-left: 3px solid #3B6D11; border-radius: 0; }
+  .hb-amber  { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: 0; }
   .hb-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
   .hb-purple .hb-label { color: #534AB7; }
-  .hb-teal .hb-label { color: #0F6E56; }
-  .hb-coral .hb-label { color: #993C1D; }
-  .hb-green .hb-label { color: #3B6D11; }
-  .hb-amber .hb-label { color: #854F0B; }
+  .hb-teal   .hb-label { color: #0F6E56; }
+  .hb-coral  .hb-label { color: #993C1D; }
+  .hb-green  .hb-label { color: #3B6D11; }
+  .hb-amber  .hb-label { color: #854F0B; }
   .hb-text { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
   .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
   .pill { font-size: 18px; padding: 7px 18px; border-radius: 20px; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); cursor: pointer; transition: all .2s; background: transparent; font-family: var(--font-sans); }
@@ -84,12 +95,12 @@
   .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 20px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
   .quiz-option:hover { border-color: #AFA9EC; background: #EEEDFE; color: #3C3489; }
   .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
-  .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
-  .quiz-option.reveal { border-color: #0F6E56; background: #E1F5EE; color: #085041; opacity: .7; }
+  .quiz-option.wrong   { border-color: #993C1D; background: #FAECE7; color: #712B13; }
+  .quiz-option.reveal  { border-color: #0F6E56; background: #E1F5EE; color: #085041; opacity: .7; }
   .feedback { font-size: 20px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
   .feedback.show { display: block; }
   .fb-correct { background: #E1F5EE; color: #085041; }
-  .fb-wrong { background: #FAECE7; color: #712B13; }
+  .fb-wrong   { background: #FAECE7; color: #712B13; }
   .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--color-border-secondary); background: var(--color-background-primary); }
   .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
   .nav-btn:hover { background: var(--color-background-secondary); }
@@ -97,25 +108,167 @@
   .nav-btn.primary:hover { background: #3C3489; }
   .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
   .counter { font-size: 17px; color: var(--color-text-tertiary); }
-  .flow-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-bottom: 1.5rem; }
-  .flow-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; }
-  .flow-num { font-size: 36px; font-weight: 700; margin-bottom: .3rem; }
-  .flow-lbl { font-size: 26px; color: var(--color-text-secondary); line-height: 1.45; }
-  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-secondary); }
-  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-  .complete-card { background: #EEEDFE; border-radius: var(--border-radius-lg); padding: 1.75rem; text-align: center; margin-bottom: 1.5rem; }
-  .complete-icon { width: 52px; height: 52px; border-radius: 50%; background: #534AB7; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-  .complete-title { font-size: 36px; font-weight: 700; color: #26215C; margin-bottom: .4rem; }
-  .complete-sub { font-size: 26px; color: #534AB7; }
-  .final-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
-
   .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
   .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
   .audio-btn:hover { background: var(--color-background-primary); }
   .audio-btn.playing { color: #0F6E56; border-color: #0F6E56; }
   .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
   .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+
+  /* ── Visual components ── */
+
+  /* Icon circle */
+  .icon-circle { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .icon-circle svg { width: 26px; height: 26px; }
+
+  /* Archetype cards — s0 */
+  .archetype-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; margin-bottom: 1.25rem; }
+  .archetype-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem .9rem; text-align: center; }
+  .archetype-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto .65rem; }
+  .archetype-label { font-size: 17px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .3rem; }
+  .archetype-body  { font-size: 16px; color: var(--color-text-secondary); line-height: 1.5; }
+
+  /* Contrast panel — s1 */
+  .contrast-panel { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .contrast-col { border-radius: var(--border-radius-lg); padding: 1.1rem 1rem; }
+  .contrast-col.bad  { background: #FAECE7; border-top: 3px solid #993C1D; }
+  .contrast-col.good { background: #E1F5EE; border-top: 3px solid #0F6E56; }
+  .contrast-head { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .75rem; }
+  .contrast-col.bad  .contrast-head { color: #993C1D; }
+  .contrast-col.good .contrast-head { color: #0F6E56; }
+  .contrast-item { display: flex; align-items: flex-start; gap: .5rem; margin-bottom: .55rem; font-size: 17px; color: var(--color-text-primary); line-height: 1.4; }
+  .contrast-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: .45em; }
+  .bad  .contrast-dot { background: #993C1D; }
+  .good .contrast-dot { background: #0F6E56; }
+
+  /* Impact matrix — s2 */
+  .impact-matrix { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .impact-cell { border-radius: var(--border-radius-lg); padding: 1rem; }
+  .impact-icon-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+  .impact-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .impact-icon svg { width: 18px; height: 18px; }
+  .impact-label { font-size: 16px; font-weight: 700; }
+  .impact-body  { font-size: 16px; color: var(--color-text-secondary); line-height: 1.5; }
+  .impact-cell.purple { background: #EEEDFE; } .impact-cell.purple .impact-label { color: #534AB7; } .impact-cell.purple .impact-icon { background: #534AB7; }
+  .impact-cell.coral  { background: #FAECE7; } .impact-cell.coral  .impact-label { color: #993C1D; } .impact-cell.coral  .impact-icon { background: #993C1D; }
+  .impact-cell.teal   { background: #E1F5EE; } .impact-cell.teal   .impact-label { color: #0F6E56; } .impact-cell.teal   .impact-icon { background: #0F6E56; }
+  .impact-cell.amber  { background: #FAEEDA; } .impact-cell.amber  .impact-label { color: #854F0B; } .impact-cell.amber  .impact-icon { background: #854F0B; }
+
+  /* Journey path — s3 */
+  .journey { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.25rem; }
+  .journey-step { display: flex; align-items: stretch; gap: .9rem; }
+  .journey-left { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
+  .journey-node { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .journey-node svg { width: 22px; height: 22px; }
+  .journey-line { width: 2px; flex: 1; margin: 3px 0; min-height: 12px; background: var(--color-border-tertiary); }
+  .journey-content { flex: 1; padding-bottom: .75rem; }
+  .journey-title { font-size: 19px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .3rem; }
+  .journey-body  { font-size: 17px; color: var(--color-text-secondary); line-height: 1.55; }
+
+  /* Lesson checklist — s4 */
+  .lesson-list { display: flex; flex-direction: column; gap: .55rem; margin-bottom: 1.25rem; }
+  .lesson-item { display: flex; align-items: center; gap: .85rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .8rem 1rem; }
+  .lesson-num { width: 30px; height: 30px; border-radius: 50%; background: #534AB7; color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .lesson-text { font-size: 18px; color: var(--color-text-primary); font-weight: 500; }
+
+  /* Dialogue contrast — s5 */
+  .dialogue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .dialogue-col { border-radius: var(--border-radius-lg); overflow: hidden; }
+  .dialogue-head { padding: .65rem 1rem; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .dialogue-col.bad  .dialogue-head { background: #993C1D; color: #fff; }
+  .dialogue-col.good .dialogue-head { background: #0F6E56; color: #fff; }
+  .dialogue-body { padding: .9rem 1rem; font-size: 17px; line-height: 1.6; }
+  .dialogue-col.bad  .dialogue-body { background: #FAECE7; color: #712B13; }
+  .dialogue-col.good .dialogue-body { background: #E1F5EE; color: #085041; }
+  .dialogue-outcome { padding: .65rem 1rem; font-size: 15px; font-weight: 600; line-height: 1.4; }
+  .dialogue-col.bad  .dialogue-outcome { background: #f5ddd6; color: #993C1D; }
+  .dialogue-col.good .dialogue-outcome { background: #cceedd; color: #0F6E56; }
+
+  /* Values flow diagram — s6 */
+  .values-flow { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .vf-node { background: var(--color-background-secondary); border: 1.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: .6rem .9rem; text-align: center; font-size: 16px; font-weight: 700; color: var(--color-text-primary); }
+  .vf-node.values { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; font-size: 17px; }
+  .vf-arrow { font-size: 20px; color: var(--color-text-tertiary); padding: 0 .4rem; }
+  .vf-fundamentals { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; }
+  .vf-fund { border-radius: var(--border-radius-md); padding: .45rem .7rem; font-size: 14px; font-weight: 700; }
+  .vf-fund.cf  { background: #E1F5EE; color: #0F6E56; }
+  .vf-fund.pr  { background: #FAECE7; color: #993C1D; }
+  .vf-fund.gr  { background: #EAF3DE; color: #3B6D11; }
+  .vf-fund.tx  { background: #FAEEDA; color: #854F0B; }
+
+  /* 4F pyramid / flow — s7 */
+  .fund-stack { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.25rem; }
+  .fund-row { display: flex; align-items: center; gap: 1rem; border-radius: var(--border-radius-lg); padding: .9rem 1.1rem; }
+  .fund-row.cf   { background: #E1F5EE; border-left: 4px solid #0F6E56; }
+  .fund-row.pr   { background: #FAECE7; border-left: 4px solid #993C1D; }
+  .fund-row.gr   { background: #EAF3DE; border-left: 4px solid #3B6D11; }
+  .fund-row.tx   { background: #FAEEDA; border-left: 4px solid #854F0B; }
+  .fund-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .fund-icon svg { width: 22px; height: 22px; }
+  .fund-row.cf .fund-icon { background: #0F6E56; }
+  .fund-row.pr .fund-icon { background: #993C1D; }
+  .fund-row.gr .fund-icon { background: #3B6D11; }
+  .fund-row.tx .fund-icon { background: #854F0B; }
+  .fund-info { flex: 1; }
+  .fund-num  { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: .15rem; }
+  .fund-row.cf .fund-num { color: #0F6E56; }
+  .fund-row.pr .fund-num { color: #993C1D; }
+  .fund-row.gr .fund-num { color: #3B6D11; }
+  .fund-row.tx .fund-num { color: #854F0B; }
+  .fund-name { font-size: 19px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .2rem; }
+  .fund-desc { font-size: 17px; color: var(--color-text-secondary); line-height: 1.5; }
+  .fund-connector { display: flex; align-items: center; gap: .5rem; padding: .1rem 1.1rem; }
+  .fund-connector-line { flex: 1; height: 1px; background: var(--color-border-tertiary); }
+  .fund-connector-label { font-size: 13px; color: var(--color-text-tertiary); font-style: italic; white-space: nowrap; }
+
+  /* Definition icon cards — s8 */
+  .def-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .def-card { border-radius: var(--border-radius-lg); padding: 1.1rem; }
+  .def-card.cf { background: #E1F5EE; }
+  .def-card.pr { background: #FAECE7; }
+  .def-card.gr { background: #EAF3DE; }
+  .def-card.tx { background: #FAEEDA; }
+  .def-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: .65rem; }
+  .def-icon svg { width: 20px; height: 20px; }
+  .def-card.cf .def-icon { background: #0F6E56; }
+  .def-card.pr .def-icon { background: #993C1D; }
+  .def-card.gr .def-icon { background: #3B6D11; }
+  .def-card.tx .def-icon { background: #854F0B; }
+  .def-num  { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .2rem; }
+  .def-card.cf .def-num { color: #0F6E56; }
+  .def-card.pr .def-num { color: #993C1D; }
+  .def-card.gr .def-num { color: #3B6D11; }
+  .def-card.tx .def-num { color: #854F0B; }
+  .def-name { font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .4rem; }
+  .def-body { font-size: 16px; color: var(--color-text-secondary); line-height: 1.55; }
+
+  /* Solves grid — s10 */
+  .solves-section-head { display: flex; align-items: center; gap: .7rem; margin-bottom: .85rem; margin-top: .25rem; }
+  .solves-section-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .solves-section-icon svg { width: 18px; height: 18px; }
+  .solves-section-label { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .solve-item { display: flex; align-items: flex-start; gap: .85rem; padding: .8rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .solve-item:last-child { border-bottom: none; }
+  .solve-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: .1rem; }
+  .solve-icon svg { width: 17px; height: 17px; }
+  .solve-title { font-size: 18px; font-weight: 600; color: var(--color-text-primary); margin-bottom: .2rem; }
+  .solve-body  { font-size: 17px; color: var(--color-text-secondary); line-height: 1.55; }
+
+  /* Completion badge — s11 */
+  .completion-badge { display: flex; flex-direction: column; align-items: center; background: #EEEDFE; border-radius: 16px; padding: 2rem 1.5rem 1.75rem; margin-bottom: 1.5rem; text-align: center; }
+  .badge-ring { width: 80px; height: 80px; border-radius: 50%; background: #534AB7; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+  .badge-ring svg { width: 40px; height: 40px; }
+  .badge-title { font-size: 28px; font-weight: 700; color: #26215C; margin-bottom: .3rem; }
+  .badge-sub   { font-size: 19px; color: #534AB7; }
+  .four-f-pill-row { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+  .four-f-pill { border-radius: 20px; padding: .4rem .9rem; font-size: 15px; font-weight: 700; }
+  .four-f-pill.cf { background: #E1F5EE; color: #0F6E56; }
+  .four-f-pill.pr { background: #FAECE7; color: #993C1D; }
+  .four-f-pill.gr { background: #EAF3DE; color: #3B6D11; }
+  .four-f-pill.tx { background: #FAEEDA; color: #854F0B; }
+
+  .complete-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.75rem; text-align: center; margin-bottom: 1.5rem; }
+  .final-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
 </style>
 
 <div class="container">
@@ -132,60 +285,83 @@
   <div class="prog-step" id="p7"></div>
   <div class="prog-step" id="p8"></div>
   <div class="prog-step" id="p9"></div>
-  <span class="step-label" id="step-label">1 of 10</span>
+  <div class="prog-step" id="p10"></div>
+  <span class="step-label" id="step-label">1 of 12</span>
 </div>
 
+<!-- ── s0: The gap ── -->
 <div class="screen active" id="s0">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s0" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s0">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s0"></span>
   </div>
-
   <div class="tag">4F Solution — Industry need</div>
   <h2>There is a gap in this industry. The 4F Solution exists to close it.</h2>
   <p class="sub">This training is for every financial professional — new or experienced. Before anything else, you need to understand the problem the 4F Solution was built to solve.</p>
 
-  <div class="highlight-box hb-purple">
-    <div class="hb-label">Who this is for</div>
-    <div class="hb-text">Every professional in this room — whether you are brand new, a few years in, or have been doing this for decades. The gap this system addresses exists at every level. The conversation this industry needs to have is the same regardless of how long you have been in it.</div>
+  <div class="archetype-grid">
+    <div class="archetype-card">
+      <div class="archetype-icon" style="background:#E1F5EE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="archetype-label">New Professional</div>
+      <div class="archetype-body">Build confidence before product knowledge</div>
+    </div>
+    <div class="archetype-card">
+      <div class="archetype-icon" style="background:#EEEDFE">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      </div>
+      <div class="archetype-label">Experienced Pro</div>
+      <div class="archetype-body">Make instincts consistent and teachable</div>
+    </div>
+    <div class="archetype-card">
+      <div class="archetype-icon" style="background:#FAEEDA">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="archetype-label">Building a Team</div>
+      <div class="archetype-body">Create a common language across your practice</div>
+    </div>
   </div>
+
   <div class="card">
     <div class="card-title">How to use this training</div>
     <div class="card-body">Move at your own pace. The knowledge checks surface gaps — not test memory. If you are experienced, pay attention to where the system formalizes things you already do intuitively. That is where the real value is.</div>
   </div>
 </div>
 
+<!-- ── s1: Consistency problem ── -->
 <div class="screen" id="s1">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s1" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s1">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s1"></span>
   </div>
-
   <div class="tag">4F Solution — The industry gap</div>
   <h2>The financial services industry has a consistency problem</h2>
   <p class="sub">It is not a product problem. It is not a knowledge problem. It is a process problem — and it affects new professionals and experienced ones in exactly the same way.</p>
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">What the gap looks like</div>
-    <div class="hb-text">Two professionals at the same firm, with the same products and the same licensing, will deliver completely different client experiences. One asks about goals. One leads with insurance. One explores the full picture. One fills a gap they noticed. There is no common language, no shared process, and no consistent output. The client experience depends entirely on who they happen to sit across from.</div>
+
+  <div class="contrast-panel">
+    <div class="contrast-col bad">
+      <div class="contrast-head">Without a process</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Every meeting goes a different direction</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Leads with products before needs</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Client experience is unpredictable</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Hard to scale or train others</div>
+    </div>
+    <div class="contrast-col good">
+      <div class="contrast-head">With the 4F Solution</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Every meeting has the same foundation</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Needs surface before solutions</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Client experience is consistent</div>
+      <div class="contrast-item"><span class="contrast-dot"></span>Teachable and scalable by design</div>
+    </div>
   </div>
+
   <div class="card">
     <div class="card-title">Why this matters for new professionals</div>
     <div class="card-body">Without a process, every meeting is improvised. You rely on instinct you have not built yet and product knowledge you have not fully developed. The result is inconsistency — and inconsistency costs clients and costs you.</div>
@@ -196,164 +372,245 @@
   </div>
 </div>
 
+<!-- ── s2: Everyone pays ── -->
 <div class="screen" id="s2">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s2" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s2">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s2"></span>
   </div>
-
   <div class="tag">4F Solution — The cost of no system</div>
   <h2>When there is no consistent system, everyone pays</h2>
   <p class="sub">The cost shows up differently depending on where you sit — but it shows up for everyone.</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem">
-    <div class="card" style="margin-bottom:0;border-top:3px solid #534AB7">
-      <div class="card-title" style="color:#534AB7;margin-bottom:.6rem">The new professional pays with</div>
-      <div class="card-body">Lost confidence in early meetings. Inconsistent results that feel random. No way to know what went wrong or what to fix. A slow start that costs time, income, and momentum.</div>
+
+  <div class="impact-matrix">
+    <div class="impact-cell purple">
+      <div class="impact-icon-row">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="impact-label">New Professional</div>
+      </div>
+      <div class="impact-body">Lost confidence. Inconsistent results that feel random. No way to know what went wrong or what to fix.</div>
     </div>
-    <div class="card" style="margin-bottom:0;border-top:3px solid #534AB7">
-      <div class="card-title" style="color:#534AB7;margin-bottom:.6rem">The experienced professional pays with</div>
-      <div class="card-body">A practice that is hard to scale because it lives entirely in their head. Professionals they cannot effectively train. Client relationships that stay transactional. Referrals that plateau.</div>
+    <div class="impact-cell coral">
+      <div class="impact-icon-row">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        </div>
+        <div class="impact-label">Experienced Pro</div>
+      </div>
+      <div class="impact-body">A practice stuck in their head. Hard to scale, train others, or move beyond transactional relationships.</div>
+    </div>
+    <div class="impact-cell teal">
+      <div class="impact-icon-row">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="impact-label">The Client</div>
+      </div>
+      <div class="impact-body">A partial picture of their financial life. Gaps they don't know exist. Feeling sold to, not advised.</div>
+    </div>
+    <div class="impact-cell amber">
+      <div class="impact-icon-row">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="impact-label">The Industry</div>
+      </div>
+      <div class="impact-body">A trust deficit. Clients who shop for products. Professionals who leave within three years.</div>
     </div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem">
-    <div class="card" style="margin-bottom:0;border-top:3px solid #993C1D">
-      <div class="card-title" style="color:#993C1D;margin-bottom:.6rem">The client pays with</div>
-      <div class="card-body">A partial picture of their financial life. Gaps they do not know exist. A feeling of being sold to rather than advised. No consistent baseline to measure progress against over time.</div>
-    </div>
-    <div class="card" style="margin-bottom:0;border-top:3px solid #993C1D">
-      <div class="card-title" style="color:#993C1D;margin-bottom:.6rem">The industry pays with</div>
-      <div class="card-body">A trust deficit. Clients who shop for products instead of seeking advice. Professionals who leave within three years. A reputation built on selling, not planning.</div>
-    </div>
-  </div>
+
   <div class="highlight-box hb-purple">
     <div class="hb-label">The 4F Solution addresses all four of these directly</div>
     <div class="hb-text">It is not a sales script. It is not a product guide. It is a consistent client process that any professional — at any stage — can run in every meeting, with every client, every time.</div>
   </div>
 </div>
 
+<!-- ── s3: Same system, different starting points ── -->
 <div class="screen" id="s3">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s3" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s3">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s3"></span>
   </div>
-
   <div class="tag">4F Solution — Where you fit</div>
   <h2>The same system. Different starting points.</h2>
   <p class="sub">The 4F process works the same way regardless of your experience level. What changes is how you will use it and what it will unlock for you specifically.</p>
-  <div class="card" style="border-left:4px solid #1D9E75;margin-bottom:.75rem">
-    <div class="card-title" style="color:#0F6E56;margin-bottom:.5rem">If you are new to financial services</div>
-    <div class="card-body">The 4F Solution gives you a structured conversation you can run confidently from your very first meeting — before you have deep product knowledge, before you have client experience, before you feel ready. You will not walk in unprepared. The system walks in with you.</div>
+
+  <div class="journey">
+    <div class="journey-step">
+      <div class="journey-left">
+        <div class="journey-node" style="background:#E1F5EE">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="journey-line"></div>
+      </div>
+      <div class="journey-content">
+        <div class="journey-title" style="color:#0F6E56">New to financial services</div>
+        <div class="journey-body">The 4F Solution gives you a structured conversation you can run confidently from your very first meeting — before you have deep product knowledge, before you have client experience, before you feel ready. The system walks in with you.</div>
+      </div>
+    </div>
+    <div class="journey-step">
+      <div class="journey-left">
+        <div class="journey-node" style="background:#EEEDFE">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="journey-line"></div>
+      </div>
+      <div class="journey-content">
+        <div class="journey-title" style="color:#534AB7">A few years of experience</div>
+        <div class="journey-body">You likely already do parts of this intuitively. The 4F Solution makes those instincts consistent, repeatable, and teachable. You will recognize what you have been doing well — and see clearly where the gaps still are.</div>
+      </div>
+    </div>
+    <div class="journey-step">
+      <div class="journey-left">
+        <div class="journey-node" style="background:#FAEEDA">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+      </div>
+      <div class="journey-content">
+        <div class="journey-title" style="color:#854F0B">Experienced and building a team</div>
+        <div class="journey-body">The 4F Solution is the common language your practice has been missing. Every professional runs the same process, the same conversation structure, the same client output — so the experience you deliver does not depend on who shows up to the meeting.</div>
+      </div>
+    </div>
   </div>
-  <div class="card" style="border-left:4px solid #7F77DD;margin-bottom:.75rem">
-    <div class="card-title" style="color:#534AB7;margin-bottom:.5rem">If you have a few years of experience</div>
-    <div class="card-body">You likely already do parts of this intuitively. The 4F Solution makes those instincts consistent, repeatable, and teachable. You will recognize what you have been doing well — and see clearly where the gaps still are.</div>
-  </div>
-  <div class="card" style="border-left:4px solid #BA7517;margin-bottom:1.25rem">
-    <div class="card-title" style="color:#854F0B;margin-bottom:.5rem">If you are experienced and building a team</div>
-    <div class="card-body">The 4F Solution is the common language your practice has been missing. It gives every professional on your team the same process, the same conversation structure, and the same client output — so the experience you deliver does not depend on who shows up to the meeting.</div>
-  </div>
+
   <div class="highlight-box hb-purple">
     <div class="hb-label">The question is not whether you need this</div>
     <div class="hb-text">Every professional operates better with a consistent system than without one. The question is whether yours is documented, teachable, and running in every meeting — or whether it exists only in your head.</div>
   </div>
 </div>
 
+<!-- ── s4: Module overview ── -->
 <div class="screen" id="s4">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s4" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s4">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s4"></span>
   </div>
-
   <div class="tag">4F Solution — Module 1: The 4F Process</div>
   <h2>Now let's build the system — starting with why it works</h2>
   <p class="sub">This module covers the foundation of the 4F Solution: why Values must come first, how the 4 Fundamentals connect to client outcomes, and what separates a consistent client process from a product conversation.</p>
-  <div class="badge-row">
-    <div class="badge"><div class="badge-dot" style="background:#534AB7"></div>7 lessons</div>
-    <div class="badge"><div class="badge-dot" style="background:#1D9E75"></div>5 knowledge checks</div>
-  </div>
-  <div class="highlight-box hb-purple">
-    <div class="hb-label">What you will learn</div>
-    <div class="hb-text">Why leading with products fails clients at every level. How Values drives everything in the 4F Solution. The logic that connects Cash Flow, Protection, Growth, and Tax Efficiency into one complete client process — and what it delivers for the professional and the client.</div>
+
+  <div class="lesson-list">
+    <div class="lesson-item"><div class="lesson-num">1</div><div class="lesson-text">The professional trap — leading with solutions before needs</div></div>
+    <div class="lesson-item"><div class="lesson-num">2</div><div class="lesson-text">Values as the input — the source of every decision</div></div>
+    <div class="lesson-item"><div class="lesson-num">3</div><div class="lesson-text">The 4F Process — four steps, one complete client system</div></div>
+    <div class="lesson-item"><div class="lesson-num">4</div><div class="lesson-text">The 4 Fundamentals defined in plain language</div></div>
+    <div class="lesson-item"><div class="lesson-num">5</div><div class="lesson-text">What the 4F Solution solves — for professionals and clients</div></div>
+    <div class="lesson-item" style="background:#EEEDFE"><div class="lesson-num" style="background:#3C3489">✓</div><div class="lesson-text" style="color:#534AB7;font-weight:600">5 knowledge checks — 80% required to pass</div></div>
   </div>
 </div>
 
+<!-- ── s5: The professional trap ── -->
 <div class="screen" id="s5">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s5" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s5">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s5"></span>
   </div>
-
   <div class="tag">4F Solution — Lesson 1: The professional trap</div>
   <h2>Most professionals lead with solutions before understanding the problem</h2>
-  <p class="sub">It happens naturally. A client sits down, you sense what they need, and you move toward the product. But the moment you do that, you've shifted from professional to salesperson — even if the product is exactly right.</p>
+  <p class="sub">It happens naturally. A client sits down, you sense what they need, and you move toward the product. But the moment you do that, you have shifted from professional to salesperson — even if the product is exactly right.</p>
+
+  <div class="dialogue-grid">
+    <div class="dialogue-col bad">
+      <div class="dialogue-head">Show &amp; Hope</div>
+      <div class="dialogue-body">"So, do you have life insurance?"</div>
+      <div class="dialogue-outcome">→ Client evaluates the product. Conversation is about insurance, not their life.</div>
+    </div>
+    <div class="dialogue-col good">
+      <div class="dialogue-head">Share &amp; Discuss</div>
+      <div class="dialogue-body">"What does financial security mean to you and your family?"</div>
+      <div class="dialogue-outcome">→ Client evaluates their life. You become the person helping them protect it.</div>
+    </div>
+  </div>
+
   <div class="highlight-box hb-coral">
     <div class="hb-label">The trap</div>
     <div class="hb-text">When you lead with the product, the client evaluates the product. When you lead with their values, the client evaluates their life — and trusts you to help them protect it.</div>
   </div>
   <div class="card">
-    <div class="card-title">What this looks like in practice</div>
-    <div class="card-body">Professional opens with: "So, do you have life insurance?" — the client is now thinking about whether they want to buy insurance, not about what they're trying to protect. The conversation is already off track.</div>
-  </div>
-  <div class="card">
     <div class="card-title">What the 4F Solution changes</div>
-    <div class="card-body">Professional opens with: "Tell me — what does financial security mean to you and your family?" — now the client is telling you what matters. Everything that follows serves that answer.</div>
+    <div class="card-body">The product does not change. The conversation does. Every professional brings their own voice, their own style, their own relationship. The system ensures that regardless of how the conversation starts — needs surface before solutions. Every time.</div>
   </div>
 </div>
 
+<!-- ── s6: Values as the input ── -->
 <div class="screen" id="s6">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s6" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s6">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s6"></span>
   </div>
-
   <div class="tag">4F Solution — Lesson 2: Values as the input</div>
   <h2>Values is not a step. It is the source of every decision that follows.</h2>
   <p class="sub">The 4 Fundamentals only have meaning when they are connected to what the client actually cares about. Without that connection, they are just categories — and the system has no power.</p>
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:1.5rem;padding:1.25rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg)">
+
+    <div style="background:#EEEDFE;border:2px solid #AFA9EC;border-radius:var(--border-radius-lg);padding:.65rem 1.4rem;font-size:17px;font-weight:700;color:#3C3489;text-align:center;width:100%;max-width:260px">Client Values &amp; Goals</div>
+
+    <div style="width:2px;height:18px;background:#AFA9EC"></div>
+
+    <div style="display:flex;align-items:flex-start;width:100%;justify-content:center;gap:0">
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div style="width:100%;height:2px;background:var(--color-border-tertiary)"></div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+        <div style="background:#E1F5EE;border:1.5px solid #0F6E56;border-radius:var(--border-radius-md);padding:.55rem .9rem;font-size:15px;font-weight:700;color:#0F6E56;text-align:center;width:calc(100% - 16px)">Cash Flow</div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div style="width:100%;height:2px;background:var(--color-border-tertiary)"></div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+        <div style="background:#FAECE7;border:1.5px solid #993C1D;border-radius:var(--border-radius-md);padding:.55rem .9rem;font-size:15px;font-weight:700;color:#993C1D;text-align:center;width:calc(100% - 16px)">Protection</div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div style="width:100%;height:2px;background:var(--color-border-tertiary)"></div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+        <div style="background:#EAF3DE;border:1.5px solid #3B6D11;border-radius:var(--border-radius-md);padding:.55rem .9rem;font-size:15px;font-weight:700;color:#3B6D11;text-align:center;width:calc(100% - 16px)">Wealth</div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div style="width:100%;height:2px;background:var(--color-border-tertiary)"></div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+        <div style="background:#FAEEDA;border:1.5px solid #854F0B;border-radius:var(--border-radius-md);padding:.55rem .9rem;font-size:15px;font-weight:700;color:#854F0B;text-align:center;width:calc(100% - 16px)">Tax Efficiency</div>
+        <div style="width:2px;height:14px;background:var(--color-border-tertiary)"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;width:100%">
+      <div style="flex:1;height:2px;background:var(--color-border-tertiary)"></div>
+      <div style="flex:1;height:2px;background:var(--color-border-tertiary)"></div>
+    </div>
+
+    <div style="width:2px;height:14px;background:#534AB7"></div>
+
+    <div style="background:#534AB7;border:2px solid #534AB7;border-radius:var(--border-radius-lg);padding:.65rem 1.4rem;font-size:17px;font-weight:700;color:#fff;text-align:center;width:100%;max-width:260px">Complete Plan</div>
+
+    <div style="width:2px;height:14px;background:#534AB7"></div>
+
+    <div style="display:flex;align-items:center;gap:.6rem;background:#EEEDFE;border:1.5px solid #AFA9EC;border-radius:var(--border-radius-md);padding:.55rem 1rem;width:100%;max-width:320px;justify-content:center">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      <span style="font-size:14px;font-weight:700;color:#3C3489">Ongoing relationship — plan evolves with the client</span>
+    </div>
+
+  </div>
+
+  <p style="font-size:18px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.6">Select a value below to see how it shapes the entire plan.</p>
   <div class="pill-row" id="value-pills">
     <button class="pill" onclick="showValue('security')">Security</button>
     <button class="pill" onclick="showValue('legacy')">Legacy</button>
@@ -368,63 +625,135 @@
   </div>
 </div>
 
+<!-- ── s7: Four steps — visual stack ── -->
 <div class="screen" id="s7">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s7" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s7">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s7"></span>
   </div>
-
   <div class="tag">4F Solution — Lesson 3: The 4F Process</div>
   <h2>Four steps. One complete client system.</h2>
-  <p class="sub">Each fundamental has a specific job. Together they cover every dimension of a client's financial life.</p>
-  <div class="highlight-box hb-teal">
-    <div class="hb-label">1 — Cash flow</div>
-    <div class="hb-text">The engine that funds everything. Without understanding what comes in, what goes out, and what's available to work with — no other fundamental can be properly addressed. Cash flow is always first.</div>
-  </div>
-  <div class="highlight-box hb-coral">
-    <div class="hb-label">2 — Protection</div>
-    <div class="hb-text">Ensures nothing derails the plan. A single unplanned event — death, disability, critical illness, or income loss from employment or business disruption — can erase everything built in the other three areas. Protection is the foundation of every other recommendation.</div>
-  </div>
-  <div class="highlight-box hb-green">
-    <div class="hb-label">3 — Growth</div>
-    <div class="hb-text">Builds wealth toward their goals. Once cash flow is clear and the plan is protected, growth becomes the vehicle — investments, savings, assets — aligned to their timeline and risk tolerance.</div>
-  </div>
-  <div class="highlight-box hb-amber">
-    <div class="hb-label">4 — Tax efficiency</div>
-    <div class="hb-text">Keeps as much as possible at every stage. Tax drag compounds over time. Structuring properly — registered accounts, corporate vehicles, estate planning — preserves the output of the other three.</div>
+  <p class="sub">Each fundamental has a specific job. Together they cover every dimension of a client's financial life. Each one builds on what comes before it.</p>
+
+  <div class="fund-stack">
+    <div class="fund-row cf">
+      <div class="fund-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div class="fund-info">
+        <div class="fund-num">Step 1 — Foundation</div>
+        <div class="fund-name">Cash Flow</div>
+        <div class="fund-desc">The engine that funds everything. Without understanding what comes in, goes out, and is available — no other fundamental can be properly addressed.</div>
+      </div>
+    </div>
+    <div class="fund-connector"><div class="fund-connector-line"></div><div class="fund-connector-label">builds on cash flow</div><div class="fund-connector-line"></div></div>
+    <div class="fund-row pr">
+      <div class="fund-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="fund-info">
+        <div class="fund-num">Step 2 — Shield</div>
+        <div class="fund-name">Protection</div>
+        <div class="fund-desc">Ensures nothing derails the plan. One unplanned event can erase everything built in the other three areas. Protection is the foundation of every other recommendation.</div>
+      </div>
+    </div>
+    <div class="fund-connector"><div class="fund-connector-line"></div><div class="fund-connector-label">builds on protection</div><div class="fund-connector-line"></div></div>
+    <div class="fund-row gr">
+      <div class="fund-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <div class="fund-info">
+        <div class="fund-num">Step 3 — Build</div>
+        <div class="fund-name">Wealth</div>
+        <div class="fund-desc">Builds wealth toward goals. Once cash flow is clear and the plan is protected, growth becomes the vehicle — investments and assets aligned to timeline and risk tolerance.</div>
+      </div>
+    </div>
+    <div class="fund-connector"><div class="fund-connector-line"></div><div class="fund-connector-label">preserves growth</div><div class="fund-connector-line"></div></div>
+    <div class="fund-row tx">
+      <div class="fund-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <div class="fund-info">
+        <div class="fund-num">Step 4 — Keep</div>
+        <div class="fund-name">Tax Efficiency</div>
+        <div class="fund-desc">Keeps as much as possible at every stage. Tax drag compounds over time. Structuring properly preserves the output of the other three.</div>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- ── s8: The 4 Fundamentals defined ── -->
 <div class="screen" id="s8">
   <div class="audio-bar">
     <button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s8" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
       <span id="audio-btn-label-s8">Listen to this screen</span>
     </button>
     <span class="audio-label" id="audio-status-s8"></span>
   </div>
+  <div class="tag">4F Solution — The 4 Fundamentals</div>
+  <h2>What the 4 Fundamentals actually mean — in plain language</h2>
+  <p class="sub">Every financial decision a client makes touches at least one of these four areas. They only have power when anchored to what the client is actually trying to build.</p>
 
+  <div class="def-grid">
+    <div class="def-card cf">
+      <div class="def-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div class="def-num">1 — Positive</div>
+      <div class="def-name">Cashflow</div>
+      <div class="def-body">Everything starts here. If more money is going out than coming in, nothing else works. Money must move in your favour — today, not just someday.</div>
+    </div>
+    <div class="def-card pr">
+      <div class="def-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="def-num">2 — Protection &amp;</div>
+      <div class="def-name">Security</div>
+      <div class="def-body">You can do everything right and still have it wiped out. Income, family, assets — all protected when life doesn't go to plan.</div>
+    </div>
+    <div class="def-card gr">
+      <div class="def-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <div class="def-num">3 — Investments &amp;</div>
+      <div class="def-name">Wealth</div>
+      <div class="def-body">Working hard isn't enough. Money needs to work too. Building real wealth over time — not just saving, but growing with intention.</div>
+    </div>
+    <div class="def-card tx">
+      <div class="def-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <div class="def-num">4 — Tax</div>
+      <div class="def-name">Minimization</div>
+      <div class="def-body">Most people overpay without knowing it. Keep as much of your own money as the rules allow. Every unnecessary tax dollar is a dollar lost from the plan.</div>
+    </div>
+  </div>
+
+  <div class="highlight-box hb-purple">
+    <div class="hb-label">From "Show &amp; Hope" to "Share &amp; Discuss"</div>
+    <div class="hb-text">Most professionals lead with a presentation and hope something lands. The 4F Solution replaces that with a real conversation — covering all four areas, in the client's own language, connected to what they actually care about. Every professional brings their own voice. The process ensures nothing gets missed.</div>
+  </div>
+</div>
+
+<!-- ── s9: Knowledge check ── -->
+<div class="screen" id="s9">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s9" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s9">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s9"></span>
+  </div>
   <div class="tag">4F Solution — Knowledge check</div>
   <h2>Knowledge check — 5 questions</h2>
   <p class="sub">Choose the best answer for each question.</p>
 
   <div style="margin-bottom:1.5rem">
-    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the system place Cash Flow first — before Protection or Growth?</div>
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Why does the system place Cash Flow first — before Protection or Wealth?</div>
     <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because without knowing what resources are available, you cannot properly size any other recommendation</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because clients are most comfortable talking about money before discussing insurance</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Because cash flow problems are more common than protection gaps</button>
@@ -433,7 +762,7 @@
 
   <div style="margin-bottom:1.5rem">
     <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says their top priority is leaving something behind for their children. Which fundamental should the professional explore most deeply?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Growth — invest aggressively to maximize the estate</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Wealth — invest aggressively to maximize the estate</button>
     <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">All four — but Protection and Tax Efficiency are critical since estate erosion is the primary risk</button>
     <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Tax Efficiency only — minimize tax on the transfer</button>
     <div class="feedback" id="fb-q2"></div>
@@ -451,107 +780,119 @@
     <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client experiences unexpected income loss and has no emergency fund. What is the professional's primary tool under Protection for this risk?</div>
     <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Life insurance and disability coverage — these are the primary protection tools</button>
     <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Cash reserves — unless the client qualifies for EI, having reserves in place is the only buffer against income loss</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Growth and Tax Efficiency — redirect investments to cover the shortfall</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Wealth and Tax Efficiency — redirect investments to cover the shortfall</button>
     <div class="feedback" id="fb-q4"></div>
   </div>
 
   <div style="margin-bottom:1rem">
     <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">Which of the following correctly describes the order of the 4 Fundamentals and why it matters?</div>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Values, Protection, Cash Flow, Growth, Tax Efficiency — protection must come before understanding income</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Cash Flow, Growth, Protection, Tax Efficiency — build wealth first then protect it</button>
-    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Cash Flow, Protection, Growth, Tax Efficiency — you must understand the engine before protecting it, building it, and keeping as much of it as possible</button>
-    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Protection, Cash Flow, Growth, Tax Efficiency — removing risk always comes first</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Values, Protection, Cash Flow, Wealth, Tax Efficiency — protection must come before understanding income</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Cash Flow, Wealth, Protection, Tax Efficiency — build wealth first then protect it</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Cash Flow, Protection, Wealth, Tax Efficiency — you must understand the engine before protecting it, building it, and keeping as much of it as possible</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Protection, Cash Flow, Wealth, Tax Efficiency — removing risk always comes first</button>
     <div class="feedback" id="fb-q5"></div>
   </div>
 </div>
 
-<div class="screen" id="s9">
+<!-- ── s10: What it solves ── -->
+<div class="screen" id="s10">
   <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s9" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s9">Listen to this screen</span>
+    <button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s10" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s10">Listen to this screen</span>
     </button>
-    <span class="audio-label" id="audio-status-s9"></span>
+    <span class="audio-label" id="audio-status-s10"></span>
   </div>
-
   <div class="tag">4F Solution — Lesson 4: What the 4F Solution delivers</div>
   <h2>What the 4F Solution solves — for professionals and clients</h2>
-  <p class="sub">Every problem the 4F Solution fixes has a direct cost to either the professional or the client when it goes unsolved. Here is what changes when the system is running properly.</p>
+  <p class="sub">Every problem the 4F Solution fixes has a direct cost when it goes unsolved. Here is what changes when the system is running properly.</p>
 
-  <div style="font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#534AB7;margin-bottom:.75rem">What it solves for the professional</div>
-
-  <div class="card">
-    <div class="card-title">Inconsistent discovery</div>
-    <div class="card-body">Without a system, every client conversation goes in a different direction. The 4F process gives every meeting the same foundation — regardless of who is sitting across from you or how the conversation starts.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Product-first selling</div>
-    <div class="card-body">Most professionals lead with solutions before understanding the problem. The 4F Solution forces needs to surface first — so every recommendation is earned, not assumed.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Difficulty onboarding new professionals</div>
-    <div class="card-body">A new professional doesn't know what to ask. The 4F Solution gives them a structured conversation they can run confidently from their very first client meeting — before they have deep product knowledge.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Compliance and documentation gaps</div>
-    <div class="card-body">A consistent system creates a consistent, defensible record showing the client's full needs were explored — not just the areas where a product was sold.</div>
-  </div>
-  <div class="card" style="margin-bottom:1.5rem">
-    <div class="card-title">Scaling a practice</div>
-    <div class="card-body">When every professional on your team runs the same process, the client experience is consistent across the entire organization — not just with the top producers.</div>
+  <div class="solves-section-head">
+    <div class="solves-section-icon" style="background:#EEEDFE">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+    </div>
+    <div class="solves-section-label" style="color:#534AB7">For the professional</div>
   </div>
 
-  <div style="font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#0F6E56;margin-bottom:.75rem">What it solves for the client</div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#EEEDFE"><svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div><div class="solve-title">Inconsistent discovery</div><div class="solve-body">The 4F process gives every meeting the same foundation — regardless of who is sitting across from you or how the conversation starts.</div></div>
+  </div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#EEEDFE"><svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+    <div><div class="solve-title">Product-first selling</div><div class="solve-body">The 4F Solution forces needs to surface first — so every recommendation is earned, not assumed.</div></div>
+  </div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#EEEDFE"><svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+    <div><div class="solve-title">Difficulty onboarding new professionals</div><div class="solve-body">A structured conversation they can run confidently from their very first client meeting — before they have deep product knowledge.</div></div>
+  </div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#EEEDFE"><svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    <div><div class="solve-title">Compliance and documentation gaps</div><div class="solve-body">A consistent system creates a defensible record showing the client's full needs were explored — not just areas where a product was sold.</div></div>
+  </div>
+  <div class="solve-item" style="margin-bottom:1.25rem">
+    <div class="solve-icon" style="background:#EEEDFE"><svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div><div class="solve-title">Scaling a practice</div><div class="solve-body">When every professional runs the same process, the client experience is consistent across the entire organization — not just with the top producers.</div></div>
+  </div>
 
-  <div class="card">
-    <div class="card-title">They don't know what they don't know</div>
-    <div class="card-body">Most clients have never seen their full financial life mapped across all four areas in a single conversation. The 4F Solution surfaces gaps they didn't know existed — before those gaps become crises.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">They feel sold to rather than served</div>
-    <div class="card-body">A values-first, system-driven conversation feels like planning — not pitching. The client stays engaged because the conversation is about them, not about a product.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Fragmented advice from multiple sources</div>
-    <div class="card-body">Most people have an insurance person, an investment person, and a tax person who never talk to each other. The 4F Solution shows the whole picture — and makes the professional the one person who sees it all.</div>
-  </div>
-  <div class="card" style="margin-bottom:1.5rem">
-    <div class="card-title">No benchmark to measure progress</div>
-    <div class="card-body">Clients rarely know if they're on track. The 4F Solution creates a baseline across all four areas that can be reviewed and updated over time — turning a one-time meeting into an ongoing relationship.</div>
+  <div class="solves-section-head">
+    <div class="solves-section-icon" style="background:#E1F5EE">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="solves-section-label" style="color:#0F6E56">For the client</div>
   </div>
 
-  <div class="highlight-box hb-purple">
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#E1F5EE"><svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+    <div><div class="solve-title">They don't know what they don't know</div><div class="solve-body">The 4F Solution surfaces gaps they didn't know existed — before those gaps become crises.</div></div>
+  </div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#E1F5EE"><svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+    <div><div class="solve-title">They feel sold to rather than served</div><div class="solve-body">A values-first conversation feels like planning — not pitching. The client stays engaged because it's about them, not a product.</div></div>
+  </div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#E1F5EE"><svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+    <div><div class="solve-title">Fragmented advice from multiple sources</div><div class="solve-body">The 4F Solution shows the whole picture — and makes the professional the one person who sees it all.</div></div>
+  </div>
+  <div class="solve-item">
+    <div class="solve-icon" style="background:#E1F5EE"><svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div><div class="solve-title">No benchmark to measure progress</div><div class="solve-body">The 4F Solution creates a baseline across all four areas — turning a one-time meeting into an ongoing relationship.</div></div>
+  </div>
+
+  <div class="highlight-box hb-purple" style="margin-top:1.25rem">
     <div class="hb-label">The biggest shift the 4F Solution creates</div>
     <div class="hb-text">It moves the relationship from transactional to advisory. That shift is where trust is built — and where referrals, retention, and a lasting practice come from.</div>
   </div>
 </div>
 
-<div class="screen" id="s10">
+<!-- ── s11: Module complete ── -->
+<div class="screen" id="s11">
   <div class="audio-bar">
-    <button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')">
-      <svg class="audio-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/>
-        <g id="audio-icon-pause-s10" style="display:none">
-          <rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-          <rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/>
-        </g>
-      </svg>
-      <span id="audio-btn-label-s10">Listen to this screen</span>
+    <button class="audio-btn" id="audio-btn-s11" onclick="toggleAudio('s11')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s11" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s11" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s11">Listen to this screen</span>
     </button>
-    <span class="audio-label" id="audio-status-s10"></span>
+    <span class="audio-label" id="audio-status-s11"></span>
   </div>
-
   <div class="tag">4F Solution — Module 1 complete</div>
   <h2>Module 1 complete</h2>
   <p class="sub">You have covered the foundation of the 4F Solution. Submit your results below — a minimum score of 80% is required.</p>
 
-  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+  <div class="completion-badge">
+    <div class="badge-ring">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="badge-title">Foundation Complete</div>
+    <div class="badge-sub">Module 1 — The 4F Process</div>
+    <div class="four-f-pill-row">
+      <span class="four-f-pill cf">Cashflow</span>
+      <span class="four-f-pill pr">Protection</span>
+      <span class="four-f-pill gr">Investments</span>
+      <span class="four-f-pill tx">Tax</span>
+    </div>
+  </div>
+
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem">
     <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
       <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
@@ -580,9 +921,7 @@
     <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
     <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
   </div>
-
 </div>
-
 
 <div class="nav">
   <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
@@ -594,7 +933,7 @@
 </div>
 
 <script>
-var cur=0,total=11;
+var cur=0,total=12;
 var scores={q1:null,q2:null,q3:null,q4:null,q5:null};
 var qAnswered={q1:false,q2:false,q3:false,q4:false,q5:false};
 var qLabels={
@@ -605,11 +944,11 @@ var qLabels={
   q5:'Q5 - Order of the 4 Fundamentals'
 };
 var values={
-  security:["Security","Cash Flow tells you how long they could sustain their lifestyle without income. Protection closes the gap if something goes wrong. Growth builds the buffer. Tax Efficiency ensures none of it is eroded unnecessarily."],
-  legacy:["Legacy","Protection becomes critical — estate erosion is the biggest threat to what they leave behind. Tax Efficiency determines how much actually transfers. Growth and Cash Flow fund the life they live on the way there."],
-  freedom:["Freedom","Cash Flow is the starting point — freedom requires surplus. Growth builds the asset base that creates independence. Protection ensures one event doesn't eliminate the freedom they've built. Tax Efficiency keeps more of it."],
-  family:["Family","Protection is paramount — their family's lifestyle depends on it. Cash Flow determines what they can sustain today. Growth builds what the family inherits. Tax Efficiency ensures transfers happen cleanly."],
-  business:["Business owner","Cash Flow — both personal income and business revenue — must be understood together. Protection covers what happens if the owner cannot work. Growth includes personal assets alongside business equity. Tax Efficiency is especially important given corporate structures."]
+  security:["Security","Cash Flow tells you how long they could sustain their lifestyle without income. Protection closes the gap if something goes wrong. Wealth builds the buffer. Tax Efficiency ensures none of it is eroded unnecessarily."],
+  legacy:["Legacy","Protection becomes critical — estate erosion is the biggest threat to what they leave behind. Tax Efficiency determines how much actually transfers. Wealth and Cash Flow fund the life they live on the way there."],
+  freedom:["Freedom","Cash Flow is the starting point — freedom requires surplus. Wealth builds the asset base that creates independence. Protection ensures one event doesn't eliminate the freedom they've built. Tax Efficiency keeps more of it."],
+  family:["Family","Protection is paramount — their family's lifestyle depends on it. Cash Flow determines what they can sustain today. Wealth builds what the family inherits. Tax Efficiency ensures transfers happen cleanly."],
+  business:["Business owner","Cash Flow — both personal income and business revenue — must be understood together. Protection covers what happens if the owner cannot work. Wealth includes personal assets alongside business equity. Tax Efficiency is especially important given corporate structures."]
 };
 
 function retakeQuiz(){
@@ -633,12 +972,11 @@ function retakeQuiz(){
   btn.disabled=false;btn.textContent='Submit results';
   var warn=document.getElementById('score-gate-msg');
   if(warn)warn.remove();
-  var st=document.getElementById('submit-status');
-  st.style.display='none';st.textContent='';
-  cur=8;
+  cur=9;
   updateUI();
   window.scrollTo(0,0);
 }
+
 function updateUI(){
   document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur)});
   document.querySelectorAll('.prog-step').forEach(function(p,i){
@@ -646,18 +984,16 @@ function updateUI(){
     if(i<cur)p.classList.add('done');
     else if(i===cur)p.classList.add('active');
   });
-  document.getElementById('counter').textContent=(cur+1)+' of 11';
+  document.getElementById('counter').textContent=(cur+1)+' of 12';
   document.getElementById('back-btn').disabled=cur===0;
   var nb=document.getElementById('next-btn');
   if(cur===total-1){nb.style.display='none';}
-  else{nb.style.display='';nb.textContent=cur===0?'Begin':cur===9?'Finish':'Next';}
-  document.getElementById('step-label').textContent=(cur+1)+' of 11';
-  if(cur===10){buildScoreSummary();document.getElementById('next-btn').style.display='none';}
+  else{nb.style.display='';nb.textContent=cur===0?'Begin':cur===10?'Finish':'Next';}
+  document.getElementById('step-label').textContent=(cur+1)+' of 12';
+  if(cur===11){buildScoreSummary();document.getElementById('next-btn').style.display='none';}
 }
 
-function goNext(){
-  if(cur<total-1){cur++;updateUI();window.scrollTo(0,0);}
-}
+function goNext(){if(cur<total-1){cur++;updateUI();window.scrollTo(0,0);}}
 function goBack(){if(cur>0){cur--;updateUI();window.scrollTo(0,0);}}
 
 function showValue(v){
@@ -675,11 +1011,7 @@ function checkQ(el,correct,qid){
   siblings.forEach(function(s){
     s.style.pointerEvents='none';
     var isCorrectAnswer=s.getAttribute('onclick').includes('true,');
-    if(isCorrectAnswer){
-      s.classList.add('correct');
-    } else {
-      s.classList.add('wrong');
-    }
+    if(isCorrectAnswer){s.classList.add('correct');}else{s.classList.add('wrong');}
   });
   var fb=document.getElementById('fb-'+qid);
   fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
@@ -687,19 +1019,18 @@ function checkQ(el,correct,qid){
     q1c:'Correct. Cash Flow is first because it sets the boundaries for everything else — you cannot properly size a protection strategy or a growth plan without knowing what resources exist.',
     q1w:"Not quite. The reason is more fundamental — without cash flow data, you cannot properly size any recommendation. You don't know what the client can sustain, afford, or has available to work with.",
     q2c:'Exactly. Legacy goals require all four fundamentals, but Protection (to prevent premature estate loss) and Tax Efficiency (to preserve what transfers) are especially critical.',
-    q2w:"Legacy is a whole-plan concern. Growth alone won't protect the estate from erosion — Protection and Tax Efficiency are equally important.",
+    q2w:"Legacy is a whole-plan concern. Wealth alone won't protect the estate from erosion — Protection and Tax Efficiency are equally important.",
     q3c:'Right. Values is the anchor. Every recommendation should trace back to what the client told you they are trying to protect or build.',
     q3w:'Values is not a warm-up. It is the anchor that makes every recommendation meaningful rather than generic.',
     q4c:"Correct. Unless the client qualifies for EI, there is no insurance product for income loss. Cash reserves are the primary tool — the professional's job is to surface how many months the client can sustain their lifestyle without income, and ensure a reserve plan is in place.",
-    q4w:"Life insurance and disability policies don't cover income loss. Unless the client qualifies for EI, there is no income replacement product for this risk. Cash reserves are the primary tool — the professional's job is to surface whether the client has enough set aside to sustain their lifestyle without income.",
-    q5c:"Correct. Cash Flow comes first because it defines what resources exist. Protection comes second because nothing else is worth building if one event can erase it. Growth comes third because once the foundation is secure, you build toward goals. Tax Efficiency comes last because it preserves the output of everything built before it.",
-    q5w:"The correct order is Cash Flow, Protection, Growth, Tax Efficiency — each step depends on the one before it. Cash Flow defines the engine. Protection ensures nothing derails it. Growth builds toward goals. Tax Efficiency keeps as much of that growth as possible."
+    q4w:"Life insurance and disability policies don't cover income loss. Unless the client qualifies for EI, there is no income replacement product for this risk. Cash reserves are the primary tool.",
+    q5c:"Correct. Cash Flow comes first because it defines what resources exist. Protection comes second because nothing else is worth building if one event can erase it. Wealth comes third because once the foundation is secure, you build toward goals. Tax Efficiency comes last because it preserves the output of everything built before it.",
+    q5w:"The correct order is Cash Flow, Protection, Wealth, Tax Efficiency — each step depends on the one before it."
   };
   fb.textContent=msgs[qid+(correct?'c':'w')];
 }
 
 function buildScoreSummary(){
-  var name=document.getElementById('participant-name').value.trim()||'';
   var correct=Object.values(scores).filter(function(v){return v===true;}).length;
   var pct=Math.round((correct/5)*100);
   document.getElementById('score-display').textContent=pct+'%';
@@ -716,7 +1047,6 @@ function buildScoreSummary(){
   if(submitBtn){
     if(pct<80){
       submitBtn.disabled=true;
-      submitBtn.title='Minimum 80% required to submit';
       var warn=document.getElementById('score-gate-msg');
       if(!warn){
         warn=document.createElement('div');
@@ -727,7 +1057,6 @@ function buildScoreSummary(){
       warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';
     } else {
       submitBtn.disabled=false;
-      submitBtn.title='';
       var warn=document.getElementById('score-gate-msg');
       if(warn)warn.remove();
     }
@@ -746,118 +1075,97 @@ function submitResults(){
   var correct=Object.values(scores).filter(function(v){return v===true;}).length;
   var pct=Math.round((correct/5)*100);
   if(pct<80){
-    st.style.display='block';
-    st.style.background='#FAECE7';
-    st.style.color='#712B13';
-    st.textContent='A minimum score of 80% is required to submit. You scored '+pct+'% ('+correct+'/5). Please retake the quiz to improve your score.';
+    st.style.display='block';st.style.background='#FAECE7';st.style.color='#712B13';
+    st.textContent='A minimum score of 80% is required. You scored '+pct+'% ('+correct+'/5). Please retake the quiz.';
     return;
   }
   var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
-  st.style.display='block';
-  st.style.background='#EEEDFE';
-  st.style.color='#3C3489';
+  st.style.display='block';st.style.background='#EEEDFE';st.style.color='#3C3489';
   st.textContent='Sending results...';
   if(btn)btn.disabled=true;
   var completed=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
   var payload={
-    participant_name: nm,
-    module: '4F Solution - Module 1',
-    completed_at: completed,
-    score_percent: pct+'%',
-    correct_of_5: correct+'/5',
-    q1_cash_flow: scores.q1===null?'Not attempted':scores.q1?'Correct':'Incorrect',
-    q2_legacy: scores.q2===null?'Not attempted':scores.q2?'Correct':'Incorrect',
-    q3_values: scores.q3===null?'Not attempted':scores.q3?'Correct':'Incorrect',
-    q4_income_loss: scores.q4===null?'Not attempted':scores.q4?'Correct':'Incorrect',
-    q5_fundamentals_order: scores.q5===null?'Not attempted':scores.q5?'Correct':'Incorrect'
+    participant_name:nm,
+    module:'4F Solution - Module 1',
+    completed_at:completed,
+    score_percent:pct+'%',
+    correct_of_5:correct+'/5',
+    q1_cash_flow:scores.q1===null?'Not attempted':scores.q1?'Correct':'Incorrect',
+    q2_legacy:scores.q2===null?'Not attempted':scores.q2?'Correct':'Incorrect',
+    q3_values:scores.q3===null?'Not attempted':scores.q3?'Correct':'Incorrect',
+    q4_income_loss:scores.q4===null?'Not attempted':scores.q4?'Correct':'Incorrect',
+    q5_fundamentals_order:scores.q5===null?'Not attempted':scores.q5?'Correct':'Incorrect'
   };
   var params=new URLSearchParams(payload);
-  fetch('https://hooks.zapier.com/hooks/catch/236545/unc6gn1/',{
-    method:'POST',
-    mode:'no-cors',
-    body:params
-  })
+  fetch('https://hooks.zapier.com/hooks/catch/236545/unc6gn1/',{method:'POST',mode:'no-cors',body:params})
   .then(function(){
-    st.style.background='#E1F5EE';
-    st.style.color='#085041';
+    st.style.background='#E1F5EE';st.style.color='#085041';
     st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/5 correct). Your facilitator will receive the full breakdown.';
     if(btn){btn.textContent='Submitted';}
   })
-  .catch(function(err){
-    st.style.background='#FAECE7';
-    st.style.color='#712B13';
+  .catch(function(){
+    st.style.background='#FAECE7';st.style.color='#712B13';
     st.textContent='Submission failed — please check your internet connection and try again.';
     if(btn)btn.disabled=false;
   });
 }
+
 updateUI();
 
-var ttsActive = null;
-var ttsUtterance = null;
-
-function getScreenText(screenId) {
-  var screen = document.getElementById(screenId);
-  if (!screen) return '';
-  var clone = screen.cloneNode(true);
-  // Remove audio bar, buttons, feedback divs from the clone
-  var remove = clone.querySelectorAll('.audio-bar, button, .feedback, .nav, input, textarea');
-  remove.forEach(function(el){ el.parentNode && el.parentNode.removeChild(el); });
-  return clone.innerText || clone.textContent || '';
+var ttsActive=null,ttsUtterance=null;
+function getScreenText(screenId){
+  var screen=document.getElementById(screenId);
+  if(!screen)return'';
+  var clone=screen.cloneNode(true);
+  clone.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea').forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
+  return clone.innerText||clone.textContent||'';
 }
-
-function stopAudio() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  if (ttsActive) {
-    var btn = document.getElementById('audio-btn-' + ttsActive);
-    var lbl = document.getElementById('audio-btn-label-' + ttsActive);
-    var st  = document.getElementById('audio-status-' + ttsActive);
-    var play = document.getElementById('audio-icon-play-' + ttsActive);
-    var pause = document.getElementById('audio-icon-pause-' + ttsActive);
-    if (btn) btn.classList.remove('playing');
-    if (lbl) lbl.textContent = 'Listen to this screen';
-    if (st)  st.textContent = '';
-    if (play)  play.style.display = '';
-    if (pause) pause.style.display = 'none';
-    ttsActive = null;
-    ttsUtterance = null;
+function stopAudio(){
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  if(ttsActive){
+    var btn=document.getElementById('audio-btn-'+ttsActive);
+    var lbl=document.getElementById('audio-btn-label-'+ttsActive);
+    var st=document.getElementById('audio-status-'+ttsActive);
+    var play=document.getElementById('audio-icon-play-'+ttsActive);
+    var pause=document.getElementById('audio-icon-pause-'+ttsActive);
+    if(btn)btn.classList.remove('playing');
+    if(lbl)lbl.textContent='Listen to this screen';
+    if(st)st.textContent='';
+    if(play)play.style.display='';
+    if(pause)pause.style.display='none';
+    ttsActive=null;ttsUtterance=null;
   }
 }
-
-function toggleAudio(screenId) {
-  if (ttsActive === screenId) { stopAudio(); return; }
+function toggleAudio(screenId){
+  if(ttsActive===screenId){stopAudio();return;}
   stopAudio();
-  var text = getScreenText(screenId);
-  if (!text.trim()) return;
-  if (!window.speechSynthesis) {
-    var st = document.getElementById('audio-status-' + screenId);
-    if (st) st.textContent = 'Audio not supported in this browser.';
+  var text=getScreenText(screenId);
+  if(!text.trim())return;
+  if(!window.speechSynthesis){
+    var st=document.getElementById('audio-status-'+screenId);
+    if(st)st.textContent='Audio not supported in this browser.';
     return;
   }
-  ttsActive = screenId;
-  var btn   = document.getElementById('audio-btn-' + screenId);
-  var lbl   = document.getElementById('audio-btn-label-' + screenId);
-  var st    = document.getElementById('audio-status-' + screenId);
-  var play  = document.getElementById('audio-icon-play-' + screenId);
-  var pause = document.getElementById('audio-icon-pause-' + screenId);
-  if (btn)   btn.classList.add('playing');
-  if (lbl)   lbl.textContent = 'Stop';
-  if (st)    st.textContent = 'Playing...';
-  if (play)  play.style.display = 'none';
-  if (pause) pause.style.display = '';
-  ttsUtterance = new SpeechSynthesisUtterance(text);
-  ttsUtterance.rate = 0.92;
-  ttsUtterance.pitch = 1;
-  ttsUtterance.lang = 'en-US';
-  ttsUtterance.onend = function() { stopAudio(); };
-  ttsUtterance.onerror = function() { stopAudio(); };
+  ttsActive=screenId;
+  var btn=document.getElementById('audio-btn-'+screenId);
+  var lbl=document.getElementById('audio-btn-label-'+screenId);
+  var st=document.getElementById('audio-status-'+screenId);
+  var play=document.getElementById('audio-icon-play-'+screenId);
+  var pause=document.getElementById('audio-icon-pause-'+screenId);
+  if(btn)btn.classList.add('playing');
+  if(lbl)lbl.textContent='Stop';
+  if(st)st.textContent='Playing...';
+  if(play)play.style.display='none';
+  if(pause)pause.style.display='';
+  ttsUtterance=new SpeechSynthesisUtterance(text);
+  ttsUtterance.rate=0.92;ttsUtterance.pitch=1;ttsUtterance.lang='en-US';
+  ttsUtterance.onend=function(){stopAudio();};
+  ttsUtterance.onerror=function(){stopAudio();};
   window.speechSynthesis.speak(ttsUtterance);
 }
-
-// Stop audio when screen changes
-var _origGoNext = goNext;
-goNext = function(){ stopAudio(); _origGoNext(); };
-var _origGoBack = goBack;
-goBack = function(){ stopAudio(); _origGoBack(); };
-
+var _origGoNext=goNext;
+goNext=function(){stopAudio();_origGoNext();};
+var _origGoBack=goBack;
+goBack=function(){stopAudio();_origGoBack();};
 </script>
 </html>
