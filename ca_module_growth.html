@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F Solution — Canadian Track: Growth</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --tp:#1a1a18;--ts:#5f5e5a;--tt:#888780;
+  --bp:#ffffff;--bs:#f5f4f0;
+  --bt:rgba(0,0,0,0.12);--bs2:rgba(0,0,0,0.22);
+  --ff:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --rm:8px;--rl:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{--tp:#e8e6de;--ts:#9c9a92;--tt:#6b6963;--bp:#1e1e1c;--bs:#272724;--bt:rgba(255,255,255,0.10);--bs2:rgba(255,255,255,0.18)}
+}
+body{font-family:var(--ff);color:var(--tp);background:var(--bs);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem}
+.container{background:var(--bp);border-radius:16px;border:0.5px solid var(--bt);padding:2rem;max-width:680px;width:100%}
+.mod{width:100%}
+.progress-bar{display:flex;gap:6px;margin-bottom:2rem;align-items:center}
+.prog-step{height:5px;flex:1;border-radius:2px;background:var(--bt);transition:background .3s}
+.prog-step.done{background:#1D9E75}
+.prog-step.active{background:#5DCAA5}
+.step-label{font-size:17px;color:var(--tt);min-width:80px;text-align:right}
+.screen{display:none}
+.screen.active{display:block}
+.tag{display:inline-block;font-size:17px;font-weight:700;padding:5px 14px;border-radius:20px;background:#E1F5EE;color:#085041;margin-bottom:1rem;letter-spacing:.03em}
+h2{font-size:28px;font-weight:700;line-height:1.35;margin-bottom:.6rem;color:var(--tp)}
+.sub{font-size:20px;font-weight:500;color:var(--ts);line-height:1.65;margin-bottom:1.5rem}
+.card{background:var(--bp);border:0.5px solid var(--bt);border-radius:var(--rl);padding:1.1rem 1.35rem;margin-bottom:.75rem}
+.card-title{font-size:20px;font-weight:600;margin-bottom:.4rem;color:var(--tp)}
+.card-body{font-size:20px;color:var(--ts);line-height:1.65}
+.hb{padding:1rem 1.35rem;margin-bottom:1.25rem;border-radius:var(--rm)}
+.hb-teal{background:#E1F5EE;border-left:3px solid #0F6E56}
+.hb-coral{background:#FAECE7;border-left:3px solid #993C1D}
+.hb-green{background:#EAF3DE;border-left:3px solid #3B6D11}
+.hb-amber{background:#FAEEDA;border-left:3px solid #854F0B}
+.hb-purple{background:#EEEDFE;border-left:3px solid #534AB7}
+.hb-label{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem}
+.hb-teal .hb-label{color:#0F6E56}.hb-coral .hb-label{color:#993C1D}.hb-green .hb-label{color:#3B6D11}.hb-amber .hb-label{color:#854F0B}.hb-purple .hb-label{color:#534AB7}
+.hb-text{font-size:20px;font-weight:500;line-height:1.7;color:var(--tp)}
+.q-card{background:var(--bs);border-radius:var(--rl);padding:1rem 1.2rem;margin-bottom:.75rem;border-left:3px solid #0F6E56}
+.q-card.coral{border-left-color:#993C1D}.q-card.amber{border-left-color:#854F0B}.q-card.purple{border-left-color:#534AB7}
+.ql{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#0F6E56;margin-bottom:.3rem}
+.q-card.coral .ql{color:#993C1D}.q-card.amber .ql{color:#854F0B}.q-card.purple .ql{color:#534AB7}
+.qt{font-size:20px;font-weight:600;color:var(--tp);line-height:1.5;margin-bottom:.3rem}
+.qw{font-size:20px;color:var(--ts);line-height:1.6}
+.audio-bar{display:flex;align-items:center;gap:12px;padding:.75rem 1rem;background:var(--bs);border-radius:var(--rm);margin-bottom:1.25rem}
+.audio-btn{display:flex;align-items:center;gap:8px;background:transparent;border:0.5px solid var(--bs2);border-radius:var(--rm);padding:8px 16px;cursor:pointer;font-size:16px;font-family:var(--ff);color:var(--tp);transition:background .2s;white-space:nowrap}
+.audio-btn:hover{background:var(--bs)}.audio-btn.playing{color:#0F6E56;border-color:#0F6E56}
+.audio-icon{width:18px;height:18px;flex-shrink:0}
+.audio-label{font-size:15px;color:var(--tt);flex:1}
+.badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem}
+.badge{display:flex;align-items:center;gap:8px;background:var(--bs);border-radius:var(--rm);padding:.65rem 1rem;font-size:18px;color:var(--ts)}
+.badge-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.quiz-option{background:var(--bp);border:0.5px solid var(--bt);border-radius:var(--rm);padding:1rem 1.2rem;margin-bottom:.65rem;cursor:pointer;font-size:20px;color:var(--tp);transition:all .2s;line-height:1.55;font-family:var(--ff);width:100%;text-align:left}
+.quiz-option:hover{border-color:#5DCAA5;background:#E1F5EE;color:#085041}
+.quiz-option.correct{border-color:#0F6E56;background:#E1F5EE;color:#085041}
+.quiz-option.wrong{border-color:#993C1D;background:#FAECE7;color:#712B13}
+.feedback{font-size:20px;line-height:1.65;padding:1rem 1.2rem;border-radius:var(--rm);margin-top:.75rem;margin-bottom:1rem;display:none}
+.feedback.show{display:block}
+.fb-correct{background:#E1F5EE;color:#085041}
+.fb-wrong{background:#FAECE7;color:#712B13}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid var(--bt)}
+.nav-btn{font-size:20px;padding:10px 22px;border-radius:var(--rm);border:0.5px solid var(--bs2);background:transparent;color:var(--tp);cursor:pointer;font-family:var(--ff);transition:background .2s}
+.nav-btn:hover{background:var(--bs)}
+.nav-btn.primary{background:#0F6E56;border-color:#0F6E56;color:#E1F5EE;font-weight:600}
+.nav-btn.primary:hover{background:#085041}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.counter{font-size:17px;color:var(--tt);min-width:60px;text-align:center}
+.sh{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#0F6E56;margin-bottom:.6rem;margin-top:1.1rem}
+.sh.coral{color:#993C1D}.sh.purple{color:#534AB7}.sh.amber{color:#854F0B}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="mod">
+<div class="progress-bar">
+  <div class="prog-step active" id="p0"></div>
+  <div class="prog-step" id="p1"></div>
+  <div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div>
+  <div class="prog-step" id="p4"></div>
+  <div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div>
+  <div class="prog-step" id="p7"></div>
+  <div class="prog-step" id="p8"></div>
+  <div class="prog-step" id="p9"></div>
+  <div class="prog-step" id="p10"></div>
+  <div class="prog-step" id="p11"></div>
+  <div class="prog-step" id="p12"></div>
+  <div class="prog-step" id="p13"></div>
+  <div class="prog-step" id="p14"></div>
+  <span class="step-label" id="step-label">1 of 15</span>
+</div>
+<div class="screen active" id="s0">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s0">Listen to this screen</span></button><span class="audio-label" id="audio-status-s0"></span></div>
+  <div class="tag">4F Solution — Canadian Track: Growth</div>
+  <h2>Building wealth — the investing fundamentals</h2>
+  <p class="sub">Cash flow creates surplus. Protection keeps it safe. Growth is what puts that surplus to work — building toward the goals the client named in discovery. This module covers the investing fundamentals every professional needs to have an intelligent growth conversation.</p>
+  <div class="badge-row">
+    <div class="badge"><div class="badge-dot" style="background:#0F6E56"></div>10 lessons</div>
+    <div class="badge"><div class="badge-dot" style="background:#1D9E75"></div>5 knowledge checks</div>
+    <div class="badge"><div class="badge-dot" style="background:#854F0B"></div>🍁 Canadian context</div>
+  </div>
+  <div class="hb hb-teal">
+    <div class="hb-label">What this module covers</div>
+    <div class="hb-text">Why growth matters and what it requires. The relationship between time, risk, and return. Asset classes and how they behave. Canadian investment vehicles — including segregated funds and discretionary wealth management. Diversification. Risk tolerance versus risk capacity. Market behaviour and the cost of panic. Connecting every growth conversation to the client's values.</div>
+  </div>
+  <div class="hb hb-amber">
+    <div class="hb-label">What this module does not cover</div>
+    <div class="hb-text">Registered accounts (RRSP, TFSA, FHSA, RESP, RDSP) and the tax treatment of investment income are addressed in Module 5: Tax Efficiency. The choice of which account to use is inseparable from the tax context and cannot be made responsibly without it.</div>
+  </div>
+</div>
+<div class="screen" id="s1">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s1">Listen to this screen</span></button><span class="audio-label" id="audio-status-s1"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 1: Why growth</div>
+  <h2>Surplus sitting still is surplus losing ground</h2>
+  <p class="sub">Cash flow creates the fuel. Growth determines whether that fuel builds something — or slowly loses purchasing power to inflation. The professional who understands this distinction changes how clients think about money sitting in a savings account.</p>
+  <div style="background:var(--bs);border-radius:var(--rl);padding:1.1rem;margin-bottom:1.25rem;border:0.5px solid var(--bt)">
+    <div style="font-size:15px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem">What $100,000 becomes after 20 years</div>
+    <div style="display:flex;flex-direction:column;gap:.6rem">
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="font-size:14px;color:var(--ts);min-width:120px;flex-shrink:0">Savings (1%)</div>
+        <div style="flex:1;position:relative;height:28px;background:var(--bp);border-radius:4px;border:0.5px solid var(--bt);overflow:hidden;display:flex;align-items:center">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:32%;background:#993C1D;border-radius:4px 0 0 4px"></div>
+          <span style="position:relative;z-index:1;font-size:13px;font-weight:700;color:#993C1D;padding-left:calc(32% + 6px)">~$122K</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="font-size:14px;color:var(--ts);min-width:120px;flex-shrink:0">Inflation (2.5%)</div>
+        <div style="flex:1;position:relative;height:28px;background:var(--bp);border-radius:4px;border:1.5px dashed #854F0B;overflow:hidden;display:flex;align-items:center">
+          <span style="position:relative;z-index:1;font-size:13px;font-weight:700;color:#854F0B;padding-left:8px">~$164K needed to maintain purchasing power</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="font-size:14px;color:var(--ts);min-width:120px;flex-shrink:0">Balanced (5%)</div>
+        <div style="flex:1;position:relative;height:28px;background:var(--bp);border-radius:4px;border:0.5px solid var(--bt);overflow:hidden;display:flex;align-items:center">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:62%;background:#0F6E56;border-radius:4px 0 0 4px"></div>
+          <span style="position:relative;z-index:1;font-size:13px;font-weight:700;color:white;padding-left:8px">~$265K</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="font-size:14px;color:var(--ts);min-width:120px;flex-shrink:0">Growth (7%)</div>
+        <div style="flex:1;position:relative;height:28px;background:var(--bp);border-radius:4px;border:0.5px solid var(--bt);overflow:hidden;display:flex;align-items:center">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#3B6D11;border-radius:4px"></div>
+          <span style="position:relative;z-index:1;font-size:13px;font-weight:700;color:white;padding-left:8px">~$387K</span>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--tt);margin-top:.6rem">Illustrative only. Past performance does not guarantee future results. Assumes annual compounding, no withdrawals, no tax.</div>
+  </div>
+  <div class="q-card">
+    <div class="ql">The compounding principle</div>
+    <div class="qt">Returns earn returns — and the longer it runs, the more disproportionate the result.</div>
+    <div class="qw">A client who invests $500 per month starting at 30 versus starting at 40 does not have a 10-year disadvantage — they have a dramatically larger one. The first decade of compounding is the most powerful because it sets the base for every subsequent year. Starting early is not a platitude. It is the single most significant growth decision most clients will make — and it is made by inaction as much as by action.</div>
+  </div>
+  <div class="q-card coral">
+    <div class="ql">The real cost of waiting</div>
+    <div class="qt">Every month of delay is a month of compounding that never happens.</div>
+    <div class="qw">A client who waits until "the right time" — when debt is cleared, when income is higher, when markets look better — is not deferring the start. They are permanently eliminating years of compounding from their outcome. The professional who helps a client see this is doing something far more valuable than recommending a product.</div>
+  </div>
+  <div class="hb hb-teal">
+    <div class="hb-label">The growth conversation starts here</div>
+    <div class="hb-text">"You told me you want to retire at 60 with enough to maintain your lifestyle for 30 years without depending on anyone. Let me show you what that requires — and what happens to that goal depending on when we start." The numbers make the case. The professional frames them.</div>
+  </div>
+</div>
+<div class="screen" id="s2">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s2">Listen to this screen</span></button><span class="audio-label" id="audio-status-s2"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 2: Time, risk, and return</div>
+  <h2>The three variables that govern every investment decision</h2>
+  <p class="sub">Time horizon, risk, and return are not independent choices. They are a triangle — move one and the other two must respond. Every growth recommendation is built on understanding how they interact for this specific client.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:#E1F5EE;border-radius:var(--rl);padding:1rem;text-align:center;border:0.5px solid #5DCAA5">
+      <div style="font-size:30px;margin-bottom:.4rem">⏳</div>
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;margin-bottom:.3rem">Time horizon</div>
+      <div style="font-size:14px;color:#085041;line-height:1.5">How long before the money is needed. Longer time = more capacity to absorb volatility and recover from downturns.</div>
+    </div>
+    <div style="background:#FAECE7;border-radius:var(--rl);padding:1rem;text-align:center;border:0.5px solid #F0997B">
+      <div style="font-size:30px;margin-bottom:.4rem">⚡</div>
+      <div style="font-size:16px;font-weight:700;color:#993C1D;margin-bottom:.3rem">Risk</div>
+      <div style="font-size:14px;color:#712B13;line-height:1.5">The possibility of loss or underperformance. Higher potential return always requires accepting higher risk. There is no free lunch.</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--rl);padding:1rem;text-align:center;border:0.5px solid #7DB858">
+      <div style="font-size:30px;margin-bottom:.4rem">📈</div>
+      <div style="font-size:16px;font-weight:700;color:#3B6D11;margin-bottom:.3rem">Return</div>
+      <div style="font-size:14px;color:#2A5009;line-height:1.5">The growth generated over time. Expected return increases with risk accepted and time allowed. Neither is guaranteed.</div>
+    </div>
+  </div>
+  <div style="border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bs);padding:.6rem 1rem;border-bottom:0.5px solid var(--bt)">
+      <div style="font-size:14px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Time horizon</div>
+      <div style="font-size:14px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Typical approach</div>
+      <div style="font-size:14px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Why</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:.7rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:16px;font-weight:700;color:#993C1D">Under 3 years</div>
+      <div style="font-size:15px;color:var(--ts)">Capital preservation — GICs, HISA, money market</div>
+      <div style="font-size:15px;color:var(--ts)">No time to recover from a market downturn before the money is needed</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:.7rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:16px;font-weight:700;color:#854F0B">3–10 years</div>
+      <div style="font-size:15px;color:var(--ts)">Balanced — mix of growth and income assets</div>
+      <div style="font-size:15px;color:var(--ts)">Some capacity to absorb volatility; stability still matters as the goal approaches</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:.7rem 1rem;background:var(--bp)">
+      <div style="font-size:16px;font-weight:700;color:#3B6D11">10+ years</div>
+      <div style="font-size:15px;color:var(--ts)">Growth-oriented — equities, diversified portfolios</div>
+      <div style="font-size:15px;color:var(--ts)">Long runway to compound and recover from downturns; inflation is the greater risk than volatility</div>
+    </div>
+  </div>
+  <div style="font-size:15px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;margin-top:1.1rem">Standard Canadian portfolio profiles — approximate asset allocation</div>
+  <div style="display:flex;flex-direction:column;gap:.45rem;margin-bottom:1rem">
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+        <div style="font-size:15px;font-weight:700;color:#993C1D">Very conservative</div>
+        <div style="font-size:13px;color:var(--tt)">Capital preservation · Low volatility</div>
+      </div>
+      <div style="display:flex;border-radius:6px;overflow:hidden;height:30px;border:0.5px solid var(--bt)">
+        <div style="width:75%;background:#534AB7;flex-shrink:0;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white;text-align:center;line-height:1.2">75%<br>Fixed</span></div>
+        <div style="width:10%;background:#3B6D11;flex-shrink:0;display:flex;align-items:center;justify-content:center"><span style="font-size:11px;font-weight:700;color:white">10%</span></div>
+        <div style="flex:1;background:#993C1D;display:flex;align-items:center;justify-content:center"><span style="font-size:11px;font-weight:700;color:white">15%</span></div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+        <div style="font-size:15px;font-weight:700;color:#854F0B">Conservative</div>
+        <div style="font-size:13px;color:var(--tt)">Income-focused · Modest growth</div>
+      </div>
+      <div style="display:flex;border-radius:6px;overflow:hidden;height:30px;border:0.5px solid var(--bt)">
+        <div style="width:30%;background:#3B6D11;flex-shrink:0;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white;white-space:nowrap">30% Eq.</span></div>
+        <div style="flex:1;background:#534AB7;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white">60% Fixed income</span></div>
+        <div style="width:10%;background:#993C1D;flex-shrink:0;display:flex;align-items:center;justify-content:center"><span style="font-size:11px;font-weight:700;color:white">10%</span></div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+        <div style="font-size:15px;font-weight:700;color:#0F6E56">Balanced</div>
+        <div style="font-size:13px;color:var(--tt)">Growth + stability · Most common</div>
+      </div>
+      <div style="display:flex;border-radius:6px;overflow:hidden;height:30px;border:0.5px solid var(--bt)">
+        <div style="width:60%;background:#3B6D11;flex-shrink:0;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white">60% Equity</span></div>
+        <div style="flex:1;background:#534AB7;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white">35% Fixed</span></div>
+        <div style="width:5%;background:#993C1D;flex-shrink:0"></div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+        <div style="font-size:15px;font-weight:700;color:#3B6D11">Growth</div>
+        <div style="font-size:13px;color:var(--tt)">Equity-led · Long horizon</div>
+      </div>
+      <div style="display:flex;border-radius:6px;overflow:hidden;height:30px;border:0.5px solid var(--bt)">
+        <div style="width:80%;background:#3B6D11;flex-shrink:0;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white">80% Equity</span></div>
+        <div style="flex:1;background:#534AB7;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white">20% Fixed</span></div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+        <div style="font-size:15px;font-weight:700;color:#2A5009">Aggressive growth</div>
+        <div style="font-size:13px;color:var(--tt)">Maximum equity · Highest volatility</div>
+      </div>
+      <div style="display:flex;border-radius:6px;overflow:hidden;height:30px;border:0.5px solid var(--bt)">
+        <div style="flex:1;background:#2A5009;display:flex;align-items:center;justify-content:center"><span style="font-size:12px;font-weight:700;color:white">95–100% Equity (global, diversified)</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:13px;color:var(--tt);margin-bottom:1.25rem">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:#3B6D11;border-radius:2px;display:inline-block"></span>Equities</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:#534AB7;border-radius:2px;display:inline-block"></span>Fixed income</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:#993C1D;border-radius:2px;display:inline-block"></span>Cash / equivalents</span>
+    <span style="color:var(--tt)">Allocations are illustrative — actual portfolios vary by manager and mandate</span>
+  </div>
+  <div class="hb hb-amber">
+    <div class="hb-label">The question clients almost never ask — but should</div>
+    <div class="hb-text">"What is the return I need — not the return I want?" A client who needs 5% to reach their goal should not be taking the risk required to pursue 8%. And a client with a 25-year horizon who is holding all cash is not being conservative — they are guaranteeing that inflation wins. The professional connects the required return to the goal, then designs the risk level around that.</div>
+  </div>
+</div>
+<div class="screen" id="s3">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s3">Listen to this screen</span></button><span class="audio-label" id="audio-status-s3"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 3: Asset classes</div>
+  <h2>What you can own — and how each behaves</h2>
+  <p class="sub">Every investment is ownership of something. Understanding what each asset class is, how it generates return, and how it behaves in different conditions is the foundation of every growth conversation.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+
+    <div style="display:grid;grid-template-columns:72px 1fr 88px;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#3B6D11;padding:.9rem .5rem;text-align:center">
+        <div style="font-size:22px">📊</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;margin-top:.3rem">Equities</div>
+      </div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.25rem">Stocks — ownership in a company</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.5">Return comes from price appreciation and dividends. Historically the highest long-term return of any asset class. Also the most volatile in the short term. The engine of most growth portfolios.</div>
+      </div>
+      <div style="background:#EAF3DE;padding:.85rem .5rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:12px;font-weight:700;color:#3B6D11">Return</div>
+        <div style="font-size:18px;font-weight:700;color:#3B6D11;line-height:1.2">Highest</div>
+        <div style="font-size:12px;color:#3B6D11;margin-top:.2rem">Risk: High</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:72px 1fr 88px;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#534AB7;padding:.9rem .5rem;text-align:center">
+        <div style="font-size:22px">📋</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;margin-top:.3rem">Bonds</div>
+      </div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.25rem">Bonds — lending to governments or corporations</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.5">Return comes from regular interest payments (coupon) plus price movement. More stable than equities. Government bonds are lower risk; corporate bonds offer higher yield for more risk. Balances equity volatility in a portfolio.</div>
+      </div>
+      <div style="background:#EEEDFE;padding:.85rem .5rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:12px;font-weight:700;color:#534AB7">Return</div>
+        <div style="font-size:18px;font-weight:700;color:#534AB7;line-height:1.2">Moderate</div>
+        <div style="font-size:12px;color:#534AB7;margin-top:.2rem">Risk: Moderate</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:72px 1fr 88px;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#854F0B;padding:.9rem .5rem;text-align:center">
+        <div style="font-size:22px">🏠</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;margin-top:.3rem">Real estate</div>
+      </div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.25rem">Property — direct or through REITs</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.5">Return from rental income and property appreciation. Direct ownership requires capital, management, and concentration. REITs (Real Estate Investment Trusts) allow exposure without direct ownership — traded on exchanges like stocks.</div>
+      </div>
+      <div style="background:#FAEEDA;padding:.85rem .5rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:12px;font-weight:700;color:#854F0B">Return</div>
+        <div style="font-size:18px;font-weight:700;color:#854F0B;line-height:1.2">Moderate+</div>
+        <div style="font-size:12px;color:#854F0B;margin-top:.2rem">Risk: Moderate</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:72px 1fr 88px;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#993C1D;padding:.9rem .5rem;text-align:center">
+        <div style="font-size:22px">💵</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;margin-top:.3rem">Cash equiv.</div>
+      </div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.25rem">Cash and equivalents — GICs, HISA, money market</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.5">Lowest risk, lowest return. Appropriate for short time horizons, emergency reserves, and capital awaiting deployment. Over the long term, returns typically do not keep pace with inflation — not a growth strategy.</div>
+      </div>
+      <div style="background:#FAECE7;padding:.85rem .5rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:12px;font-weight:700;color:#993C1D">Return</div>
+        <div style="font-size:18px;font-weight:700;color:#993C1D;line-height:1.2">Lowest</div>
+        <div style="font-size:12px;color:#993C1D;margin-top:.2rem">Risk: Lowest</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:72px 1fr 88px;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#0F6E56;padding:.9rem .5rem;text-align:center">
+        <div style="font-size:22px">🔮</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.85);font-weight:700;margin-top:.3rem">Alternatives</div>
+      </div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.25rem">Alternatives — commodities, private equity, infrastructure</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.5">Assets that behave differently from stocks and bonds. Used to diversify a portfolio and reduce correlation to public markets. Generally less liquid and higher minimum investment. More relevant at the wealth management level.</div>
+      </div>
+      <div style="background:#E1F5EE;padding:.85rem .5rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:12px;font-weight:700;color:#0F6E56">Return</div>
+        <div style="font-size:18px;font-weight:700;color:#0F6E56;line-height:1.2">Varies</div>
+        <div style="font-size:12px;color:#0F6E56;margin-top:.2rem">Risk: Varies</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="hb hb-teal">
+    <div class="hb-label">The key insight</div>
+    <div class="hb-text">No single asset class is "best." The right combination depends on the client's time horizon, goals, and capacity to absorb volatility. A portfolio is not a collection of individual bets — it is a structure designed to deliver a specific outcome at a specific level of risk. That is what the next screens build toward.</div>
+  </div>
+</div>
+<div class="screen" id="s4">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s4">Listen to this screen</span></button><span class="audio-label" id="audio-status-s4"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 4: Investment vehicles</div>
+  <h2>The tools available to Canadian investors</h2>
+  <p class="sub">Asset classes are what you own. Investment vehicles are how you own them. The vehicle determines cost, accessibility, flexibility, and in some cases additional features like guarantees. Knowing the difference matters for the growth conversation.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#3B6D11;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">Individual stocks</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Direct ownership of shares in a company. Full control, no management fee. Requires research and conviction. Concentration risk is high — one company's performance affects the whole position.</div>
+        <div style="font-size:13px;background:#EAF3DE;color:#2A5009;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Experienced investors, supplementary to a diversified core</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#534AB7;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">ETFs — Exchange-Traded Funds</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Baskets of securities that trade on an exchange like a stock. Instant diversification, very low management expense ratios (MERs often 0.05–0.25%). Passive index ETFs are the foundation of most modern growth portfolios.</div>
+        <div style="font-size:13px;background:#EEEDFE;color:#3C3489;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Core portfolio holdings, cost-conscious investors</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#0F6E56;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">Mutual funds</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Pooled investments managed by a professional fund manager. Actively managed funds aim to outperform a benchmark — at a higher MER (typically 1.5–2.5%). Access to a wide range of strategies and asset classes. Bought and sold at end-of-day NAV, not on an exchange.</div>
+        <div style="font-size:13px;background:#E1F5EE;color:#085041;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Clients who want active management and broader access</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#993C1D;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">GICs — Guaranteed Investment Certificates</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Fixed or variable rate deposits for a set term (30 days to 5 years). Principal is guaranteed. Cashable vs non-cashable versions differ on early redemption. CDIC insured up to $100,000 per category. Not a growth strategy — a capital preservation tool.</div>
+        <div style="font-size:13px;background:#FAECE7;color:#712B13;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Short horizons, capital awaiting deployment, risk-averse clients</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#854F0B;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">Bonds — direct</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Purchasing individual government or corporate bonds. Provides predictable interest income and principal return at maturity. Less accessible than bond ETFs or funds for most retail investors due to minimum purchase sizes and bid-ask spreads.</div>
+        <div style="font-size:13px;background:#FAEEDA;color:#633806;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Larger portfolios, specific income requirements</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#3B6D11;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">Real estate — direct and REITs</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Direct ownership (rental properties) generates income and capital appreciation but requires significant capital, management, and creates concentration. REITs provide real estate exposure through exchange-traded securities — liquid, diversified, lower minimum investment.</div>
+        <div style="font-size:13px;background:#EAF3DE;color:#2A5009;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Income-oriented clients, portfolio diversification</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#993C1D;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">Segregated funds 🍁</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Insurance contracts holding investment funds — with maturity guarantees (75–100%), death benefit that bypasses probate, potential creditor protection, and reset options. Contract terms vary significantly between issuers. Life insurance licence required.</div>
+        <div style="font-size:13px;background:#FAECE7;color:#712B13;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Clients needing capital guarantees, estate bypass, or creditor protection alongside market-linked growth</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden">
+      <div style="background:#534AB7;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">CV life insurance 🍁</div></div>
+      <div style="background:var(--bs);padding:.85rem 1rem">
+        <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Participating whole life and universal life policies accumulate cash value (CV) alongside the death benefit. The CV grows tax-deferred, can be accessed through policy loans, and in participating policies may receive dividends. A dual-purpose tool — protection and tax-sheltered accumulation. Life insurance licence required.</div>
+        <div style="font-size:13px;background:#EEEDFE;color:#3C3489;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Long-horizon clients who have maximized registered accounts and want additional tax-sheltered growth</div>
+      </div>
+    </div>
+  </div>
+  <div style="border-radius:var(--rl);border:0.5px solid var(--bt);overflow:hidden;margin-bottom:1.25rem">
+    <div style="background:#0F6E56;padding:.65rem 1rem"><div style="font-size:16px;font-weight:700;color:white">GIAs — Guaranteed Interest Accounts 🍁</div></div>
+    <div style="background:var(--bs);padding:.85rem 1rem">
+      <div style="font-size:14px;color:var(--ts);line-height:1.55;margin-bottom:.4rem">Insurance-company equivalents of GICs — issued under an individual insurance contract rather than a bank deposit. Offer competitive fixed or variable rates for a set term. Key distinctions: protected by Assuris (not CDIC) up to $100,000 or 85% of the promised amount; beneficiary can be named directly, allowing the account to bypass probate and potentially pass outside the estate; creditor protection may apply when a qualifying beneficiary is named — same as segregated funds. Available within insurance-licensed professionals' scope.</div>
+      <div style="font-size:13px;background:#E1F5EE;color:#085041;padding:4px 7px;border-radius:6px;font-weight:600">Best for: Capital preservation clients who also want beneficiary designation and probate bypass — without equity market exposure</div>
+    </div>
+  </div>
+  <div class="hb hb-amber">
+    <div class="hb-label">MER — the cost that compounds against you</div>
+    <div class="hb-text">The Management Expense Ratio is the annual cost of holding a fund, deducted from returns before they reach the investor. A 2% MER on a 6% gross return leaves 4% net — every year, compounded. Over 25 years the difference between a 0.2% ETF MER and a 2% mutual fund MER on a $100,000 portfolio can exceed $150,000. Cost is not the only consideration — but it is always a consideration.</div>
+  </div>
+  <div style="background:var(--bs);border-radius:var(--rl);padding:1rem 1.1rem;border-left:3px solid #534AB7">
+    <div style="font-size:14px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">Liquidity — how quickly can the client access their money?</div>
+    <div style="display:flex;flex-direction:column;gap:.4rem">
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">Stocks, ETFs, REITs</div>
+        <div style="font-size:14px;color:#3B6D11;font-weight:600">High — sell any trading day, settle T+1 or T+2</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">Mutual funds</div>
+        <div style="font-size:14px;color:#3B6D11;font-weight:600">High — redeem at end-of-day NAV, typically 2–3 days</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">Segregated funds</div>
+        <div style="font-size:14px;color:#854F0B;font-weight:600">Moderate — redeemable but may affect guarantees; terms vary by contract</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">GIAs</div>
+        <div style="font-size:14px;color:#854F0B;font-weight:600">Moderate — some cashable versions; early redemption penalties vary</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">GICs (non-cashable)</div>
+        <div style="font-size:14px;color:#993C1D;font-weight:600">Low — locked in until maturity; early exit not possible or penalized</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">CV life insurance</div>
+        <div style="font-size:14px;color:#854F0B;font-weight:600">Moderate — policy loans available against cash value; surrender may trigger tax and lose coverage</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">Annuities</div>
+        <div style="font-size:14px;color:#993C1D;font-weight:600">Very low — capital is exchanged for income stream; typically not redeemable</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:.5rem;padding:.5rem .6rem;background:var(--bp);border-radius:var(--rm);border:0.5px solid var(--bt)">
+        <div style="font-size:14px;font-weight:600;color:var(--tp)">Direct real estate</div>
+        <div style="font-size:14px;color:#993C1D;font-weight:600">Very low — months to sell; significant transaction costs</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--tt);margin-top:.6rem;line-height:1.5">Liquidity matters most when the unexpected happens — a job loss, a health event, an opportunity. A plan built entirely on illiquid assets leaves the client without options when they need them most. Every portfolio needs a liquid layer. The emergency reserve from the cash flow conversation is the foundation — growth assets should not be the emergency fund.</div>
+  </div>
+</div>
+<div class="screen" id="s4b">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s4b" onclick="toggleAudio('s4b')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4b" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4b" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s4b">Listen to this screen</span></button><span class="audio-label" id="audio-status-s4b"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 4B: Licensing requirements</div>
+  <h2>Who can sell what — Canadian licensing requirements 🍁</h2>
+  <p class="sub">Every investment vehicle in Canada has a licensing requirement attached to it. The professional must operate within their licence — and must know which vehicles fall outside it so they can refer appropriately rather than advise outside their scope.</p>
+  <div style="border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;background:var(--bs);padding:.6rem 1rem;border-bottom:0.5px solid var(--bt)">
+      <div style="font-size:13px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Investment vehicle</div>
+      <div style="font-size:13px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Licence required</div>
+      <div style="font-size:13px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Regulator 🍁</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:var(--tp)">GICs (bank-issued)</div>
+      <div style="font-size:14px;color:var(--ts)">Mutual Fund Rep, Investment Rep, or bank employee</div>
+      <div style="font-size:14px;color:var(--ts)">CIRO / OSFI</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:var(--tp)">Mutual funds</div>
+      <div style="font-size:14px;color:var(--ts)">Mutual Fund Dealing Representative</div>
+      <div style="font-size:14px;color:var(--ts)">CIRO (formerly MFDA)</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:var(--tp)">ETFs, stocks, bonds (direct)</div>
+      <div style="font-size:14px;color:var(--ts)">Investment Dealer Representative</div>
+      <div style="font-size:14px;color:var(--ts)">CIRO (formerly IIROC)</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:var(--tp)">REITs (publicly traded)</div>
+      <div style="font-size:14px;color:var(--ts)">Investment Dealer Representative</div>
+      <div style="font-size:14px;color:var(--ts)">CIRO</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:#E1F5EE">
+      <div style="font-size:15px;font-weight:700;color:#0F6E56">Segregated funds ⭐</div>
+      <div style="font-size:14px;color:#085041;font-weight:600">Life Insurance licence</div>
+      <div style="font-size:14px;color:#085041">Provincial insurance regulator</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:#E1F5EE">
+      <div style="font-size:15px;font-weight:700;color:#0F6E56">GIAs — Guaranteed Interest Accounts ⭐</div>
+      <div style="font-size:14px;color:#085041;font-weight:600">Life Insurance licence</div>
+      <div style="font-size:14px;color:#085041">Provincial insurance regulator · Assuris</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:#E1F5EE">
+      <div style="font-size:15px;font-weight:700;color:#0F6E56">CV Life Insurance ⭐</div>
+      <div style="font-size:14px;color:#085041;font-weight:600">Life Insurance licence</div>
+      <div style="font-size:14px;color:#085041">Provincial insurance regulator</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:#E1F5EE">
+      <div style="font-size:15px;font-weight:700;color:#0F6E56">Annuities ⭐</div>
+      <div style="font-size:14px;color:#085041;font-weight:600">Life Insurance licence</div>
+      <div style="font-size:14px;color:#085041">Provincial insurance regulator · Assuris</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:var(--tp)">Discretionary management</div>
+      <div style="font-size:14px;color:var(--ts)">Portfolio Manager (PM) registration</div>
+      <div style="font-size:14px;color:var(--ts)">Provincial securities regulator</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:.65rem 1rem;background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:var(--tp)">Direct real estate</div>
+      <div style="font-size:14px;color:var(--ts)">Real estate licence (to trade); no securities licence required for personal purchase advice</div>
+      <div style="font-size:14px;color:var(--ts)">Provincial real estate regulator</div>
+    </div>
+  </div>
+  <div style="background:#E1F5EE;border-left:3px solid #0F6E56;border-radius:var(--rl);padding:.9rem 1rem;margin-bottom:.75rem">
+    <div style="font-size:14px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem">⭐ The seg fund advantage for insurance-licensed professionals</div>
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">A life insurance licence covers four investment products that no securities licence can touch: segregated funds (market-linked growth with guarantees and estate bypass), GIAs (capital preservation with beneficiary designation and Assuris protection), CV life insurance (tax-deferred cash value accumulation inside a life policy), and annuities (guaranteed lifetime income). This is one of the most significant licensing advantages in Canadian financial services — the professional can serve a complete range of growth, preservation, and income needs entirely within their insurance licence.</div>
+  </div>
+  <div style="background:#FAEEDA;border-left:3px solid #854F0B;border-radius:var(--rl);padding:.9rem 1rem">
+    <div style="font-size:14px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem">Operating outside your licence — always a referral</div>
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">An insurance-licensed professional who recommends an ETF portfolio, individual stocks, or a self-directed investment account is operating outside their licence. The correct action is to surface the opportunity, explain what the vehicle is, and refer to an appropriately licensed colleague or firm. The professional who refers well builds trust and a referral network. The one who advises outside their scope creates liability.</div>
+  </div>
+</div>
+<div class="screen" id="s5">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s5">Listen to this screen</span></button><span class="audio-label" id="audio-status-s5"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 5: Segregated funds</div>
+  <h2>Segregated funds — the insurance-based investment 🍁</h2>
+  <p class="sub">Segregated funds are unique to Canada. They combine investment growth potential with insurance-based guarantees — a combination available nowhere else in the investment landscape. Understanding them is part of every Canadian professional's toolkit.</p>
+  <div class="hb hb-teal">
+    <div class="hb-label">What makes seg funds different</div>
+    <div class="hb-text">Segregated funds are individual variable insurance contracts issued by life insurance companies — not securities products. They hold underlying investments (similar to mutual funds) but wrap them in an insurance contract that provides guarantees that no securities product can offer. This distinction matters for licensing, regulation, and client suitability.</div>
+  </div>
+  <div class="sh">The four core features</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#0F6E56;padding:.8rem .9rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:22px">🛡️</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Maturity guarantee — 75% to 100% of deposits</div>
+        <div style="font-size:15px;color:var(--ts);line-height:1.55">At the maturity date (typically 10 years from issue, or age 100), the client is guaranteed to receive at least 75% or 100% of their total deposits — regardless of market performance. If markets have grown, the client receives the higher market value. If markets have fallen, the guarantee kicks in. The cost of this guarantee is embedded in a higher MER than comparable mutual funds.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#0F6E56;padding:.8rem .9rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:22px">🏦</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Death benefit guarantee — passes outside the estate</div>
+        <div style="font-size:15px;color:var(--ts);line-height:1.55">On death, the named beneficiary receives at least the guaranteed amount (75–100% of deposits) — or the market value if higher. Critically, the death benefit passes directly to the named beneficiary, bypassing the estate entirely. This means no probate fees, no delay, no public disclosure, and no exposure to estate creditors. For clients with estate planning objectives, this is a meaningful structural advantage.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#534AB7;padding:.8rem .9rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:22px">⚖️</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Creditor protection — for qualifying clients</div>
+        <div style="font-size:15px;color:var(--ts);line-height:1.55">When a spouse, child, grandchild, or parent is named as beneficiary (or an irrevocable beneficiary is named), the segregated fund may be protected from creditors — including in bankruptcy. This is particularly valuable for business owners, incorporated professionals, and self-employed clients who carry professional or business liability. The protection is not absolute and varies by province and circumstance — always involve a lawyer for clients relying on this feature.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#854F0B;padding:.8rem .9rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:22px">🔒</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Reset options — locking in gains</div>
+        <div style="font-size:15px;color:var(--ts);line-height:1.55">Many seg fund contracts allow the client to reset the guarantee base to the current market value — locking in gains during periods of strong market performance. After a reset, the maturity date typically resets as well (extending the 10-year window). Resets are powerful in rising markets but must be used judiciously — resetting a depressed value locks in losses as the new guarantee base.</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:#FAECE7;border-radius:var(--rl);padding:1rem;border:0.5px solid #F0997B">
+      <div style="font-size:15px;font-weight:700;color:#993C1D;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.04em">The cost</div>
+      <div style="font-size:14px;color:#712B13;line-height:1.6">MER typically 0.5–1% higher than comparable mutual funds. Over long time horizons, this cost compounds. The guarantees are not free — the client pays for them through reduced net return versus an unguaranteed equivalent.</div>
+    </div>
+    <div style="background:#E1F5EE;border-radius:var(--rl);padding:1rem;border:0.5px solid #5DCAA5">
+      <div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.04em">When it earns its cost</div>
+      <div style="font-size:14px;color:#085041;line-height:1.6">Clients who cannot afford to lose capital (near-retirement, conservative temperament), clients with estate planning objectives (probate bypass, beneficiary designation), business owners and professionals needing creditor protection, clients who would otherwise hold all cash due to market fear.</div>
+    </div>
+  </div>
+  <div class="sh">GIAs — covered in Lesson 4</div>
+  <div style="background:var(--bs);border-radius:var(--rl);padding:.75rem 1rem;margin-bottom:1rem;border-left:3px solid #0F6E56">
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">GIAs (Guaranteed Interest Accounts) are introduced in the Investment Vehicles lesson. As an insurance product issued under a contract rather than a bank deposit, they carry the same beneficiary designation, probate bypass, creditor protection, and Assuris coverage that apply to segregated funds — making them the capital preservation equivalent within the insurance product family.</div>
+  </div>
+  <div class="sh">Annuities — converting capital to guaranteed income 🍁</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#993C1D;padding:.75rem .85rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:20px">♾️</div>
+      <div style="background:var(--bs);padding:.75rem 1rem">
+        <div style="font-size:15px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Life annuity — income guaranteed for life</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Converts a lump sum into a guaranteed income stream that continues regardless of how long the client lives. Eliminates longevity risk entirely. The tradeoff: the client gives up liquidity and the ability to pass the capital to heirs. Joint and survivor versions continue income to a surviving spouse after the first death.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#534AB7;padding:.75rem .85rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:20px">📅</div>
+      <div style="background:var(--bs);padding:.75rem 1rem">
+        <div style="font-size:15px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Term-certain annuity — income for a fixed period</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Guarantees income for a specific number of years regardless of survival. If the annuitant dies before the term ends, payments continue to the beneficiary. Balances the income certainty of a life annuity with some residual capital protection for heirs.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#854F0B;padding:.75rem .85rem;display:flex;align-items:center;justify-content:center;min-width:44px;font-size:20px">📋</div>
+      <div style="background:var(--bs);padding:.75rem 1rem">
+        <div style="font-size:15px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Prescribed annuity — tax-efficient for non-registered funds</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Available for non-registered money. CRA treats each payment as a blend of return of capital and interest income — resulting in a lower taxable portion of each payment versus a conventional annuity. Particularly relevant for retirement income planning from non-registered accounts where minimizing taxable income matters.</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#FAEEDA;border-left:3px solid #854F0B;border-radius:var(--rl);padding:.9rem 1rem;margin-bottom:1.25rem">
+    <div style="font-size:14px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem">The annuity tradeoff</div>
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">Annuities are the only product that guarantees the client will not outlive their income — regardless of how long they live. The cost of that guarantee is giving up liquidity and capital access. For clients who have adequate other assets and whose primary retirement fear is longevity, a partial annuity — covering essential expenses — can anchor a retirement income plan while leaving growth assets invested. All annuities are issued by life insurance companies and sold under a life insurance licence.</div>
+  </div>
+  <div class="sh">Lower-MER seg fund options — the market has evolved 🍁</div>
+  <div style="background:var(--bs);border-radius:var(--rl);padding:1rem 1.1rem;margin-bottom:1rem;border-left:3px solid #0F6E56">
+    <div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.35rem">Insurance companies offering index-linked seg funds at lower cost</div>
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">Traditional seg fund MERs of 2.5–3.5% reflected the cost of active management plus the guarantee. A growing number of Canadian insurance companies — including Beneva (formed from the merger of La Capitale and SSQ Insurance) and Assumption Life — now offer seg fund contracts with passively managed or index-linked underlying funds at meaningfully lower MERs, in some cases comparable to mutual funds. The insurance contract, beneficiary designation, estate bypass, and creditor protection features remain. The guarantee structure may differ slightly — some offer 75% rather than 100% maturity guarantee — which is reflected in the lower cost. For fee-conscious clients who still need the insurance protections, these products close much of the gap between seg funds and ETFs. The professional who knows these options exist can have a materially different cost conversation without abandoning the insurance benefits.</div>
+  </div>
+  <div style="background:#FAECE7;border-left:3px solid #993C1D;border-radius:var(--rl);padding:.9rem 1rem;margin-bottom:.75rem">
+    <div style="font-size:14px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem">⚠ Critical — segregated fund contracts vary significantly between companies</div>
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">Unlike mutual funds — which are standardized products regulated under securities law with consistent disclosure requirements — segregated fund contracts are individual insurance contracts that vary materially from company to company. Guarantee percentages, maturity dates, reset provisions, death benefit structures, withdrawal terms, fee schedules, and creditor protection conditions all differ between issuers. Two seg fund contracts with identical MERs may have meaningfully different guarantee structures. A professional making a seg fund recommendation must have read and understood the specific contract being recommended — not just the product category. Comparing contracts before recommending is not optional. It is the professional standard.</div>
+  </div>
+  <div class="hb hb-amber">
+    <div class="hb-label">Licensing note — all three under one licence</div>
+    <div class="hb-text">Segregated funds, GIAs, and annuities are all insurance products regulated under provincial insurance legislation. A life insurance licence covers all three. This is one of the most significant advantages of the insurance licence in financial services — the professional can deliver capital preservation with probate bypass (GIAs), market-linked growth with guarantees (seg funds), and guaranteed lifetime income (annuities) entirely within their licensing scope.</div>
+  </div>
+</div>
+<div class="screen" id="s6">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s6">Listen to this screen</span></button><span class="audio-label" id="audio-status-s6"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 6: Discretionary wealth management</div>
+  <h2>When a client graduates to managed wealth</h2>
+  <p class="sub">At a certain level of complexity and investable assets, a fundamentally different approach becomes appropriate — one where a licensed portfolio manager makes investment decisions on the client's behalf within an agreed mandate. Knowing when a client has reached this threshold is one of the most valuable things a professional can do.</p>
+  <div class="hb hb-teal">
+    <div class="hb-label">What discretionary management means</div>
+    <div class="hb-text">In a discretionary relationship, the client signs an Investment Policy Statement (IPS) establishing objectives, constraints, and risk parameters. Within that mandate, the portfolio manager makes buy, sell, and rebalancing decisions without requiring client approval for each trade. The client delegates day-to-day execution while retaining oversight through regular reporting and review. This is a fundamentally different relationship than a mutual fund or self-directed account.</div>
+  </div>
+  <div style="border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;background:var(--bs);padding:.6rem 1rem;border-bottom:0.5px solid var(--bt)">
+      <div style="font-size:13px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Feature</div>
+      <div style="font-size:13px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em">Non-discretionary</div>
+      <div style="font-size:13px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.04em">Discretionary</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;color:var(--tp);font-weight:600">Trade approval</div>
+      <div style="font-size:14px;color:var(--ts)">Client must approve each trade</div>
+      <div style="font-size:14px;color:var(--ts)">Manager acts within mandate — no approval needed</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;color:var(--tp);font-weight:600">Fiduciary standard</div>
+      <div style="font-size:14px;color:var(--ts)">Suitability standard</div>
+      <div style="font-size:14px;color:var(--ts)">Fiduciary — must act in client's best interest</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;color:var(--tp);font-weight:600">Fee structure</div>
+      <div style="font-size:14px;color:var(--ts)">Commission or fee-per-trade</div>
+      <div style="font-size:14px;color:var(--ts)">Fee-based (% of AUM) — aligned with client growth</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.65rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;color:var(--tp);font-weight:600">Rebalancing</div>
+      <div style="font-size:14px;color:var(--ts)">Requires client instruction</div>
+      <div style="font-size:14px;color:var(--ts)">Continuous and proactive within mandate</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.65rem 1rem;background:var(--bp)">
+      <div style="font-size:15px;color:var(--tp);font-weight:600">Typical minimum</div>
+      <div style="font-size:14px;color:var(--ts)">None to low</div>
+      <div style="font-size:14px;color:var(--ts)">Varies significantly — traditional firms $500K–$1M+; technology-enabled firms from $10K–$100K</div>
+    </div>
+  </div>
+  <div style="background:#E1F5EE;border-left:3px solid #0F6E56;border-radius:var(--rl);padding:.9rem 1rem;margin-bottom:1.25rem">
+    <div style="font-size:14px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.35rem">The threshold has changed — GVX Wealth and the new model 🍁</div>
+    <div style="font-size:15px;color:var(--tp);line-height:1.65">Regulatory changes and technology have fundamentally lowered the entry point for discretionary portfolio management in Canada. Firms like GVX Wealth now offer true discretionary portfolio management — with a licensed portfolio manager, an Investment Policy Statement, fiduciary standard, and fee-based structure — at minimums that make this accessible to a far broader client base than the traditional $500K–$1M threshold suggested. The model: technology-enabled model portfolios managed by licensed PMs, typically at 0.25–0.75% AUM fees, with full discretionary authority and ongoing rebalancing. The professional who knows this option exists can make a referral that was previously unavailable to clients with $50,000–$200,000 in investable assets. The conversation about when to refer has changed.</div>
+  </div>
+  <div class="sh">When to surface this conversation</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:var(--bs);border-radius:var(--rm);padding:.85rem 1rem;border-left:3px solid #0F6E56">
+      <div style="font-size:14px;font-weight:700;color:#0F6E56;margin-bottom:.3rem">Client signals</div>
+      <div style="font-size:14px;color:var(--ts);line-height:1.55">Has $50K+ in investable assets with no managed solution · Managing multiple accounts across institutions · Spending significant time on investment decisions · Experiencing emotional reactions to market volatility · Expressing frustration with self-directed outcomes</div>
+    </div>
+    <div style="background:var(--bs);border-radius:var(--rm);padding:.85rem 1rem;border-left:3px solid #534AB7">
+      <div style="font-size:14px;font-weight:700;color:#534AB7;margin-bottom:.3rem">Life events that trigger it</div>
+      <div style="font-size:14px;color:var(--ts);line-height:1.55">Business sale or liquidity event · Inheritance or significant gift · Divorce settlement · Insurance payout · Retirement transition where managing drawdown requires active oversight</div>
+    </div>
+  </div>
+  <div class="hb hb-purple">
+    <div class="hb-label">The professional's role here</div>
+    <div class="hb-text">The professional who identifies that a client has graduated to discretionary management — and makes the right referral — creates a far deeper relationship than one who tries to serve a need outside their capacity. Knowing where the client belongs in the ecosystem, and connecting them there, is itself a form of fiduciary excellence. The referral back from a wealth management relationship often brings the broader client relationship with it.</div>
+  </div>
+</div>
+<div class="screen" id="s7">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s7">Listen to this screen</span></button><span class="audio-label" id="audio-status-s7"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 7: Diversification</div>
+  <h2>Diversification — what it actually means in practice</h2>
+  <p class="sub">Diversification is not owning many things. It is owning things that behave differently from each other — so that when one falls, others hold or rise. Understanding the difference between true diversification and the illusion of it is one of the most practical things a professional can teach.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:#FAECE7;border-radius:var(--rl);padding:1rem;border:0.5px solid #F0997B">
+      <div style="font-size:15px;font-weight:700;color:#993C1D;margin-bottom:.5rem">❌ Not diversification</div>
+      <div style="font-size:14px;color:#712B13;line-height:1.7">
+        Owning 20 Canadian bank stocks<br>
+        Holding 5 tech-focused mutual funds<br>
+        A portfolio of 100% Canadian equities<br>
+        Three index funds that all track the same index<br>
+        Employer stock in both the portfolio and pension
+      </div>
+    </div>
+    <div style="background:#E1F5EE;border-radius:var(--rl);padding:1rem;border:0.5px solid #5DCAA5">
+      <div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.5rem">✓ Actual diversification</div>
+      <div style="font-size:14px;color:#085041;line-height:1.7">
+        Equities + bonds (different behaviour)<br>
+        Canadian + international + emerging markets<br>
+        Multiple sectors: tech, healthcare, financials, energy<br>
+        Different asset classes: stocks, real estate, alternatives<br>
+        Growth assets + income-generating assets
+      </div>
+    </div>
+  </div>
+  <div class="q-card">
+    <div class="ql">Correlation — the concept that matters</div>
+    <div class="qt">When two assets move together, holding both provides no diversification benefit.</div>
+    <div class="qw">If Asset A and Asset B both fall 30% in a market downturn, owning both did not reduce risk — it just spread it across two names. True diversification requires assets with low or negative correlation: when one falls, the other holds steady or rises. Bonds and equities have historically had low correlation — not always negative, but often divergent enough to smooth out portfolio volatility. International equities add geographic diversification that Canadian-only portfolios lack.</div>
+  </div>
+  <div class="q-card coral">
+    <div class="ql">The Canadian home bias problem 🍁</div>
+    <div class="qt">Canada represents approximately 3% of global equity market capitalization — but many Canadian investors hold 50–70% of their portfolio in Canadian equities.</div>
+    <div class="qw">This concentration creates risk that is not compensated by return. The Canadian market is heavily weighted toward financials, energy, and materials — three sectors that move together in certain economic conditions. A globally diversified portfolio does not abandon Canadian equities; it simply ensures that Canada's 3% global weight does not dominate a portfolio while the other 97% of global opportunity goes unowned.</div>
+  </div>
+  <div class="hb hb-green">
+    <div class="hb-label">The professional's diversification conversation</div>
+    <div class="hb-text">"Tell me where your savings are right now — all of them." Then: "Let's look at how those assets behave relative to each other." A client who has their RRSP in Canadian bank stocks, their employer stock plan in their employer's shares, and their TFSA in a Canadian equity index fund has three accounts with one concentrated bet. That is not a diversified portfolio — it is a concentrated Canadian financial-sector portfolio with three labels on it.</div>
+  </div>
+</div>
+<div class="screen" id="s8">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 8: Risk tolerance vs capacity</div>
+  <h2>Two different risk questions — both matter</h2>
+  <p class="sub">Risk tolerance is how the client feels about risk. Risk capacity is how much risk their financial situation can actually absorb. A professional who only assesses one of these is missing half the picture — and setting the client up for decisions they will regret.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:#EEEDFE;border-radius:var(--rl);padding:1.1rem;border:0.5px solid #A9A4E6;text-align:center">
+      <div style="font-size:28px;margin-bottom:.4rem">🧠</div>
+      <div style="font-size:17px;font-weight:700;color:#534AB7;margin-bottom:.4rem">Risk tolerance</div>
+      <div style="font-size:14px;color:#3C3489;line-height:1.6">How the client feels about the possibility of loss. Emotional and psychological. Determined by personality, experience, and how they have reacted to past market events. Can be assessed but not changed.</div>
+    </div>
+    <div style="background:#E1F5EE;border-radius:var(--rl);padding:1.1rem;border:0.5px solid #5DCAA5;text-align:center">
+      <div style="font-size:28px;margin-bottom:.4rem">📊</div>
+      <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.4rem">Risk capacity</div>
+      <div style="font-size:14px;color:#085041;line-height:1.6">How much risk the client's financial situation can actually absorb. Determined by time horizon, income stability, debt level, dependants, and the consequences of a loss. Objective and measurable.</div>
+    </div>
+  </div>
+  <div style="border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr;background:var(--bs);padding:.6rem 1rem;border-bottom:0.5px solid var(--bt)">
+      <div style="font-size:13px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">Scenario</div>
+      <div style="font-size:13px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.04em">What it means</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;padding:.7rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:#3B6D11">High tolerance + High capacity</div>
+      <div style="font-size:14px;color:var(--ts)">Growth-oriented portfolio appropriate. Client can absorb volatility emotionally and financially. Time horizon allows recovery.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;padding:.7rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:#993C1D">High tolerance + Low capacity</div>
+      <div style="font-size:14px;color:var(--ts)">Danger zone. Client thinks they can handle risk but their situation cannot absorb a loss. A 40% market drop close to retirement is not recoverable emotionally or financially. Capacity governs.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;padding:.7rem 1rem;border-bottom:0.5px solid var(--bt);background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:#854F0B">Low tolerance + High capacity</div>
+      <div style="font-size:14px;color:var(--ts)">Client would panic-sell during a correction despite having the financial capacity to hold. Portfolio needs to match what the client will actually stay in — otherwise they will abandon it at the worst moment.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;padding:.7rem 1rem;background:var(--bp)">
+      <div style="font-size:15px;font-weight:600;color:#534AB7">Low tolerance + Low capacity</div>
+      <div style="font-size:14px;color:var(--ts)">Conservative approach appropriate. Preservation-focused. Seg funds, GICs, balanced funds with downside protection. Accept lower return for stability.</div>
+    </div>
+  </div>
+  <div class="hb hb-coral">
+    <div class="hb-label">The most common professional mistake</div>
+    <div class="hb-text">Building a portfolio for the client's stated risk tolerance without assessing their actual capacity — then discovering at the first market correction that the client wants to sell everything. A client who says "I'm comfortable with risk" in a rising market and calls in a panic during a 20% drawdown has revealed their true tolerance. The professional who anticipated this and built accordingly has a client who stays invested. The one who didn't has a client who locks in losses at the bottom.</div>
+  </div>
+</div>
+<div class="screen" id="s9">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s9" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s9">Listen to this screen</span></button><span class="audio-label" id="audio-status-s9"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 9: Market behaviour</div>
+  <h2>Volatility is not risk — panic is</h2>
+  <p class="sub">Markets fall. They always have and they always will. The professional who prepares clients for this reality — before it happens — is the one whose clients stay invested through corrections and capture the recovery that follows.</p>
+  <div style="background:var(--bs);border-radius:var(--rl);padding:1.1rem;margin-bottom:1.25rem;border:0.5px solid var(--bt)">
+    <div style="font-size:14px;font-weight:700;color:var(--tt);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem">Historical market context — S&P/TSX and global markets</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem">
+      <div style="background:#FAECE7;border-radius:var(--rm);padding:.8rem;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#993C1D">~1/yr</div>
+        <div style="font-size:13px;color:#712B13;margin-top:.2rem;line-height:1.4">Average market corrections of 10%+ per year</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--rm);padding:.8rem;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#854F0B">Every 3–5yr</div>
+        <div style="font-size:13px;color:#633806;margin-top:.2rem;line-height:1.4">Bear markets (20%+ decline) occur historically</div>
+      </div>
+      <div style="background:#E1F5EE;border-radius:var(--rm);padding:.8rem;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#0F6E56">100%</div>
+        <div style="font-size:13px;color:#085041;margin-top:.2rem;line-height:1.4">Recovery rate from every historical market decline</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--tt);margin-top:.6rem">Historical data. Past performance does not guarantee future results. Recovery timeframes vary significantly.</div>
+  </div>
+  <div class="q-card coral">
+    <div class="ql">The cost of panic selling</div>
+    <div class="qt">Missing the best 10 days in the market over 20 years cuts the portfolio roughly in half.</div>
+    <div class="qw">The best market days tend to cluster around the worst market days — during periods of extreme volatility. A client who exits the market during a correction to "wait until things calm down" frequently misses the sharpest recovery days. The investor who stayed invested through the 2008 financial crisis, the 2020 COVID crash, and every correction in between has a portfolio that reflects the full market return. The investor who exited at the bottom has a permanently impaired outcome.</div>
+  </div>
+  <div class="q-card">
+    <div class="ql">Time in the market vs timing the market</div>
+    <div class="qt">No professional consistently predicts market direction. The evidence for this is overwhelming.</div>
+    <div class="qw">The strategy that consistently outperforms market timing is time in the market — staying invested through volatility according to a plan built for the client's actual situation. This is not passive indifference. It is disciplined adherence to a strategy designed for the client's time horizon and risk capacity. The professional who holds a client in their seat during a correction delivers more value than any portfolio manager who claims to time the market.</div>
+  </div>
+  <div style="background:var(--bs);border-radius:var(--rl);padding:1rem;margin-bottom:1.25rem;border-left:3px solid #0F6E56">
+    <div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.4rem">What to say when markets fall</div>
+    <div style="font-size:16px;color:var(--tp);line-height:1.65">"This is exactly what we planned for. Markets fall — we knew that going in. The question is not whether your portfolio is down today. The question is whether your goal in 15 years has changed. If it hasn't, neither has the strategy we built to get there. Let me show you where we are relative to where we need to be."</div>
+  </div>
+  <div class="hb hb-teal">
+    <div class="hb-label">Dollar-cost averaging — the volatility tool most clients already have</div>
+    <div class="hb-text">A client who invests a fixed amount monthly — through payroll deductions, automatic transfers, or pension contributions — is already dollar-cost averaging. They buy more units when prices are low and fewer when prices are high. Over time this reduces the average cost per unit below the average price per unit. The client who panics and stops contributions during a market decline is the only one who converts paper losses into permanent ones and eliminates the benefit of buying at lower prices.</div>
+  </div>
+</div>
+<div class="screen" id="s10">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s10" onclick="toggleAudio('s10')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s10" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s10" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s10">Listen to this screen</span></button><span class="audio-label" id="audio-status-s10"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 10: The growth conversation</div>
+  <h2>Connecting every growth decision to what the client is building toward</h2>
+  <p class="sub">The growth conversation that starts with products is backwards. It starts with goals. Everything else — vehicles, asset classes, risk level, time horizon — flows from what the client is trying to build and by when.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#993C1D;padding:.75rem .9rem;display:flex;align-items:center;justify-content:center;min-width:40px;font-size:20px;font-weight:700;color:white">1</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">What are you building toward?</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">"Retirement at 60 with $6,000/month in income." "A paid-off home in 15 years." "University for both kids." "Financial independence by 55." The goal must be specific — not "building wealth" or "being comfortable." Specific goals have numbers. Numbers make the plan testable.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#854F0B;padding:.75rem .9rem;display:flex;align-items:center;justify-content:center;min-width:40px;font-size:20px;font-weight:700;color:white">2</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">When do you need it?</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Time horizon determines everything about appropriate risk level. A 30-year horizon for retirement savings and a 3-year horizon for a house down payment require completely different approaches — even if the goal amounts are similar.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#534AB7;padding:.75rem .9rem;display:flex;align-items:center;justify-content:center;min-width:40px;font-size:20px;font-weight:700;color:white">3</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">What rate of return does the plan require?</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Given the goal, the time horizon, and what the client can invest monthly — what return does the math require? This becomes the anchor for every risk conversation. "Based on your goal and what you're starting with, you need approximately 5.5% per year. Here's what that requires and what it means for how we structure this."</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#0F6E56;padding:.75rem .9rem;display:flex;align-items:center;justify-content:center;min-width:40px;font-size:20px;font-weight:700;color:white">4</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">What does the client own now — and where does it live?</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Existing assets, accounts, employer plans, pensions. Where are the gaps? Where is the home bias or concentration risk? The account structure question — which registered accounts to use — belongs in Tax Efficiency, but the inventory of what exists belongs here.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#3B6D11;padding:.75rem .9rem;display:flex;align-items:center;justify-content:center;min-width:40px;font-size:20px;font-weight:700;color:white">5</div>
+      <div style="background:var(--bs);padding:.8rem 1rem">
+        <div style="font-size:16px;font-weight:700;color:var(--tp);margin-bottom:.2rem">Is any employer match being left on the table?</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.55">Group RRSP or pension employer matching is an immediate 50–100% return on the contributed dollar before any investment return occurs. It is the highest-guaranteed return available to any employed client. A client who is not contributing enough to capture the full match is declining free money. This question is asked before any other portfolio discussion.</div>
+      </div>
+    </div>
+  </div>
+  <div class="hb hb-green">
+    <div class="hb-label">The growth recommendation that sticks</div>
+    <div class="hb-text">"You told me you want to retire at 60 with enough to never depend on anyone. To do that from where you are today, starting now, you need to set aside $X per month and earn approximately Y% per year. Here is what that looks like — and here is the range of approaches that can achieve it based on what you've told me about how you respond to market volatility. The account structure for where to hold this we will cover when we look at Tax Efficiency." The client understands what they are building, why the approach is designed the way it is, and what comes next.</div>
+  </div>
+</div>
+<div class="screen" id="s11">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s11" onclick="toggleAudio('s11')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s11" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s11" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s11">Listen to this screen</span></button><span class="audio-label" id="audio-status-s11"></span></div>
+  <div class="tag">4F Solution — Canadian summary review</div>
+  <h2>The growth fundamental — consolidated</h2>
+  <p class="sub">Ten lessons. Scan before the quiz.</p>
+  <div style="display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#3B6D11;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">1</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#3B6D11;margin-bottom:.15rem">Why growth</div><div style="font-size:14px;color:var(--ts)">Surplus sitting still loses purchasing power. Compounding requires time — starting late permanently reduces the outcome.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#0F6E56;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">2</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.15rem">Time, risk, return</div><div style="font-size:14px;color:var(--ts)">A triangle — move one and the others must respond. Required return (not desired) anchors the risk conversation.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#534AB7;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">3</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#534AB7;margin-bottom:.15rem">Asset classes</div><div style="font-size:14px;color:var(--ts)">Equities (highest return/risk) · Bonds (moderate) · Real estate · Cash equivalents (lowest) · Alternatives. Each has a role.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#854F0B;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">4</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#854F0B;margin-bottom:.15rem">Investment vehicles</div><div style="font-size:14px;color:var(--ts)">Stocks · ETFs (low MER) · Mutual funds · GICs · Bonds · REITs · GIAs (insurance, beneficiary designation, Assuris-protected). MER compounds against the investor — always a consideration.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#993C1D;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">5</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#993C1D;margin-bottom:.15rem">Insurance-based products 🍁</div><div style="font-size:14px;color:var(--ts)">Seg funds (maturity guarantee, estate bypass, creditor protection, reset options) · GIAs (capital preservation with beneficiary designation) · CV life insurance (tax-deferred cash value, policy loans, dual-purpose) · Annuities (life, term-certain, prescribed — guaranteed income). All under life insurance licence. Lower-MER index-linked seg funds available through providers like Beneva and Assumption Life.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#534AB7;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">6</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#534AB7;margin-bottom:.15rem">Discretionary wealth management</div><div style="font-size:14px;color:var(--ts)">Portfolio manager acts within agreed mandate. Fiduciary standard. Fee-based (0.25–0.75% AUM). Traditional firms $500K–$1M+. Technology-enabled firms like GVX Wealth from ~$10K–$50K. The threshold has changed — know when to refer.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#0F6E56;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">7</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.15rem">Diversification</div><div style="font-size:14px;color:var(--ts)">Owning things that behave differently — not just owning many things. Canadian home bias creates uncompensated concentration risk.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#993C1D;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">8</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#993C1D;margin-bottom:.15rem">Risk tolerance vs capacity</div><div style="font-size:14px;color:var(--ts)">Tolerance = how the client feels. Capacity = what their situation can absorb. When they conflict, capacity governs.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#854F0B;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">9</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#854F0B;margin-bottom:.15rem">Market behaviour</div><div style="font-size:14px;color:var(--ts)">Corrections are normal and guaranteed. Recoveries are historical. Panic selling locks in losses and misses recovery days. Time in market beats timing the market.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--bt)">
+      <div style="background:#3B6D11;padding:.65rem .9rem;display:flex;align-items:center;justify-content:center;min-width:34px;font-size:17px;font-weight:700;color:white">10</div>
+      <div style="background:var(--bs);padding:.65rem 1rem"><div style="font-size:15px;font-weight:700;color:#3B6D11;margin-bottom:.15rem">The growth conversation</div><div style="font-size:14px;color:var(--ts)">Goal → time horizon → required return → current assets → employer match. Never leave free money. Account structure belongs in Tax Efficiency.</div></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s12">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s12" onclick="toggleAudio('s12')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s12" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s12" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s12">Listen to this screen</span></button><span class="audio-label" id="audio-status-s12"></span></div>
+  <div class="tag">4F Solution — Knowledge check</div>
+  <h2>Knowledge check — 5 questions</h2>
+  <p class="sub">Choose the best answer for each question.</p>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--tp)">A client is 55 years old, plans to retire at 65, and says "I'm very comfortable with risk — I don't mind if my portfolio drops 40%." Their emergency reserve is minimal, they carry $60,000 in consumer debt, and they have no pension. How should the professional respond to their stated risk tolerance?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Accept it — the client knows their own comfort level and 10 years is a reasonable recovery horizon</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">The client's stated tolerance is high but their capacity is low. With a 10-year horizon to retirement, significant debt, no pension, and minimal reserves, a 40% loss would be catastrophic and unrecoverable in time. Risk capacity governs when tolerance and capacity conflict — the portfolio must reflect what the client's situation can actually absorb, not what they think they can handle emotionally.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Suggest a growth portfolio but explain that markets can fall</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Recommend segregated funds as a compromise between growth and protection</button>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--tp)">A client has $180,000 in their RRSP — all held in five different Canadian equity mutual funds from three different providers. They believe they are well diversified. What is the most significant issue with this portfolio?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">The funds are spread across too many providers — consolidation would reduce fees</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">Despite five funds and three providers, the portfolio has no meaningful diversification — all five funds track Canadian equities. Canada represents approximately 3% of global market cap. The client has 100% Canadian equity exposure and zero exposure to international markets, bonds, real estate, or other asset classes. This is a concentrated bet on Canadian equities, not a diversified portfolio.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Five funds is too many — a single balanced ETF would be more efficient</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">The portfolio is missing alternative assets, which reduces return potential</button>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--tp)">A client is a self-employed chiropractor with $400,000 in investable assets. They are concerned about professional liability exposure. Which feature of segregated funds is most directly relevant to their situation — and what professional must the client consult before relying on it?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">The maturity guarantee — it protects their capital from market losses. A financial advisor should be consulted.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">The death benefit — it bypasses probate and passes directly to beneficiaries. A tax accountant should be consulted.</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Creditor protection — when a qualifying beneficiary is named, segregated funds may be protected from creditors including in professional liability claims. However, this protection is not absolute, varies by province, and the client must consult a lawyer before relying on it for protection planning. The professional surfaces the feature and makes the referral — they do not guarantee the outcome.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">The reset option — it allows the client to lock in gains during rising markets. No additional professional is needed.</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--tp)">Markets fall 25% over three months. A client calls and says they want to move everything to GICs "until this settles down." What is the professional's most important response?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Agree — capital preservation is appropriate until market conditions improve</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Explain that GICs produce lower returns than equities over the long term</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Return to the plan and the goal. "Your goal hasn't changed — you still want to retire at 60 with $6,000 a month. This is exactly what we discussed would happen periodically. Moving to GICs today locks in a 25% loss permanently and removes you from the recovery that historically follows every correction. The portfolio we built was designed for exactly this moment. Let's look at where you are relative to where you need to be."</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Suggest moving 50% to GICs as a compromise to reduce the client's anxiety</button>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+  <div style="margin-bottom:1rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--tp)">A client's employer matches 100% of RRSP contributions up to 4% of salary. The client earns $90,000 and is currently contributing 2% to the group RRSP. They are asking whether they should open a self-directed TFSA to begin investing. What is the first thing the professional must address?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">The TFSA question — it is tax-free and more flexible than an RRSP for most clients</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Whether the client's risk tolerance supports equity investing in either account</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">The employer match gap. The client is contributing 2% and receiving a 2% match — but is eligible for a 4% match. By contributing only 2%, they are declining $1,800 per year in free employer contributions. No other investment delivers an immediate 100% guaranteed return. Before any TFSA conversation, the client should be contributing at least 4% to capture the full match. This is the highest-priority growth action available to them.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Whether the client has sufficient emergency reserves before investing</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+</div>
+<div class="screen" id="s13">
+  <div class="tag">4F Solution — Canadian Track: Growth complete</div>
+  <h2>Module complete</h2>
+  <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
+  <div id="score-summary" style="background:var(--bs);border-radius:var(--rl);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+    <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tt);margin-bottom:1rem">Quiz results</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div style="background:var(--bp);border-radius:var(--rm);padding:1rem;text-align:center;border:0.5px solid var(--bt)">
+        <div style="font-size:36px;font-weight:700;color:#0F6E56" id="score-display">—</div>
+        <div style="font-size:17px;color:var(--ts);margin-top:.25rem">Score</div>
+      </div>
+      <div style="background:var(--bp);border-radius:var(--rm);padding:1rem;text-align:center;border:0.5px solid var(--bt)">
+        <div style="font-size:36px;font-weight:700;color:#0F6E56" id="correct-display">—</div>
+        <div style="font-size:17px;color:var(--ts);margin-top:.25rem">Correct of 5</div>
+      </div>
+    </div>
+    <div id="q-breakdown" style="font-size:16px;color:var(--ts);line-height:1.8"></div>
+  </div>
+  <div id="submit-section" style="margin-bottom:1.25rem">
+    <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tt);margin-bottom:.75rem">Send results to facilitator</div>
+    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--bs2);border-radius:var(--rm);padding:.75rem 1rem;font-size:22px;font-family:var(--ff);color:var(--tp);background:var(--bp);margin-bottom:.75rem">
+    <div id="name-warning" style="display:none;font-size:15px;color:#993C1D;margin-bottom:.75rem">Please enter your name before submitting.</div>
+    <button class="nav-btn primary" onclick="submitResults()" style="width:100%;padding:.85rem 1.25rem;margin-bottom:.75rem">Submit results</button>
+    <div style="font-size:15px;color:var(--tt);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
+    <div id="submit-status" style="display:none;margin-top:.75rem;font-size:19px;padding:.85rem 1rem;border-radius:var(--rm)"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+    <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
+    <button class="nav-btn" onclick="window.print()" style="width:100%">Print / save as PDF</button>
+  </div>
+</div>
+<div class="nav">
+  <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
+  <span class="counter" id="counter">1 of 15</span>
+  <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next</button>
+</div>
+</div>
+</div>
+<script>
+var TOTAL_SCREENS=15,TOTAL_QUESTIONS=5,QUIZ_SCREEN_INDEX=13,LAST_LESSON_INDEX=12;
+var WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var MODULE_NAME='4F Solution — Canadian Track: Growth';
+var qLabels={
+  q1:'Q1 — Risk tolerance vs risk capacity',
+  q2:'Q2 — Canadian home bias and diversification',
+  q3:'Q3 — Segregated funds creditor protection',
+  q4:'Q4 — Market correction — holding the client',
+  q5:'Q5 — Employer match priority'
+};
+var qMsgs={
+  q1c:'Correct. Risk capacity governs when it conflicts with tolerance. This client has a 10-year runway to retirement, significant consumer debt, no pension backstop, and minimal reserves. A 40% loss at 55 with retirement at 65 means a devastating permanent reduction in their retirement outcome with insufficient time to recover. The portfolio must be built for what their situation can absorb — not for what they feel comfortable with in theory.',
+  q1w:'Stated risk tolerance is only one half of the risk assessment. Risk capacity — what the client\'s financial situation can actually absorb — is equally important and governs when the two conflict. A 55-year-old with significant debt, no pension, and minimal reserves cannot afford a 40% loss regardless of their emotional comfort with the idea. Capacity determines the appropriate risk level here.',
+  q2c:'Correct. Holding assets across five funds and three providers creates the illusion of diversification without the reality. All five funds track Canadian equities — which represent approximately 3% of global market capitalization. The client has near-total concentration in one geography and one asset class. True diversification requires assets that behave differently from each other: bonds, international equities, different geographies and sectors.',
+  q2w:'The number of funds and the number of providers are not measures of diversification. What matters is whether the assets held behave differently from each other. Five Canadian equity funds move together because they all track the same underlying market. The client needs exposure to asset classes and geographies beyond Canadian equities — which represent roughly 3% of global market cap — to achieve genuine diversification.',
+  q3c:'Correct. Creditor protection is the most directly relevant segregated fund feature for a self-employed professional with liability exposure. When a qualifying beneficiary is named (spouse, child, grandchild, or parent) or an irrevocable beneficiary is designated, the segregated fund may be shielded from creditors including in professional liability claims. The critical caveat: this protection is not absolute, varies by province, and requires legal advice before the client relies on it. The professional surfaces the feature and refers — they do not guarantee the protection.',
+  q3w:'For a self-employed professional concerned about liability, the most relevant segregated fund feature is creditor protection — not the maturity guarantee or death benefit. When a qualifying beneficiary is named, segregated funds may be protected from professional creditors. However, this is not absolute and varies by province. The client must consult a lawyer before treating this as part of their liability protection strategy.',
+  q4c:'Correct. The professional\'s job in a market correction is to return the client to the plan and the goal — not to accommodate the panic or split the difference. Moving to GICs locks in the 25% loss permanently and removes the client from the recovery. The plan was built for this moment. The professional who can hold their client in their seat during a correction delivers more value than any portfolio adjustment.',
+  q4w:'Accommodating a panic decision — even partially — validates the instinct to exit at the worst moment. The professional\'s role is to return the client to their stated goal and the plan built around it. The portfolio was designed for this moment. Moving to GICs locks in losses and removes the client from the recovery that historically follows every correction. The correct response anchors the conversation to what has not changed: the goal.',
+  q5c:'Correct. No investment generates an immediate 100% guaranteed return — but an employer match does. A client contributing 2% to receive a 2% match when a 4% match is available is declining $1,800 per year in free money. Before any discussion of TFSAs, self-directed accounts, or investment vehicle selection, the client must be contributing at minimum the amount required to capture the full employer match. This is the single highest-priority growth action available to any employed client with matching.',
+  q5w:'The employer match is the highest-priority growth action for any employed client whose employer offers matching. An immediate 100% guaranteed return on contributed dollars exists nowhere else in investing. This client is declining $1,800 per year in free employer contributions by contributing only 2% instead of 4%. That gap must be closed before any other growth conversation. The TFSA question is secondary — account structure belongs in Tax Efficiency regardless.'
+};
+var cur=0,scores={},qAnswered={};
+Object.keys(qLabels).forEach(function(q){scores[q]=null;qAnswered[q]=false;});
+function updateUI(){
+  document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur);});
+  document.querySelectorAll('.prog-step').forEach(function(p,i){p.classList.remove('done','active');if(i<cur)p.classList.add('done');else if(i===cur)p.classList.add('active');});
+  document.getElementById('counter').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  document.getElementById('back-btn').disabled=cur===0;
+  var nb=document.getElementById('next-btn');
+  if(cur===TOTAL_SCREENS-1){nb.style.display='none';}
+  else{nb.style.display='';nb.textContent=cur===0?'Begin':cur===LAST_LESSON_INDEX?'Finish':'Next';}
+  document.getElementById('step-label').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  if(cur===TOTAL_SCREENS-1){buildScoreSummary();}
+}
+function goNext(){if(cur<TOTAL_SCREENS-1){stopAudio();cur++;updateUI();window.scrollTo(0,0);}}
+function goBack(){if(cur>0){stopAudio();cur--;updateUI();window.scrollTo(0,0);}}
+function checkQ(el,correct,qid){
+  if(qAnswered[qid])return;
+  qAnswered[qid]=true;scores[qid]=correct;
+  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){s.style.pointerEvents='none';s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');});
+  var fb=document.getElementById('fb-'+qid);
+  fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
+  fb.textContent=qMsgs[qid+(correct?'c':'w')]||'';
+}
+function buildScoreSummary(){
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  document.getElementById('score-display').textContent=pct+'%';
+  document.getElementById('correct-display').textContent=correct+'/'+TOTAL_QUESTIONS;
+  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){var res=scores[q];var icon=res===null?'○':res?'✓':'✗';var col=res===null?'var(--tt)':res?'#0F6E56':'#993C1D';return'<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';}).join('');
+  var submitBtn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if(submitBtn){if(pct<80){submitBtn.disabled=true;var warn=document.getElementById('score-gate-msg');if(!warn){warn=document.createElement('div');warn.id='score-gate-msg';warn.style.cssText='font-size:18px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';submitBtn.parentNode.insertBefore(warn,submitBtn);}warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';}else{submitBtn.disabled=false;var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();}}
+}
+function retakeQuiz(){
+  Object.keys(qLabels).forEach(function(q){qAnswered[q]=false;scores[q]=null;document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){btn.classList.remove('correct','wrong');btn.style.pointerEvents='';});var fb=document.getElementById('fb-'+q);if(fb){fb.className='feedback';fb.textContent='';}});
+  document.getElementById('score-display').textContent='—';document.getElementById('correct-display').textContent='—';document.getElementById('q-breakdown').innerHTML='';
+  var st=document.getElementById('submit-status');st.style.display='none';st.textContent='';
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');if(btn){btn.disabled=false;btn.textContent='Submit results';}
+  var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();
+  cur=QUIZ_SCREEN_INDEX;updateUI();window.scrollTo(0,0);
+}
+function submitResults(){
+  var nm=document.getElementById('participant-name').value.trim();
+  if(!nm){document.getElementById('name-warning').style.display='block';document.getElementById('participant-name').focus();return;}
+  document.getElementById('name-warning').style.display='none';
+  var st=document.getElementById('submit-status');
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  if(pct<80){st.style.display='block';st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='A minimum score of 80% is required. You scored '+pct+'%. Please retake the quiz.';return;}
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  st.style.display='block';st.style.background='#E1F5EE';st.style.color='#085041';st.textContent='Sending results...';
+  if(btn)btn.disabled=true;
+  var payload={participant_name:nm,module:MODULE_NAME,completed_at:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),score_percent:pct+'%',correct_of_total:correct+'/'+TOTAL_QUESTIONS};
+  qs.forEach(function(q){payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect';});
+  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(payload)})
+  .then(function(){st.style.background='#E1F5EE';st.style.color='#085041';st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct).';if(btn)btn.textContent='Submitted';})
+  .catch(function(){st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='Submission failed — please check your connection and try again.';if(btn)btn.disabled=false;});
+}
+var ttsActive=null,ttsUtterance=null;
+function getScreenText(sid){var s=document.getElementById(sid);if(!s)return'';var c=s.cloneNode(true);c.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea').forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});return c.innerText||c.textContent||'';}
+function stopAudio(){if(window.speechSynthesis)window.speechSynthesis.cancel();if(ttsActive){var b=document.getElementById('audio-btn-'+ttsActive);var l=document.getElementById('audio-btn-label-'+ttsActive);var s=document.getElementById('audio-status-'+ttsActive);var p=document.getElementById('audio-icon-play-'+ttsActive);var pa=document.getElementById('audio-icon-pause-'+ttsActive);if(b)b.classList.remove('playing');if(l)l.textContent='Listen to this screen';if(s)s.textContent='';if(p)p.style.display='';if(pa)pa.style.display='none';ttsActive=null;ttsUtterance=null;}}
+function toggleAudio(sid){if(ttsActive===sid){stopAudio();return;}stopAudio();var text=getScreenText(sid);if(!text.trim())return;if(!window.speechSynthesis)return;ttsActive=sid;var b=document.getElementById('audio-btn-'+sid);var l=document.getElementById('audio-btn-label-'+sid);var s=document.getElementById('audio-status-'+sid);var p=document.getElementById('audio-icon-play-'+sid);var pa=document.getElementById('audio-icon-pause-'+sid);if(b)b.classList.add('playing');if(l)l.textContent='Stop';if(s)s.textContent='Playing...';if(p)p.style.display='none';if(pa)pa.style.display='';ttsUtterance=new SpeechSynthesisUtterance(text);ttsUtterance.rate=0.92;ttsUtterance.lang='en-CA';ttsUtterance.onend=function(){stopAudio();};ttsUtterance.onerror=function(){stopAudio();};window.speechSynthesis.speak(ttsUtterance);}
+updateUI();
+</script>
+</body>
+</html>

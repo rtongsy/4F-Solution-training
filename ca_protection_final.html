@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F Solution — Canadian Track: Protection</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e6de;
+      --color-text-secondary: #9c9a92;
+      --color-text-tertiary: #6b6963;
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #272724;
+      --color-border-tertiary: rgba(255,255,255,0.10);
+      --color-border-secondary: rgba(255,255,255,0.18);
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
+  .mod { width: 100%; }
+  .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
+  .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
+  .prog-step.done { background: #1D9E75; }
+  .prog-step.active { background: #5DCAA5; }
+  .step-label { font-size: 17px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #E1F5EE; color: #085041; margin-bottom: 1rem; letter-spacing: .03em; }
+  h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
+  .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
+  .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
+  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
+  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; }
+  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; }
+  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; }
+  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; }
+  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; }
+  .hb-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
+  .hb-teal .hb-label { color: #0F6E56; }
+  .hb-coral .hb-label { color: #993C1D; }
+  .hb-green .hb-label { color: #3B6D11; }
+  .hb-amber .hb-label { color: #854F0B; }
+  .hb-purple .hb-label { color: #534AB7; }
+  .hb-text { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+  .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 20px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
+  .quiz-option:hover { border-color: #5DCAA5; background: #E1F5EE; color: #085041; }
+  .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
+  .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
+  .feedback { font-size: 20px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
+  .feedback.show { display: block; }
+  .fb-correct { background: #E1F5EE; color: #085041; }
+  .fb-wrong { background: #FAECE7; color: #712B13; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
+  .nav-btn:hover { background: var(--color-background-secondary); }
+  .nav-btn.primary { background: #0F6E56; border-color: #0F6E56; color: #E1F5EE; font-weight: 600; }
+  .nav-btn.primary:hover { background: #085041; }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .counter { font-size: 17px; color: var(--color-text-tertiary); min-width: 60px; text-align: center; }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-secondary); }
+  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .q-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #0F6E56; }
+  .q-card.coral { border-left-color: #993C1D; }
+  .q-card.amber { border-left-color: #854F0B; }
+  .q-card.purple { border-left-color: #534AB7; }
+  .q-label { font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #0F6E56; margin-bottom: .4rem; }
+  .q-card.coral .q-label { color: #993C1D; }
+  .q-card.amber .q-label { color: #854F0B; }
+  .q-card.purple .q-label { color: #534AB7; }
+  .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
+  .q-why { font-size: 20px; color: var(--color-text-secondary); line-height: 1.6; }
+  .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
+  .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
+  .audio-btn:hover { background: var(--color-background-primary); }
+  .audio-btn.playing { color: #0F6E56; border-color: #0F6E56; }
+  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+  .section-header { font-size: 21px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #0F6E56; margin-bottom: .75rem; margin-top: 1.25rem; }
+  .section-header.coral { color: #993C1D; }
+  .section-header.purple { color: #534AB7; }
+  .section-header.amber { color: #854F0B; }
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: 1.25rem; }
+  .profile-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .85rem 1rem; border-top: 3px solid #0F6E56; }
+  .profile-card.coral { border-top-color: #993C1D; }
+  .profile-card.amber { border-top-color: #854F0B; }
+  .profile-card.purple { border-top-color: #534AB7; }
+  .profile-name { font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: .3rem; }
+  .profile-body { font-size: 17px; color: var(--color-text-secondary); line-height: 1.55; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
+  .flag-card { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
+  .flag-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #854F0B; margin-bottom: .4rem; }
+  .flag-body { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="mod">
+<div class="progress-bar">
+  <div class="prog-step active" id="p0"></div>
+  <div class="prog-step" id="p1"></div>
+  <div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div>
+  <div class="prog-step" id="p4"></div>
+  <div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div>
+  <div class="prog-step" id="p7"></div>
+  <div class="prog-step" id="p8"></div>
+  <div class="prog-step" id="p9"></div>
+  <div class="prog-step" id="p10"></div>
+  <span class="step-label" id="step-label">1 of 11</span>
+</div>
+<div class="screen active" id="s0">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s0">Listen to this screen</span></button><span class="audio-label" id="audio-status-s0"></span></div>
+  <div class="tag">4F Solution — Canadian Track: Protection</div>
+  <h2>Building the right protection plan — for this client, not the average one</h2>
+  <p class="sub">Discovery told you what the client has, what they owe, who depends on them, and what matters most. This module teaches what to do with that — how to identify the right products, cover the need completely, sequence priorities when budget is tight, manage cost intelligently, and connect every recommendation to values.</p>
+  <div class="badge-row">
+    <div class="badge"><div class="badge-dot" style="background:#0F6E56"></div>6 lessons</div>
+    <div class="badge"><div class="badge-dot" style="background:#1D9E75"></div>5 knowledge checks</div>
+    <div class="badge"><div class="badge-dot" style="background:#854F0B"></div>🍁 Canadian context</div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">What you will learn</div>
+    <div class="hb-text">How to read the discovery data and identify what is actually at risk. The decision logic for matching each need to the right product. How to assess group benefits against the client's real obligations. How to prioritize when cash flow cannot close every gap at once. How to manage cost without sacrificing coverage where it matters. How to present every recommendation in the language of what the client said matters most.</div>
+  </div>
+</div>
+<div class="screen" id="s1">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s1">Listen to this screen</span></button><span class="audio-label" id="audio-status-s1"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 1: Reading the need</div>
+  <h2>Before any product — what is actually at risk?</h2>
+  <p class="sub">A product recommendation without a defined need is a guess dressed as advice. Four questions must be answered before any product conversation begins.</p>
+  <div class="q-card">
+    <div class="q-label">Question 1 — Income</div>
+    <div class="q-text">What income would stop — and for how long does the plan need it replaced?</div>
+    <div class="q-why">A 35-year-old with a 25-year mortgage and two young children needs income replaced for a fundamentally different period than a 55-year-old whose mortgage is paid. The duration shapes the product.</div>
+  </div>
+  <div class="q-card coral">
+    <div class="q-label">Question 2 — Obligations</div>
+    <div class="q-text">What survives regardless of what happens to the client?</div>
+    <div class="q-why">The mortgage still comes due. Children still need to be fed and educated. Debt still accrues. List every obligation the plan depends on the client funding — and what happens to each one if they cannot. That list is the gap the protection plan exists to close.</div>
+  </div>
+  <div class="q-card amber">
+    <div class="q-label">Question 3 — Existing coverage</div>
+    <div class="q-text">What does it actually provide — not what does it say on paper?</div>
+    <div class="q-why">Group life at 2x salary sounds like coverage until you put it next to a $700,000 mortgage. Group LTD at 70% sounds adequate until you calculate the after-tax benefit when the employer pays the premium. The professional reads the actual policy — not the summary card.</div>
+  </div>
+  <div class="q-card purple">
+    <div class="q-label">Question 4 — The gap</div>
+    <div class="q-text">Expressed in specific dollars, for each risk event.</div>
+    <div class="q-why">Not "they need more coverage." The gap is: if this client dies tomorrow, their family faces a $640,000 shortfall. If they become disabled, their monthly income drops by $1,800 against obligations of $4,200. Each number connects to a specific product conversation. Vague gaps produce vague recommendations.</div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">The discipline</div>
+    <div class="hb-text">Do not open a product conversation until all four questions have answers. A professional who can say "here is exactly what you are exposed to, and here is exactly what closes each gap" is operating at a different level than one who presents a menu of products and monthly costs.</div>
+  </div>
+</div>
+<div class="screen" id="s2">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s2">Listen to this screen</span></button><span class="audio-label" id="audio-status-s2"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 2: Product decision logic</div>
+  <h2>Matching product to need — the decision logic</h2>
+  <p class="sub">Every product conversation starts with the gap it closes. The need defines the product — not the other way around.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#FAECE7;padding:.8rem 1rem;display:flex;align-items:center">
+        <div style="font-size:15px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">Temporary<br>obligation</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.8rem 1rem;display:flex;align-items:center;justify-content:center">
+        <div style="font-size:22px;color:var(--color-text-tertiary)">→</div>
+      </div>
+      <div style="background:#E1F5EE;padding:.8rem 1rem;min-width:180px">
+        <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Term life</div>
+        <div style="font-size:15px;color:#085041;line-height:1.4">Match term to obligation horizon. Confirm renewability and convertibility.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#FAECE7;padding:.8rem 1rem;display:flex;align-items:center">
+        <div style="font-size:15px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">Permanent<br>obligation</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.8rem 1rem;display:flex;align-items:center;justify-content:center">
+        <div style="font-size:22px;color:var(--color-text-tertiary)">→</div>
+      </div>
+      <div style="background:#E1F5EE;padding:.8rem 1rem;min-width:180px">
+        <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Permanent life</div>
+        <div style="font-size:15px;color:#085041;line-height:1.4">Term-to-100 (pure protection, no CV) · Par whole life (guaranteed + dividends) · Universal life (flexible). Not all permanent products have cash value — match structure to objective.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#FAECE7;padding:.8rem 1rem;display:flex;align-items:center">
+        <div style="font-size:15px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">Income loss<br>during work</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.8rem 1rem;display:flex;align-items:center;justify-content:center">
+        <div style="font-size:22px;color:var(--color-text-tertiary)">→</div>
+      </div>
+      <div style="background:#E1F5EE;padding:.8rem 1rem;min-width:180px">
+        <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Individual disability</div>
+        <div style="font-size:15px;color:#085041;line-height:1.5">Own occupation. Elimination period = emergency reserve.<br><strong>Benefit period:</strong> 2yr (short-term need, lower cost) · 5yr (mid-range, budget-constrained) · To age 65 (full income replacement — the standard for most working-age clients).</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#EEEDFE;padding:.8rem 1rem;display:flex;align-items:center">
+        <div style="font-size:15px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">Health event<br>costs + gap</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.8rem 1rem;display:flex;align-items:center;justify-content:center">
+        <div style="font-size:22px;color:var(--color-text-tertiary)">→</div>
+      </div>
+      <div style="background:#EEEDFE;padding:.8rem 1rem;min-width:180px">
+        <div style="font-size:17px;font-weight:700;color:#534AB7;margin-bottom:.2rem">Critical illness</div>
+        <div style="font-size:15px;color:#3C3489;line-height:1.4">Tax-free lump sum. 1–3 years of income plus out-of-pocket costs. 30-day survival period applies.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#FAEEDA;padding:.8rem 1rem;display:flex;align-items:center">
+        <div style="font-size:15px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">Non-working<br>partner</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.8rem 1rem;display:flex;align-items:center;justify-content:center">
+        <div style="font-size:22px;color:var(--color-text-tertiary)">→</div>
+      </div>
+      <div style="background:#FAEEDA;padding:.8rem 1rem;min-width:180px">
+        <div style="font-size:17px;font-weight:700;color:#854F0B;margin-bottom:.2rem">Life + CI</div>
+        <div style="font-size:15px;color:#633806;line-height:1.4">Size to replacement cost of contributions — childcare, household management — not to income.</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.75rem">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem;border-left:3px solid #993C1D">
+      <div style="font-size:15px;font-weight:700;color:#993C1D;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.04em">Term key nuance</div>
+      <div style="font-size:16px;color:var(--color-text-secondary);line-height:1.5">Convertibility lets the client access permanent coverage later — at original issue age, no medical. Always explain this at sale.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem;border-left:3px solid #534AB7">
+      <div style="font-size:15px;font-weight:700;color:#534AB7;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.04em">CI key nuance</div>
+      <div style="font-size:16px;color:var(--color-text-secondary);line-height:1.5">30-day survival period: if the client dies within 30 days of diagnosis, the claim falls to life insurance — not CI.</div>
+    </div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">The rule</div>
+    <div class="hb-text">The need defines the product. A professional who leads with a preferred product — then looks for a need to fit it — is working backwards. Every conversation above starts on the left side of the arrow, not the right.</div>
+  </div>
+</div>
+<div class="screen" id="s3">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s3">Listen to this screen</span></button><span class="audio-label" id="audio-status-s3"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 3: Group benefits and relationship structure</div>
+  <h2>Group coverage and client profile — two inputs that change everything</h2>
+  <p class="sub">Group benefits are the starting point of the gap analysis — not the answer. Client profile determines which gaps are urgent. Assess both before any recommendation.</p>
+  <div class="section-header">The standard Canadian group benefit gaps</div>
+  <div style="border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;background:var(--color-background-secondary);padding:.6rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary)">
+      <div style="font-size:15px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em">Coverage</div>
+      <div style="font-size:15px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em">What group provides</div>
+      <div style="font-size:15px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em">The gap</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.75rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div style="font-size:17px;font-weight:600;color:var(--color-text-primary)">Life insurance</div>
+      <div style="font-size:16px;color:var(--color-text-secondary)">1–2× salary</div>
+      <div style="font-size:16px;color:#993C1D;font-weight:600">Rarely enough. $85K salary = $170K coverage vs $550K mortgage.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.75rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div>
+        <div style="font-size:17px;font-weight:600;color:var(--color-text-primary)">LTD — taxability</div>
+      </div>
+      <div style="font-size:16px;color:var(--color-text-secondary)">66–70% gross replacement</div>
+      <div style="font-size:16px;color:#993C1D;font-weight:600">Employer pays premium → benefit is taxable. Real net: ~48–55%.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.75rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div>
+        <div style="font-size:17px;font-weight:600;color:var(--color-text-primary)">LTD — definition</div>
+      </div>
+      <div style="font-size:16px;color:var(--color-text-secondary)">Own occupation (yr 1–2)</div>
+      <div style="font-size:16px;color:#993C1D;font-weight:600">Converts to any occupation at year 2. Insurer can deny if client can do any work.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.75rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div style="font-size:17px;font-weight:600;color:var(--color-text-primary)">Critical illness</div>
+      <div style="font-size:16px;color:var(--color-text-secondary)">Often absent or $10K–$25K</div>
+      <div style="font-size:16px;color:#993C1D;font-weight:600">Insufficient for a serious health event. Most clients need individual CI.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:.75rem 1rem;background:var(--color-background-primary)">
+      <div style="font-size:17px;font-weight:600;color:var(--color-text-primary)">Portability</div>
+      <div style="font-size:16px;color:var(--color-text-secondary)">Tied to employment</div>
+      <div style="font-size:16px;color:#993C1D;font-weight:600">Ends if client leaves — often when health has changed and individual coverage is harder to get.</div>
+    </div>
+  </div>
+  <div class="section-header">Client profile — product urgency by situation</div>
+  <div style="border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);background:var(--color-background-secondary);padding:.6rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary)">
+      <div style="font-size:15px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em">Profile</div>
+      <div style="font-size:15px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.04em;text-align:center">Disability</div>
+      <div style="font-size:15px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.04em;text-align:center">Life</div>
+      <div style="font-size:15px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:.04em;text-align:center">CI</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);padding:.65rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div style="font-size:16px;font-weight:600;color:var(--color-text-primary)">Single, no dependants</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🟡</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);padding:.65rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:#FFF8F8">
+      <div style="font-size:16px;font-weight:700;color:#993C1D">Single parent ⚡</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);padding:.65rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div style="font-size:16px;font-weight:600;color:var(--color-text-primary)">Dual income, no dependants</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🟡</div>
+      <div style="text-align:center;font-size:18px">🟡</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);padding:.65rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div style="font-size:16px;font-weight:600;color:var(--color-text-primary)">Single income household</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);padding:.65rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div style="font-size:16px;font-weight:600;color:var(--color-text-primary)">Partnered with dependants</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr repeat(3,1fr);padding:.65rem 1rem;background:var(--color-background-primary)">
+      <div style="font-size:16px;font-weight:600;color:var(--color-text-primary)">Blended family</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+      <div style="text-align:center;font-size:18px">🔴</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:1rem;font-size:16px;color:var(--color-text-secondary);margin-bottom:1.25rem;flex-wrap:wrap">
+    <span>🔴 Critical priority</span>
+    <span>🟡 Situational — depends on debt load and obligations</span>
+  </div>
+  <div style="background:#FAEEDA;border-left:3px solid #854F0B;border-radius:var(--border-radius-lg);padding:1rem 1.2rem;margin-bottom:.75rem">
+    <div style="font-size:15px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem">Single parent — note</div>
+    <div style="font-size:17px;color:var(--color-text-primary);line-height:1.6">All three products are critical. One income, full obligations, no safety net. Cost management is the primary constraint — not need.</div>
+  </div>
+  <div class="flag-card">
+    <div class="flag-label">🏢 Business owners — separate learning path</div>
+    <div class="flag-body">Business owners require a dedicated conversation — key person insurance, buy-sell funding, corporate structures. Complete the Business Owner Learning Path before advising any business owner client on protection.</div>
+  </div>
+</div>
+<div class="screen" id="s4">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s4">Listen to this screen</span></button><span class="audio-label" id="audio-status-s4"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 4: The real odds</div>
+  <h2>What are the actual odds — for Canadian men, women, and children?</h2>
+  <p class="sub">Most clients dramatically underestimate their risk. A professional who knows these numbers changes the conversation from hypothetical to factual.</p>
+  <div class="section-header">Disability</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:#FAECE7;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #F0997B">
+      <div style="font-size:36px;font-weight:700;color:#993C1D;line-height:1">1 in 8</div>
+      <div style="font-size:17px;font-weight:600;color:#712B13;margin-top:.4rem">Canadians will experience long-term disability before retirement</div>
+    </div>
+    <div style="background:#FAECE7;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #F0997B">
+      <div style="font-size:36px;font-weight:700;color:#993C1D;line-height:1">27%</div>
+      <div style="font-size:17px;font-weight:600;color:#712B13;margin-top:.4rem">of Canadians 15+ live with a disability today — up from 22% in 2017</div>
+    </div>
+    <div style="background:#FAECE7;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #F0997B">
+      <div style="font-size:36px;font-weight:700;color:#993C1D;line-height:1">30%</div>
+      <div style="font-size:17px;font-weight:600;color:#712B13;margin-top:.4rem">Women — disability rate vs 24% for men</div>
+    </div>
+    <div style="background:#FAECE7;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #F0997B">
+      <div style="font-size:36px;font-weight:700;color:#993C1D;line-height:1">33%</div>
+      <div style="font-size:17px;font-weight:600;color:#712B13;margin-top:.4rem">of early retirees left work due to health — not financial readiness</div>
+    </div>
+  </div>
+  <div class="section-header purple">Critical illness — cancer, heart disease, stroke</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:#EEEDFE;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #A9A4E6">
+      <div style="font-size:30px;font-weight:700;color:#534AB7;line-height:1">2 in 5</div>
+      <div style="font-size:15px;font-weight:600;color:#3C3489;margin-top:.4rem">Canadians will develop cancer in their lifetime</div>
+      <div style="font-size:13px;color:#534AB7;margin-top:.3rem">Men 45% · Women 44%</div>
+    </div>
+    <div style="background:#EEEDFE;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #A9A4E6">
+      <div style="font-size:30px;font-weight:700;color:#534AB7;line-height:1">6.3%</div>
+      <div style="font-size:15px;font-weight:600;color:#3C3489;margin-top:.4rem">of Canadian adults diagnosed with heart disease</div>
+      <div style="font-size:13px;color:#534AB7;margin-top:.3rem">Men 7.9% · Women 4.7%</div>
+    </div>
+    <div style="background:#EEEDFE;border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid #A9A4E6">
+      <div style="font-size:30px;font-weight:700;color:#534AB7;line-height:1">62,000+</div>
+      <div style="font-size:15px;font-weight:600;color:#3C3489;margin-top:.4rem">strokes per year in Canada</div>
+      <div style="font-size:13px;color:#534AB7;margin-top:.3rem">405,000 living with effects</div>
+    </div>
+  </div>
+  <div style="background:#EEEDFE;border-radius:var(--border-radius-md);padding:.85rem 1rem;margin-bottom:1.25rem;border:0.5px solid #A9A4E6">
+    <div style="font-size:17px;color:#3C3489;line-height:1.6">Over 90% of heart attack survivors and 80% of stroke survivors reach hospital alive. <strong style="color:#534AB7">These are CI conversations, not life insurance conversations.</strong> The survivor faces months of recovery, income disruption, and out-of-pocket costs — that 30% of cancer's $26.2B economic burden carried directly by patients and families is exactly what CI insurance funds.</div>
+  </div>
+  <div class="section-header">Premature death &amp; children</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+      <div style="font-size:17px;font-weight:700;color:var(--color-text-secondary);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em">Survival to age 75</div>
+      <div style="display:flex;gap:.5rem;justify-content:center">
+        <div style="flex:1;background:#E1F5EE;border-radius:var(--border-radius-md);padding:.6rem;text-align:center">
+          <div style="font-size:26px;font-weight:700;color:#0F6E56">78%</div>
+          <div style="font-size:14px;color:#085041;font-weight:600">Women</div>
+        </div>
+        <div style="flex:1;background:#FAECE7;border-radius:var(--border-radius-md);padding:.6rem;text-align:center">
+          <div style="font-size:26px;font-weight:700;color:#993C1D">65%</div>
+          <div style="font-size:14px;color:#712B13;font-weight:600">Men</div>
+        </div>
+      </div>
+      <div style="font-size:14px;color:var(--color-text-tertiary);margin-top:.5rem">1 in 3 men will not reach 75. 1 in 5 women will not.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.1rem;border:0.5px solid var(--color-border-tertiary)">
+      <div style="font-size:17px;font-weight:700;color:var(--color-text-secondary);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.05em">Children</div>
+      <div style="font-size:20px;color:var(--color-text-primary);font-weight:600;margin-bottom:.3rem">1,400 diagnosed with cancer annually</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);margin-bottom:.5rem">83% five-year survival rate — CI funds the recovery</div>
+      <div style="font-size:20px;color:var(--color-text-primary);font-weight:600;margin-bottom:.3rem">6.2% of children 5–14 have a disability</div>
+      <div style="font-size:17px;color:var(--color-text-secondary)">Direct cost and caregiving impact on household cash flow</div>
+    </div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">How to use this in conversation</div>
+    <div class="hb-text">Use one or two statistics relevant to this client's profile — not a recitation. "Based on Canadian data, someone your age has a 1-in-8 chance of a long-term disability before retirement. That's not to alarm you — it's to show you the risk is real. Here's what that means for your specific situation." The statistic opens the door. The client's own numbers close it.</div>
+  </div>
+</div>
+<div class="screen" id="s5">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s5">Listen to this screen</span></button><span class="audio-label" id="audio-status-s5"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 5: Priority and sequencing</div>
+  <h2>When cash flow cannot close every gap at once</h2>
+  <p class="sub">Three variables determine priority. Every gap is assessed against all three — the combination determines where it sits in the sequence.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:1.5rem">
+    <div style="background:#FAECE7;border-radius:var(--border-radius-md);padding:.85rem;text-align:center;border:0.5px solid #F0997B">
+      <div style="font-size:26px;margin-bottom:.3rem">⚡</div>
+      <div style="font-size:16px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.05em">Severity</div>
+      <div style="font-size:17px;color:#712B13;margin-top:.3rem;line-height:1.4">What is the consequence if this gap is not closed?</div>
+    </div>
+    <div style="background:#EEEDFE;border-radius:var(--border-radius-md);padding:.85rem;text-align:center;border:0.5px solid #A9A4E6">
+      <div style="font-size:26px;margin-bottom:.3rem">📊</div>
+      <div style="font-size:16px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:.05em">Probability</div>
+      <div style="font-size:17px;color:#3C3489;margin-top:.3rem;line-height:1.4">How likely is this event for this specific client?</div>
+    </div>
+    <div style="background:#E1F5EE;border-radius:var(--border-radius-md);padding:.85rem;text-align:center;border:0.5px solid #5DCAA5">
+      <div style="font-size:26px;margin-bottom:.3rem">💰</div>
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em">Cost to close</div>
+      <div style="font-size:17px;color:#085041;margin-top:.3rem;line-height:1.4">What does addressing this gap require relative to cash flow?</div>
+    </div>
+  </div>
+  <div style="border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--color-background-secondary);padding:.6rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary)">
+      <div style="font-size:16px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em">Coverage</div>
+      <div style="font-size:16px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.05em;text-align:center">Severity</div>
+      <div style="font-size:16px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:.05em;text-align:center">Probability</div>
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;text-align:center">Cost</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:.8rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary)">① Disability</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Income stops. All obligations continue.</div>
+      </div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#993C1D">Catastrophic</div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#534AB7">Highest</div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#854F0B">Higher</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:.8rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)">
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary)">② Life insurance</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Where dependants exist. Irreversible for survivors.</div>
+      </div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#993C1D">Catastrophic</div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#534AB7">Lower</div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#0F6E56">Lowest</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:.8rem 1rem;background:var(--color-background-primary)">
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary)">③ Critical illness</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Income bridge + out-of-pocket costs.</div>
+      </div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#993C1D">High</div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#534AB7">Moderate</div>
+      <div style="text-align:center;font-size:17px;font-weight:700;color:#854F0B">Moderate</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">When the sequence shifts — read the profile</div>
+    <div class="card-body">Single, no dependants → disability and CI before life. Family history of cancer → weight CI higher. Physically demanding occupation → disability probability rises. Young family + large mortgage → term life may move alongside disability given its low cost. This is a framework, not a formula.</div>
+  </div>
+  <div class="highlight-box hb-green">
+    <div class="hb-label">Name what is left open</div>
+    <div class="hb-text">"Here is what we are closing today. Here is what remains exposed. Here is when we address it." A client who understands their own exposure and has a plan is far better served than one who received a partial plan without knowing what was missing.</div>
+  </div>
+</div>
+<div class="screen" id="s6">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s6">Listen to this screen</span></button><span class="audio-label" id="audio-status-s6"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 6: Managing cost</div>
+  <h2>Not the cheapest plan — the most efficient one</h2>
+  <p class="sub">Maximum coverage per dollar of available cash flow. Every dollar of unnecessary premium is a dollar that could close another gap.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #0F6E56">
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 1</div>
+      <div style="font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem">Match term to obligation</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">A 30-year term is only justified if the obligation runs 30 years. Match the term length to the actual horizon — mortgage payoff, child independence, retirement.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #0F6E56">
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 2</div>
+      <div style="font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem">Elimination period = emergency reserve</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Client has 90 days of reserves → 90-day elimination period. Lower premium, same protection. The emergency fund and disability policy are designed together.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #0F6E56">
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 3</div>
+      <div style="font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem">Layer group + individual</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Individual coverage fills the gap — does not replace group. Size individual to the difference between after-tax group benefit and actual obligations.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #854F0B">
+      <div style="font-size:16px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 4</div>
+      <div style="font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem">Riders: value vs habit</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">✓ Own occupation · COLA on disability · Waiver of premium · Convertibility on term<br>✗ Accidental death · ROP on CI unless all other gaps funded</div>
+    </div>
+  </div>
+  <div class="section-header">Combining policies</div>
+  <div style="display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #534AB7">
+      <div style="font-size:16px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 5 — Term laddering</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.5rem">Match multiple smaller policies to the declining obligation curve. Example: $500K mortgage + $300K income replacement need.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+        <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.6rem .8rem;border:0.5px solid var(--color-border-tertiary)">
+          <div style="font-size:17px;font-weight:700;color:#534AB7">$500K · 20-year term</div>
+          <div style="font-size:15px;color:var(--color-text-secondary)">Covers mortgage + dependant years</div>
+        </div>
+        <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.6rem .8rem;border:0.5px solid var(--color-border-tertiary)">
+          <div style="font-size:17px;font-weight:700;color:#534AB7">$300K · 10-year term</div>
+          <div style="font-size:15px;color:var(--color-text-secondary)">Covers peak income replacement years</div>
+        </div>
+      </div>
+      <div style="font-size:16px;color:var(--color-text-secondary);margin-top:.5rem">Premium drops automatically as each obligation ends.</div>
+    </div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #993C1D;margin-bottom:.75rem">
+    <div style="font-size:16px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Tool 6 — Joint first-to-die</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+      <div style="background:#E1F5EE;border-radius:var(--border-radius-md);padding:.6rem .8rem">
+        <div style="font-size:15px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Typically includes</div>
+        <div style="font-size:15px;color:#085041;line-height:1.5">Survivor conversion option (30–60 days, no medical)<br>Temporary coverage during window<br>Double payout on common disaster</div>
+      </div>
+      <div style="background:#FAECE7;border-radius:var(--border-radius-md);padding:.6rem .8rem">
+        <div style="font-size:15px;font-weight:700;color:#993C1D;margin-bottom:.2rem">Watch for</div>
+        <div style="font-size:15px;color:#712B13;line-height:1.5">New coverage at attained age (not original)<br>Savings often modest — as low as $4/mo<br>Higher health risk can eliminate savings<br>Cannot split if couple separates</div>
+      </div>
+    </div>
+    <div style="font-size:16px;color:var(--color-text-secondary)">Always confirm survivor provisions exist in the specific policy. Always compare actual quotes.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #854F0B">
+      <div style="font-size:16px;font-weight:700;color:#854F0B;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 7 — Joint last-to-die</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Estate planning tool only. Pays on second death. Funds tax liability, estate equalization, or legacy. Not for income replacement or debt coverage.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #0F6E56">
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Tool 8 — Multi-life policy</div>
+      <div style="font-size:17px;color:var(--color-text-secondary);line-height:1.5">Two individual policies under one number. Each partner keeps their own coverage, convertibility rights, and benefit period. Saves $30–$90/year vs two separate policies. No structural drawbacks.</div>
+    </div>
+  </div>
+  <div class="highlight-box hb-amber">
+    <div class="hb-label">The discipline</div>
+    <div class="hb-text">Every structural decision should be driven by what it achieves for the client — not by what reduces premium most aggressively. Joint first-to-die is not simply cheaper or simpler than two individual policies. It is a different structure with specific provisions, specific limitations, and specific situations where it fits. Understand it fully before recommending it.</div>
+  </div>
+</div>
+<div class="screen" id="s7">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s7">Listen to this screen</span></button><span class="audio-label" id="audio-status-s7"></span></div>
+  <div class="tag">4F Solution — Canadian Lesson 7: Values connection</div>
+  <h2>Connecting the plan to what the client said matters most</h2>
+  <p class="sub">A technically correct recommendation that is emotionally disconnected will not be acted on. The client who understands what they are buying in terms of what they value — not what it costs — is the client who says yes, maintains the plan, and refers others.</p>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">The language shift that changes everything</div>
+    <div class="hb-text">Not: "You need $750,000 of life insurance and the premium is $87 per month." Instead: "You told me that your family's security is what matters most — that no matter what happens to you, your partner and your children are taken care of. Here is exactly what happens to that security if you die tomorrow with what you have now. And here is exactly what changes if we close this gap. The cost is $87 per month. The question is whether your family's security is worth $87 per month to you." The numbers are the same. The framing is entirely different.</div>
+  </div>
+  <div class="q-card">
+    <div class="q-label">Step 1 — Recall the value, not the product</div>
+    <div class="q-text">Begin every recommendation by reflecting what the client told you during discovery.</div>
+    <div class="q-why">Not "you said security was important" — but "you told me that if something happened to you, the one thing you could not accept was your children losing the house and your partner having to rebuild from scratch." That specificity tells the client you were listening. It anchors every recommendation to something they already believe — not something you are trying to convince them of.</div>
+  </div>
+  <div class="q-card coral">
+    <div class="q-label">Step 2 — Show the consequence of the gap</div>
+    <div class="q-text">Make the exposure real — in their numbers, against their stated priority.</div>
+    <div class="q-why">"If you died tomorrow, your partner would receive $160,000 from your group plan. The mortgage is $480,000. After paying it off, there is $320,000 left — roughly four years of living expenses for your family. After that, your partner is on their own. Is that the security you described?" The client answers that question. The professional does not editorialize.</div>
+  </div>
+  <div class="q-card">
+    <div class="q-label">Step 3 — Present the solution as the gap closed</div>
+    <div class="q-text">The product is what closes the gap — not what the professional is selling.</div>
+    <div class="q-why">"This policy ensures that if you die tomorrow, your partner has enough to pay off the mortgage, maintain the family's lifestyle for ten years, and fund your children's education. What you described as security — this is what funds it." The premium follows naturally. It is not the lead — it is the cost of the outcome the client said they want.</div>
+  </div>
+  <div class="q-card amber">
+    <div class="q-label">Step 4 — Handle cost objections with values, not discounts</div>
+    <div class="q-text">Most cost objections are uncertainty objections in disguise.</div>
+    <div class="q-why">When a client says "that seems expensive," the professional who responds by reducing the coverage has missed what the client is actually expressing. They are not sure the risk is real, or not sure the product will deliver. Return to the gap: "Let me show you what happens if we don't close this." If after seeing the consequence clearly they still decline, they are making an informed decision about an accepted risk. That is their right. Document it and move forward — never reduce coverage to overcome an objection that was never actually about the premium.</div>
+  </div>
+  <div class="highlight-box hb-green">
+    <div class="hb-label">The plan the client owns</div>
+    <div class="hb-text">A client who understands their protection plan in terms of their own values — not in premiums and policy numbers — is a client who maintains that plan through rate changes, life transitions, and competing financial pressures. They know what it is protecting. They know why it matters. That is the difference between a transaction and a relationship.</div>
+  </div>
+</div>
+<div class="screen" id="s8">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s8">Listen to this screen</span></button><span class="audio-label" id="audio-status-s8"></span></div>
+  <div class="tag">4F Solution — Canadian summary review</div>
+  <h2>The complete protection recommendation</h2>
+  <p class="sub">Five competencies. One page. Scan this before the quiz.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:0;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#993C1D;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px">
+        <div style="font-size:20px;font-weight:700;color:white">1</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#993C1D;margin-bottom:.2rem">Read the need first</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Income · Obligations · Existing coverage (after tax) · Gap in specific dollars per risk event. No product conversation until all four are answered.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:0;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#534AB7;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px">
+        <div style="font-size:20px;font-weight:700;color:white">2</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#534AB7;margin-bottom:.2rem">Match product to need</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Temporary → term · Permanent → permanent · Income loss → own occupation disability · Health event → CI · Non-working partner → life + CI sized to replacement cost.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:0;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#854F0B;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px">
+        <div style="font-size:20px;font-weight:700;color:white">3</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#854F0B;margin-bottom:.2rem">Assess group benefits — in real dollars</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">After-tax LTD · Own-to-any occupation at year 2 · CI gap · Portability risk · Individual fills the gap — does not replace group.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:0;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#0F6E56;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px">
+        <div style="font-size:20px;font-weight:700;color:white">4</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Prioritize and manage cost</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Disability first · Life second (with dependants) · CI third · Term laddered to obligations · Elimination period = reserves · Joint first-to-die: confirm provisions, compare quotes · Name what is left open explicitly.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:0;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#3B6D11;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px">
+        <div style="font-size:20px;font-weight:700;color:white">5</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#3B6D11;margin-bottom:.2rem">Connect to values</div>
+        <div style="font-size:16px;color:var(--color-text-secondary)">Recall what the client said → show the consequence of the gap → present the product as what closes it → cost objections go back to the gap, never to reduced coverage.</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.2rem;border:0.5px solid var(--color-border-tertiary)">
+    <div style="font-size:16px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">The Canadian statistics — have one ready</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem">
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#993C1D">1 in 8</div>
+        <div style="font-size:14px;color:var(--color-text-secondary)">Long-term disability before retirement</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#534AB7">2 in 5</div>
+        <div style="font-size:14px;color:var(--color-text-secondary)">Canadians will develop cancer</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#993C1D">1 in 3</div>
+        <div style="font-size:14px;color:var(--color-text-secondary)">Canadian men won't reach age 75</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s9">
+  <div class="audio-bar"><button class="audio-btn" id="audio-btn-s9" onclick="toggleAudio('s9')"><svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s9" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s9" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg><span id="audio-btn-label-s9">Listen to this screen</span></button><span class="audio-label" id="audio-status-s9"></span></div>
+  <div class="tag">4F Solution — Knowledge check</div>
+  <h2>Knowledge check — 5 questions</h2>
+  <p class="sub">Choose the best answer for each question.</p>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client's group LTD replaces 70% of their $90,000 income. Their employer pays the premium. Their monthly obligations are $4,800. The professional presents this as adequate coverage. What is wrong?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">The 70% replacement rate is below the recommended 80% standard</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">Because the employer pays the premium, the LTD benefit is taxable — the real after-tax monthly benefit is approximately $3,600–$3,900, leaving a gap of $900–$1,200 against the $4,800 obligation. The headline rate is not the real rate.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Group LTD does not cover the first 90 days of disability</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">The client should have individual disability instead of group coverage</button>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A single client with no dependants and a $350,000 mortgage asks what protection they need. The professional leads with life insurance. Is this the right starting point?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Yes — the mortgage creates a significant life insurance need regardless of dependant status</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Yes — life insurance should always open the protection conversation</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">No — for a single client with no dependants, disability and critical illness are almost always higher priorities. No one's financial security depends on the death benefit. Life insurance may apply for debt coverage but follows, not leads, the disability and CI conversation.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">No — a single client with no dependants does not need any life insurance regardless of debt</button>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client says their $750,000 life insurance recommendation seems expensive at $110 per month. The professional responds by suggesting a smaller policy. What is the better approach?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Agree and reduce the coverage to match the client's comfort level</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Offer a shorter term to reduce the monthly cost</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">Return to the gap — show specifically what their family faces without this coverage. Most cost objections are uncertainty objections. Address the uncertainty first: "Let me show you what $110 per month is actually protecting." If the client sees the consequence clearly and still declines, they are making an informed choice about an accepted risk — not objecting to the premium.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Explain that $110 per month is competitive for this coverage amount</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has a non-working spouse managing the household and caring for two young children. The protection plan covers only the earning partner. What has been missed?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Nothing — the non-working partner has no income to replace so coverage is not required</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">The non-working partner should have disability insurance in case they need to return to work</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">The non-working partner provides real economic value the plan depends on. If they die or become seriously ill, childcare costs appear, the working partner's schedule is disrupted, and household management must be replaced at real cost. Life and CI on the non-working partner should be sized to the cost of replacing those contributions — not to an income that does not exist.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">The non-working partner should be added to the earning partner's group benefits plan</button>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+  <div style="margin-bottom:1rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A couple with a $600,000 mortgage and two young children is on a tight budget. Their primary protection objective is ensuring the mortgage is paid off if either partner dies. The professional recommends a joint first-to-die policy instead of two individual policies. Is this appropriate — and what must be explained?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">No — joint first-to-die is only appropriate for estate planning objectives, not debt coverage</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Yes — joint first-to-die is always the most cost-efficient structure for couples</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">Yes — for this specific objective, joint first-to-die is appropriate and cost-effective. But the professional must clearly explain the trade-off: after the first death, the surviving partner has no coverage under this policy. If their health has deteriorated, individual coverage may be more expensive or unavailable at that point. The client must understand this before choosing the structure.</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Yes — and no explanation of trade-offs is needed since the mortgage objective is clearly temporary</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+</div>
+<div class="screen" id="s10">
+  <div class="tag">4F Solution — Canadian Track: Protection complete</div>
+  <h2>Module complete</h2>
+  <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+    <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:36px;font-weight:700;color:#0F6E56" id="score-display">—</div>
+        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Score</div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:36px;font-weight:700;color:#0F6E56" id="correct-display">—</div>
+        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div>
+      </div>
+    </div>
+    <div id="q-breakdown" style="font-size:18px;color:var(--color-text-secondary);line-height:1.8"></div>
+  </div>
+  <div id="submit-section" style="margin-bottom:1.25rem">
+    <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">Send results to facilitator</div>
+    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:26px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
+    <div id="name-warning" style="display:none;font-size:17px;color:#993C1D;margin-bottom:.75rem">Please enter your name before submitting.</div>
+    <button class="nav-btn primary" onclick="submitResults()" style="width:100%;padding:.85rem 1.25rem;margin-bottom:.75rem">Submit results</button>
+    <div style="font-size:17px;color:var(--color-text-tertiary);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
+    <div id="submit-status" style="display:none;margin-top:.75rem;font-size:21px;padding:.85rem 1rem;border-radius:var(--border-radius-md)"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.5rem">
+    <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
+    <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
+  </div>
+</div>
+<div class="nav">
+  <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
+  <span class="counter" id="counter">1 of 11</span>
+  <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next</button>
+</div>
+</div>
+</div>
+<script>
+var TOTAL_SCREENS=11,TOTAL_QUESTIONS=5,QUIZ_SCREEN_INDEX=9,LAST_LESSON_INDEX=8;
+var WEBHOOK_URL='https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var MODULE_NAME='4F Solution — Canadian Track: Protection';
+var qLabels={q1:'Q1 — Group LTD tax treatment',q2:'Q2 — Protection priority for single clients',q3:'Q3 — Handling the cost objection',q4:'Q4 — Non-working partner coverage',q5:'Q5 — Joint first-to-die suitability and trade-offs'};
+var qMsgs={
+  q1c:'Correct. When the employer pays the group LTD premium, the benefit is taxable income when received. A 70% gross replacement on $90,000 produces $5,250 per month before tax — but after tax at most Canadian rates, the client nets approximately $3,600 to $3,900. Against $4,800 in monthly obligations, that is a real and significant gap. The headline replacement rate is not the real replacement rate.',
+  q1w:'The critical issue is the tax treatment. When the employer pays the premium — the most common Canadian structure — the benefit is taxable when received. The 70% gross replacement becomes a materially lower net replacement. That after-tax calculation must be completed before the gap can be assessed.',
+  q2c:'Correct. For a single client with no dependants, there is no surviving partner or child whose financial security depends on the life insurance death benefit. The primary protection risks are disability — no income backstop — and critical illness — no partner to absorb the impact. Life insurance for debt coverage may be appropriate but is not the first conversation.',
+  q2w:'The prioritization framework depends on the client profile. A single client with no dependants has a fundamentally different protection picture than a partnered client with children. The real risks — disability and critical illness — get the first conversation. Life insurance for debt coverage is a reasonable secondary discussion but should not lead.',
+  q3c:'Correct. A cost objection is almost always an uncertainty objection in disguise. The client is not sure the risk is real or that the product will actually deliver. Reducing coverage addresses the symptom and misses the cause. Returning to the gap — showing specifically what their family faces without this coverage — addresses the real concern.',
+  q3w:'Reducing coverage or changing terms in response to a cost objection treats a symptom without addressing the cause. Most cost objections are uncertainty objections. The professional who returns to the gap and shows the client what they are actually protecting against addresses the real concern. Price is rarely the real issue when a client understands what they are buying.',
+  q4c:'Correct. A non-working partner who manages the household and raises children provides real economic value the plan depends on. If that partner dies or becomes seriously ill, childcare costs appear, the working partner\'s schedule is disrupted, and household management must be replaced at real cost. Covering only the earner produces a plan that is half-complete for this family profile.',
+  q4w:'A non-working partner has no income to replace but does have economic value the plan depends on. The contributions they make would need to be replaced at real cost if they died or became seriously ill. Life and CI coverage sized to the replacement cost of those contributions is appropriate and often as urgent as coverage on the earning partner.',
+  q5c:'Correct. Joint first-to-die can be appropriate for this objective — and the survivor provisions and cost reality must both be understood. Most Canadian policies include a survivor conversion option: a window after the first death in which the survivor can obtain a new individual policy without a medical exam. This is not guaranteed in every policy and must be confirmed. The professional also addresses cost honestly: joint first-to-die is not always cheaper than two individual policies. Savings can be minimal, and when one partner carries a higher health risk, the joint policy can cost more. Always compare actual quotes.',
+  q5w:'Joint first-to-die has more nuance than the answer suggests. Most Canadian policies include a survivor conversion option — a window after the first death where the survivor can obtain new individual coverage without a medical exam. This means it is not necessarily a dead end for the survivor — but the new coverage is priced at attained age and typically offered as permanent rather than term, so it is not equivalent to maintained individual coverage. Additionally, joint first-to-die is not always cheaper than two individual policies — savings can be minimal and are eliminated entirely when one partner carries a significantly higher health risk. The professional understands and explains both the provisions and the cost reality before recommending.'
+};
+var cur=0,scores={},qAnswered={};
+Object.keys(qLabels).forEach(function(q){scores[q]=null;qAnswered[q]=false;});
+function updateUI(){
+  document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('active',i===cur);});
+  document.querySelectorAll('.prog-step').forEach(function(p,i){p.classList.remove('done','active');if(i<cur)p.classList.add('done');else if(i===cur)p.classList.add('active');});
+  document.getElementById('counter').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  document.getElementById('back-btn').disabled=cur===0;
+  var nb=document.getElementById('next-btn');
+  if(cur===TOTAL_SCREENS-1){nb.style.display='none';}
+  else{nb.style.display='';nb.textContent=cur===0?'Begin':cur===LAST_LESSON_INDEX?'Finish':'Next';}
+  document.getElementById('step-label').textContent=(cur+1)+' of '+TOTAL_SCREENS;
+  if(cur===TOTAL_SCREENS-1){buildScoreSummary();}
+}
+function goNext(){if(cur<TOTAL_SCREENS-1){stopAudio();cur++;updateUI();window.scrollTo(0,0);}}
+function goBack(){if(cur>0){stopAudio();cur--;updateUI();window.scrollTo(0,0);}}
+function checkQ(el,correct,qid){
+  if(qAnswered[qid])return;
+  qAnswered[qid]=true;scores[qid]=correct;
+  document.querySelectorAll('[data-q="'+qid+'"]').forEach(function(s){s.style.pointerEvents='none';s.classList.add(s.getAttribute('onclick').includes('true,')?'correct':'wrong');});
+  var fb=document.getElementById('fb-'+qid);
+  fb.className='feedback show '+(correct?'fb-correct':'fb-wrong');
+  fb.textContent=qMsgs[qid+(correct?'c':'w')]||'';
+}
+function buildScoreSummary(){
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  document.getElementById('score-display').textContent=pct+'%';
+  document.getElementById('correct-display').textContent=correct+'/'+TOTAL_QUESTIONS;
+  document.getElementById('q-breakdown').innerHTML=qs.map(function(q){var res=scores[q];var icon=res===null?'○':res?'✓':'✗';var col=res===null?'var(--color-text-tertiary)':res?'#0F6E56':'#993C1D';return'<div style="color:'+col+';padding:2px 0"><span style="font-weight:700">'+icon+'</span> '+qLabels[q]+(res===null?' — not attempted':'')+'</div>';}).join('');
+  var submitBtn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if(submitBtn){if(pct<80){submitBtn.disabled=true;var warn=document.getElementById('score-gate-msg');if(!warn){warn=document.createElement('div');warn.id='score-gate-msg';warn.style.cssText='font-size:21px;color:#712B13;background:#FAECE7;padding:.85rem 1rem;border-radius:8px;margin-bottom:.75rem;font-weight:500';submitBtn.parentNode.insertBefore(warn,submitBtn);}warn.textContent='A minimum score of 80% is required to submit. Please retake the quiz.';}else{submitBtn.disabled=false;var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();}}
+}
+function retakeQuiz(){
+  Object.keys(qLabels).forEach(function(q){qAnswered[q]=false;scores[q]=null;document.querySelectorAll('[data-q="'+q+'"]').forEach(function(btn){btn.classList.remove('correct','wrong');btn.style.pointerEvents='';});var fb=document.getElementById('fb-'+q);if(fb){fb.className='feedback';fb.textContent='';}});
+  document.getElementById('score-display').textContent='—';document.getElementById('correct-display').textContent='—';document.getElementById('q-breakdown').innerHTML='';
+  var st=document.getElementById('submit-status');st.style.display='none';st.textContent='';
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');if(btn){btn.disabled=false;btn.textContent='Submit results';}
+  var warn=document.getElementById('score-gate-msg');if(warn)warn.remove();
+  cur=QUIZ_SCREEN_INDEX;updateUI();window.scrollTo(0,0);
+}
+function submitResults(){
+  var nm=document.getElementById('participant-name').value.trim();
+  if(!nm){document.getElementById('name-warning').style.display='block';document.getElementById('participant-name').focus();return;}
+  document.getElementById('name-warning').style.display='none';
+  var st=document.getElementById('submit-status');
+  var qs=Object.keys(qLabels);
+  var correct=qs.filter(function(q){return scores[q]===true;}).length;
+  var pct=Math.round((correct/TOTAL_QUESTIONS)*100);
+  if(pct<80){st.style.display='block';st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='A minimum score of 80% is required. You scored '+pct+'%. Please retake the quiz.';return;}
+  var btn=document.querySelector('#submit-section button[onclick="submitResults()"]');
+  st.style.display='block';st.style.background='#E1F5EE';st.style.color='#085041';st.textContent='Sending results...';
+  if(btn)btn.disabled=true;
+  var payload={participant_name:nm,module:MODULE_NAME,completed_at:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),score_percent:pct+'%',correct_of_total:correct+'/'+TOTAL_QUESTIONS};
+  qs.forEach(function(q){payload[q]=scores[q]===null?'Not attempted':scores[q]?'Correct':'Incorrect';});
+  fetch(WEBHOOK_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams(payload)})
+  .then(function(){st.style.background='#E1F5EE';st.style.color='#085041';st.textContent='Results submitted. '+nm+' scored '+pct+'% ('+correct+'/'+TOTAL_QUESTIONS+' correct).';if(btn)btn.textContent='Submitted';})
+  .catch(function(){st.style.background='#FAECE7';st.style.color='#712B13';st.textContent='Submission failed — please check your connection and try again.';if(btn)btn.disabled=false;});
+}
+var ttsActive=null,ttsUtterance=null;
+function getScreenText(screenId){var screen=document.getElementById(screenId);if(!screen)return'';var clone=screen.cloneNode(true);clone.querySelectorAll('.audio-bar,button,.feedback,.nav,input,textarea').forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});return clone.innerText||clone.textContent||'';}
+function stopAudio(){if(window.speechSynthesis)window.speechSynthesis.cancel();if(ttsActive){var btn=document.getElementById('audio-btn-'+ttsActive);var lbl=document.getElementById('audio-btn-label-'+ttsActive);var st=document.getElementById('audio-status-'+ttsActive);var play=document.getElementById('audio-icon-play-'+ttsActive);var pause=document.getElementById('audio-icon-pause-'+ttsActive);if(btn)btn.classList.remove('playing');if(lbl)lbl.textContent='Listen to this screen';if(st)st.textContent='';if(play)play.style.display='';if(pause)pause.style.display='none';ttsActive=null;ttsUtterance=null;}}
+function toggleAudio(screenId){if(ttsActive===screenId){stopAudio();return;}stopAudio();var text=getScreenText(screenId);if(!text.trim())return;if(!window.speechSynthesis)return;ttsActive=screenId;var btn=document.getElementById('audio-btn-'+screenId);var lbl=document.getElementById('audio-btn-label-'+screenId);var st=document.getElementById('audio-status-'+screenId);var play=document.getElementById('audio-icon-play-'+screenId);var pause=document.getElementById('audio-icon-pause-'+screenId);if(btn)btn.classList.add('playing');if(lbl)lbl.textContent='Stop';if(st)st.textContent='Playing...';if(play)play.style.display='none';if(pause)pause.style.display='';ttsUtterance=new SpeechSynthesisUtterance(text);ttsUtterance.rate=0.92;ttsUtterance.lang='en-CA';ttsUtterance.onend=function(){stopAudio();};ttsUtterance.onerror=function(){stopAudio();};window.speechSynthesis.speak(ttsUtterance);}
+updateUI();
+</script>
+</body>
+</html>
