@@ -772,15 +772,15 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 
 // ── REGISTRATION GATE ──
-(async function initRegistration(){
+document.addEventListener('DOMContentLoaded', async function initRegistration(){
   const sd = window._sd;
   if(sd.name){
     const el=document.getElementById('reg-name');
-    el.value=sd.name; el.readOnly=true;
+    if(el){el.value=sd.name; el.readOnly=true;}
   }
   if(sd.email){
     const el=document.getElementById('reg-email');
-    el.value=sd.email; el.readOnly=true;
+    if(el){el.value=sd.email; el.readOnly=true;}
   }
   const email=(sd.email||'').trim().toLowerCase();
   if(email){
@@ -793,7 +793,7 @@ document.addEventListener("DOMContentLoaded", function(){
       }
     }catch(e){}
   }
-})();
+});
 
 async function submitRegistration(){
   const nameEl=document.getElementById('reg-name');

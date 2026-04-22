@@ -738,16 +738,16 @@ function showLimitBanner(){
 })();
 
 // ── REGISTRATION GATE ──
-(async function initRegistration(){
+document.addEventListener('DOMContentLoaded', async function initRegistration(){
   const sd = window._sd;
   // Pre-fill from SuiteDash params
   if(sd.name){
     const el=document.getElementById('reg-name');
-    el.value=sd.name; el.readOnly=true;
+    if(el){el.value=sd.name; el.readOnly=true;}
   }
   if(sd.email){
     const el=document.getElementById('reg-email');
-    el.value=sd.email; el.readOnly=true;
+    if(el){el.value=sd.email; el.readOnly=true;}
   }
 
   // Check if already registered
@@ -763,7 +763,7 @@ function showLimitBanner(){
     }catch(e){}
   }
   // Show gate (already visible by default)
-})();
+});
 
 async function submitRegistration(){
   const nameEl=document.getElementById('reg-name');
