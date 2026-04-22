@@ -377,14 +377,6 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
         </button>
       </div>
 
-      <!-- Background dropdown -->
-      <div style="margin-bottom:14px">
-        <div>
-          <div class="nf-label" style="margin-bottom:5px">Prospect community <span style="font-weight:400;color:var(--text3);font-size:0.63rem">— who your natural market looks like</span></div>
-          <select id="background-select" class="nf-input" onchange="setBackground(this.value)" style="cursor:pointer">
-            <option value="">Select a background...</option>
-          </select>
-        </div>
       </div>
 
       <!-- Persona Names -->
@@ -727,7 +719,8 @@ function showLimitBanner(){
 
 // Init profile builder on page load
 document.addEventListener('DOMContentLoaded',()=>{
-  buildBackgroundGrid();
+  // Apply default background (european) so persona names are pre-populated
+  setBackground(cfg.background);
 });
 
 // ── MIC CHECK ──
@@ -1144,7 +1137,6 @@ function setCountry(c){
     const el=document.getElementById('ctry-'+x);
     el.className='choice-btn'+(x===c?' sel':'');
   });
-  buildBackgroundGrid();
   if(!document.getElementById('sc-prospect').classList.contains('locked')) buildPersonaGrid();
 }
 
@@ -1299,7 +1291,7 @@ function lock(id){document.getElementById(id).classList.add('locked');}
 
 function checkReady(){
   const rfOk=cfg.useRF===false||(cfg.useRF===true&&cfg.rfEntry!==null);
-  const ready=cfg.market&&cfg.channel&&cfg.useRF!==null&&rfOk&&cfg.background;
+  const ready=cfg.market&&cfg.channel&&cfg.useRF!==null&&rfOk;
   const btn=document.getElementById('start-btn');
   btn.disabled=!ready;
   if(ready){
