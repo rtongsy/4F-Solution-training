@@ -787,7 +787,7 @@ document.addEventListener("DOMContentLoaded", function(){
     try{
       const r=await window.storage.get('reg:'+email);
       if(r && r.value){
-        sessionStorage.setItem('_auth','password');
+        sessionStorage.setItem('_auth','Step2connect');
         document.getElementById('reg-gate').classList.add('hidden');
         return;
       }
@@ -812,7 +812,7 @@ async function submitRegistration(){
       registeredAt: new Date().toISOString(),
       tool: 'recruiting-trainer'
     }));
-    sessionStorage.setItem('_auth','password');
+    sessionStorage.setItem('_auth','Step2connect');
     document.getElementById('reg-gate').classList.add('hidden');
   }catch(e){
     errEl.textContent='Could not save registration. Please try again.';
