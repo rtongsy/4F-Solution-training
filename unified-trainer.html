@@ -297,36 +297,50 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 /* ── SUMMARY ── */
 #summary{align-items:center;justify-content:center;background:var(--bg);gap:14px;padding:30px;overflow-y:auto;}
 
-::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+/* ── REGISTRATION GATE ── */
+#reg-gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;}
+#reg-gate.hidden{display:none;}
+.reg-card{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:36px 32px;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.10);}
+.reg-logo{height:32px;width:auto;margin-bottom:20px;}
+.reg-title{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.reg-sub{font-size:0.82rem;color:var(--text2);margin-bottom:24px;line-height:1.5;}
+.reg-field{margin-bottom:16px;}
+.reg-field label{display:block;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);margin-bottom:6px;}
+.reg-field input{width:100%;padding:10px 12px;border:1px solid var(--border2);border-radius:8px;font-size:0.9rem;color:var(--text);background:var(--s2);outline:none;transition:border-color 0.15s;}
+.reg-field input:focus{border-color:var(--gold);}
+.reg-field input[readonly]{opacity:0.65;cursor:default;}
+.reg-btn{width:100%;padding:12px;background:var(--gold);color:#fff;border:none;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;margin-top:8px;transition:background 0.15s;}
+.reg-btn:hover{background:var(--gold2);}
+.reg-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.reg-err{font-size:0.78rem;color:var(--red);margin-top:8px;min-height:18px;}
 
-/* ── TOPBAR ── */
-.topbar{height:52px;background:#1a2440;border-bottom:2px solid var(--gold);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;}
-.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff;letter-spacing:-0.01em;}
-.topbar-logo em{color:var(--gold);font-style:normal;}
-.topbar-pill{font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:rgba(232,148,10,0.18);color:var(--gold);border:1px solid rgba(232,148,10,0.3);}
-.topbar-right{margin-left:auto;font-size:0.68rem;color:rgba(255,255,255,0.45);}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 </style>
 </head>
 <body>
-<script>
-  // ── ACCESS PROTECTION ──
-  const _pw = 'step2connect';
-  if(sessionStorage.getItem('_auth') !== _pw){
-    const _input = prompt('Enter access code:');
-    if(_input !== _pw){
-      document.body.innerHTML = '<div style="font-family:sans-serif;text-align:center;padding:80px 20px;color:#333"><h2>Access denied</h2><p style="color:#888;margin-top:8px">Contact your team leader for the access code.</p></div>';
-    } else {
-      sessionStorage.setItem('_auth', _pw);
-    }
-  }
-</script>
 
-<div class="topbar">
-  <div class="topbar-logo">Prospect<em>AI</em></div>
-  <div class="topbar-pill">Opening Doors, Making the Connection</div>
-  <div class="topbar-right">Powered by the 4F Solution</div>
+<!-- ══ REGISTRATION GATE ══ -->
+<div id="reg-gate">
+  <div class="reg-card">
+    <div class="reg-title">Welcome to the Practice Simulator</div>
+    <div class="reg-sub">Please confirm your details to get started. You'll only need to do this once.</div>
+    <div class="reg-field">
+      <label>Full Name</label>
+      <input type="text" id="reg-name" placeholder="Your name" autocomplete="name">
+    </div>
+    <div class="reg-field">
+      <label>Email Address</label>
+      <input type="email" id="reg-email" placeholder="Your email" autocomplete="email">
+    </div>
+    <div class="reg-err" id="reg-err"></div>
+    <button class="reg-btn" id="reg-btn" onclick="submitRegistration()">Access Simulator →</button>
+  </div>
 </div>
 
+<!-- JOURNEY BAR -->
+  <img src="data:image/jpeg;base64,/9j/4QC8RXhpZgAASUkqAAgAAAAGABIBAwABAAAAAQAAABoBBQABAAAAVgAAABsBBQABAAAAXgAAACgBAwABAAAAAgAAABMCAwABAAAAAQAAAGmHBAABAAAAZgAAAAAAAABgAAAAAQAAAGAAAAABAAAABgAAkAcABAAAADAyMTABkQcABAAAAAECAwAAoAcABAAAADAxMDABoAMAAQAAAP//AAACoAQAAQAAAAACAAADoAQAAQAAAAACAAAAAAAA/+EO12h0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8APD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpBdHRyaWI9J2h0dHA6Ly9ucy5hdHRyaWJ1dGlvbi5jb20vYWRzLzEuMC8nPgogIDxBdHRyaWI6QWRzPgogICA8cmRmOlNlcT4KICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogICAgIDxBdHRyaWI6Q3JlYXRlZD4yMDI2LTA0LTA1PC9BdHRyaWI6Q3JlYXRlZD4KICAgICA8QXR0cmliOkRhdGE+eyZxdW90O2RvYyZxdW90OzomcXVvdDtEQUd5MFdsc19HQSZxdW90OywmcXVvdDt1c2VyJnF1b3Q7OiZxdW90O1VBQkxqNXYtdVFzJnF1b3Q7LCZxdW90O2JyYW5kJnF1b3Q7OiZxdW90O0FUQkwgRXhwZXJpb3ImcXVvdDt9PC9BdHRyaWI6RGF0YT4KICAgICA8QXR0cmliOkV4dElkPmY3NTQxZmVkLTIxNDAtNGFkZS1hMWRiLTg2Yzk2MjJjZmIzYjwvQXR0cmliOkV4dElkPgogICAgIDxBdHRyaWI6RmJJZD41MjUyNjU5MTQxNzk1ODA8L0F0dHJpYjpGYklkPgogICAgIDxBdHRyaWI6VG91Y2hUeXBlPjI8L0F0dHJpYjpUb3VjaFR5cGU+CiAgICA8L3JkZjpsaT4KICAgPC9yZGY6U2VxPgogIDwvQXR0cmliOkFkcz4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6ZGM9J2h0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvJz4KICA8ZGM6dGl0bGU+CiAgIDxyZGY6QWx0PgogICAgPHJkZjpsaSB4bWw6bGFuZz0neC1kZWZhdWx0Jz40RiBTT0xVVElPTiBORVcgQW5pbWF0ZWQgQXJyb3cgLSAxPC9yZGY6bGk+CiAgIDwvcmRmOkFsdD4KICA8L2RjOnRpdGxlPgogPC9yZGY6RGVzY3JpcHRpb24+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpwZGY9J2h0dHA6Ly9ucy5hZG9iZS5jb20vcGRmLzEuMy8nPgogIDxwZGY6QXV0aG9yPnJhaW5tYWtlci5hZzwvcGRmOkF1dGhvcj4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6eG1wPSdodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvJz4KICA8eG1wOkNyZWF0b3JUb29sPkNhbnZhIGRvYz1EQUd5MFdsc19HQSB1c2VyPVVBQkxqNXYtdVFzIGJyYW5kPUFUQkwgRXhwZXJpb3I8L3htcDpDcmVhdG9yVG9vbD4KIDwvcmRmOkRlc2NyaXB0aW9uPgo8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSd3Jz8+/9sAQwAGBAUGBQQGBgUGBwcGCAoQCgoJCQoUDg8MEBcUGBgXFBYWGh0lHxobIxwWFiAsICMmJykqKRkfLTAtKDAlKCko/9sAQwEHBwcKCAoTCgoTKBoWGigoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo/8AAEQgCAAIAAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/aAAwDAQACEQMRAD8A+qaKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoqG4uoLaMyXEqRoOpZgBXP6h4z0u1yIXe4cdoxx+Z4rCriaVJXnJI1p0KlV2hFs6aop7iG3jLzSJGg6sxAA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" alt="4F Solution" style="height:26px;width:auto;object-fit:contain;border-radius:3px;">
+  <div style="margin-left:auto;font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(232,148,10,0.5);">Practice Simulator</div>
+</div>
 <div class="jbar">
   <div class="jsteps" id="jsteps">
     <div class="jstep active" id="js-setup">⚙ Setup</div>
@@ -336,6 +350,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
     <div class="jstep pending" id="js-summary">✓ Summary</div>
   </div>
   <div class="jright" id="jright"></div>
+  <div id="usage-banner" style="font-size:0.65rem;color:var(--text3);padding-left:12px;white-space:nowrap;"></div>
 </div>
 
 <!-- ══ SETUP SCREEN ══ -->
@@ -346,15 +361,19 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
   <div class="step-card active" id="sc-agent">
     <div class="step-hdr">
       <div class="step-num" id="sn-agent">1</div>
-      <div class="step-title">Your Details</div>
+      <div class="step-title">Your Profile</div>
     </div>
     <div class="step-body">
-      <div class="name-row">
+
+      <!-- Name + Company -->
+      <div class="name-row" style="margin-bottom:14px">
         <div><div class="nf-label">Your First Name</div><input class="nf-input" id="inp-name" type="text" placeholder="e.g. Ryan" maxlength="30"></div>
         <div><div class="nf-label">Your Company</div><input class="nf-input" id="inp-company" type="text" placeholder="e.g. Experior Financial" maxlength="40"></div>
       </div>
-      <div class="nf-label" style="margin-bottom:6px;margin-top:10px">Country</div>
-      <div style="display:flex;gap:8px;">
+
+      <!-- Country -->
+      <div class="nf-label" style="margin-bottom:6px">Country</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
         <button onclick="setCountry('ca')" id="ctry-ca" class="choice-btn sel" style="flex:1;flex-direction:row;gap:8px;align-items:center;padding:10px 14px;">
           <span style="font-size:1.1rem">🇨🇦</span><div><div class="cb-title">Canada</div><div class="cb-desc">RRSP, TFSA, CPP, OAS</div></div>
         </button>
@@ -362,6 +381,29 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
           <span style="font-size:1.1rem">🇺🇸</span><div><div class="cb-title">United States</div><div class="cb-desc">401(k), Roth IRA, Social Security</div></div>
         </button>
       </div>
+
+      <!-- Prospect Region + Background dropdowns -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div>
+          <div class="nf-label" style="margin-bottom:5px">Prospect region <span style="font-weight:400;color:var(--text3);font-size:0.63rem">— where your contacts are based</span></div>
+          <select id="region-select" class="nf-input" onchange="setRegion(this.value)" style="cursor:pointer">
+            <option value="">Select a region...</option>
+          </select>
+        </div>
+        <div>
+          <div class="nf-label" style="margin-bottom:5px">Prospect community <span style="font-weight:400;color:var(--text3);font-size:0.63rem">— who your natural market looks like</span></div>
+          <select id="background-select" class="nf-input" onchange="setBackground(this.value)" style="cursor:pointer">
+            <option value="">Select a background...</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Persona Names -->
+      <div id="persona-names-section" style="display:none">
+        <div class="nf-label" style="margin-bottom:5px">Your contacts <span style="font-weight:400;color:var(--text3);font-size:0.63rem">— use real names or keep the defaults</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px" id="persona-name-inputs"></div>
+      </div>
+
     </div>
   </div>
 
@@ -481,7 +523,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
   </div>
 
   <!-- STEP 5: PROSPECT & MOOD -->
-  <div class="step-card" id="sc-prospect">
+  <div class="step-card locked" id="sc-prospect">
     <div class="step-hdr">
       <div class="step-num" id="sn-prospect">5</div>
       <div class="step-title">Prospect & Mood</div>
@@ -560,7 +602,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
       <div class="vc-live"><div class="vc-live-txt" id="vc-live">Press and hold mic to speak...</div></div>
       <div class="vc-ctrls">
         <button class="ctrl mute" id="mute-btn" onclick="toggleMute()">🎤</button>
-        <button class="ctrl mic" id="mic-btn" onclick="toggleListen()">🎙️</button>
+        <button class="ctrl mic" id="mic-btn" onmousedown="startListen()" onmouseup="stopListen()" ontouchstart="startListen(event)" ontouchend="stopListen()">🎙️</button>
         <button class="ctrl end" onclick="showSummary()">📵</button>
       </div>
       <div class="vc-fallback" id="vc-fallback">
@@ -631,10 +673,60 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 <div class="screen" id="summary"></div>
 
 <script>
-// ── API CONFIGURATION ──
-// Calls go through your secure Cloudflare Worker proxy
-const ANTHROPIC_API_KEY = ''; // Not needed — handled by the proxy
-const API = 'https://calm-mountain-27e8.rainmaker-ag.workers.dev';
+const API='https://api.anthropic.com/v1/messages';
+const MONTHLY_LIMIT=200;
+
+// ── USAGE LIMIT (persistent storage, keyed by agentName) ──
+function usageKey(name){return 'usage:'+name.trim().toLowerCase();}
+function currentMonth(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');}
+
+async function getUsage(name){
+  try{
+    const r=await window.storage.get(usageKey(name));
+    if(!r) return {month:currentMonth(),count:0};
+    const d=JSON.parse(r.value);
+    if(d.month!==currentMonth()) return {month:currentMonth(),count:0};
+    return d;
+  }catch(e){return {month:currentMonth(),count:0};}
+}
+
+async function incrementUsage(name){
+  const d=await getUsage(name);
+  d.count+=1;
+  try{await window.storage.set(usageKey(name),JSON.stringify(d));}catch(e){}
+  updateUsageBanner(name,d.count);
+}
+
+async function checkLimit(name){
+  const d=await getUsage(name);
+  return d.count<MONTHLY_LIMIT;
+}
+
+async function updateUsageBanner(name,count){
+  const el=document.getElementById('usage-banner');
+  if(!el) return;
+  const remaining=Math.max(0,MONTHLY_LIMIT-count);
+  el.textContent=`Monthly usage: ${count} / ${MONTHLY_LIMIT} exchanges (${remaining} remaining)`;
+  el.style.color=remaining<=10?'var(--red)':remaining<=30?'var(--gold)':'var(--text3)';
+}
+
+async function initUsageBanner(name){
+  const d=await getUsage(name);
+  updateUsageBanner(name,d.count);
+}
+
+function showLimitBanner(){
+  const msg='⛔ Monthly limit reached (200 exchanges). Your limit resets on the 1st of next month.';
+  // try to show in whatever active area is visible
+  ['vc-trans','sms-log','email-log'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.closest('.voice-area,.sms-area,.email-area')&&el.closest('.voice-area,.sms-area,.email-area').style.display!=='none'){
+      const d=document.createElement('div');d.className='tl sys';
+      const p=document.createElement('p');p.style.cssText='margin:0;color:var(--red);font-weight:700;';p.textContent=msg;
+      d.appendChild(p);el.appendChild(d);el.scrollTop=el.scrollHeight;
+    }
+  });
+}
 
 // ── URL PARAMS (SuiteDash) ──
 (function(){
@@ -645,229 +737,421 @@ const API = 'https://calm-mountain-27e8.rainmaker-ag.workers.dev';
   window._sd={name:n||'',email:e||'',company:c||'Experior Financial'};
 })();
 
+// ── REGISTRATION GATE ──
+(async function initRegistration(){
+  const sd = window._sd;
+  // Pre-fill from SuiteDash params
+  if(sd.name){
+    const el=document.getElementById('reg-name');
+    el.value=sd.name; el.readOnly=true;
+  }
+  if(sd.email){
+    const el=document.getElementById('reg-email');
+    el.value=sd.email; el.readOnly=true;
+  }
+
+  // Check if already registered
+  const email=(sd.email||'').trim().toLowerCase();
+  if(email){
+    try{
+      const r=await window.storage.get('reg:'+email);
+      if(r && r.value){
+        sessionStorage.setItem('_auth','password');
+        document.getElementById('reg-gate').classList.add('hidden');
+        return;
+      }
+    }catch(e){}
+  }
+  // Show gate (already visible by default)
+})();
+
+async function submitRegistration(){
+  const nameEl=document.getElementById('reg-name');
+  const emailEl=document.getElementById('reg-email');
+  const errEl=document.getElementById('reg-err');
+  const btn=document.getElementById('reg-btn');
+  const name=(nameEl.value||'').trim();
+  const email=(emailEl.value||'').trim().toLowerCase();
+
+  errEl.textContent='';
+  if(!name){errEl.textContent='Please enter your name.';return;}
+  if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';return;}
+
+  btn.disabled=true; btn.textContent='Saving...';
+  try{
+    await window.storage.set('reg:'+email, JSON.stringify({
+      name, email,
+      registeredAt: new Date().toISOString(),
+      tool: 'unified-trainer'
+    }));
+    sessionStorage.setItem('_auth','password');
+    document.getElementById('reg-gate').classList.add('hidden');
+  }catch(e){
+    errEl.textContent='Could not save registration. Please try again.';
+    btn.disabled=false; btn.textContent='Access Simulator →';
+  }
+}
+
 // Init profile builder on page load
 document.addEventListener('DOMContentLoaded',()=>{
-  buildPersonaGrid();
+  buildRegionGrid();
+  buildBackgroundGrid();
 });
 
-// ── PERSONA DATA ──
-// 8 personas — diverse backgrounds built in, Canada and US versions
+// ── BACKGROUND & REGION DATA ──
 
+const BACKGROUNDS = [
+  {
+    id:"european", label:"European / White", icon:"🏔️",
+    desc:"Mixed European heritage — British, French, Ukrainian, Dutch, Scandinavian roots",
+    names:{
+      close_family:"Aunt Carol", best_friend:"Mike", moms_friend:"Linda",
+      old_coworker:"Dave", college_friend:"Jess", neighbour:"Bob",
+      community_friend:"Tanya", sports_buddy:"Kevin"
+    },
+    culturalContext:"Your natural market reflects a mix of European-heritage families typical across Canada and the US. Many contacts have some familiarity with basic financial products but limited awareness of tax efficiency strategies.",
+  },
+  {
+    id:"south_asian", label:"South Asian", icon:"🪔",
+    desc:"Indian, Pakistani, Sri Lankan, Bangladeshi, Nepali backgrounds",
+    names:{
+      close_family:"Auntie Priya", best_friend:"Raj", moms_friend:"Mrs. Sharma",
+      old_coworker:"Vikram", college_friend:"Meera", neighbour:"Suresh",
+      community_friend:"Anita", sports_buddy:"Arjun"
+    },
+    culturalContext:"Your natural market has strong South Asian community ties. Family financial decisions are often collective — parents, in-laws, and siblings are all stakeholders. There is cultural emphasis on homeownership, children's education, and supporting aging parents. Many contacts have family financial obligations across borders. Trust is built through community reputation and referrals, not cold outreach.",
+  },
+  {
+    id:"east_asian", label:"East Asian", icon:"🏮",
+    desc:"Chinese, Korean, Japanese, Taiwanese, Hong Kong backgrounds",
+    names:{
+      close_family:"Auntie Wei", best_friend:"Jason", moms_friend:"Mrs. Chen",
+      old_coworker:"David", college_friend:"Amy", neighbour:"Mr. Kim",
+      community_friend:"Grace", sports_buddy:"Kevin"
+    },
+    culturalContext:"Your natural market has strong East Asian community networks. Financial conservatism is common — many contacts prefer guaranteed products over market exposure and are skeptical of financial industry salespeople. Family reputation matters greatly. Many have cross-border financial complexity. Education funding for children is a top priority.",
+  },
+  {
+    id:"black", label:"Black / African", icon:"✊",
+    desc:"African Canadian/American, Caribbean, West African, East African backgrounds",
+    names:{
+      close_family:"Aunt Diane", best_friend:"Marcus", moms_friend:"Ms. Williams",
+      old_coworker:"Andre", college_friend:"Keisha", neighbour:"Jerome",
+      community_friend:"Simone", sports_buddy:"Darius"
+    },
+    culturalContext:"Your natural market has deep community roots and strong church and community organization ties. There is historical distrust of the financial industry — many contacts have been underserved or had bad experiences. The opportunity is significant: generational wealth building is a genuine priority and the 4F Solution education-first approach resonates strongly. Building trust through authenticity is essential.",
+  },
+  {
+    id:"middle_eastern", label:"Middle Eastern / Arab", icon:"🌙",
+    desc:"Lebanese, Syrian, Egyptian, Iranian, Iraqi, Jordanian, Palestinian backgrounds",
+    names:{
+      close_family:"Auntie Fatima", best_friend:"Karim", moms_friend:"Um Hassan",
+      old_coworker:"Omar", college_friend:"Nadia", neighbour:"Walid",
+      community_friend:"Rania", sports_buddy:"Tariq"
+    },
+    culturalContext:"Your natural market has strong family and community cohesion. Business and financial decisions are often made with input from extended family. There may be religious considerations around interest-bearing products. Many contacts are entrepreneurs or self-employed. Hospitality and relationship come before business — rushing to the ask without genuine connection first will backfire.",
+  },
+  {
+    id:"latin", label:"Latin American / Hispanic", icon:"🌺",
+    desc:"Mexican, Colombian, Brazilian, Salvadoran, Guatemalan, Dominican backgrounds",
+    names:{
+      close_family:"Tia Rosa", best_friend:"Carlos", moms_friend:"Senora Reyes",
+      old_coworker:"Miguel", college_friend:"Sofia", neighbour:"Roberto",
+      community_friend:"Elena", sports_buddy:"Diego"
+    },
+    culturalContext:"Your natural market has strong family and community networks with high trust within the community. Family-first financial decisions are the norm — protecting and providing for the family is the primary financial motivator. Many contacts are first or second generation with complex cross-border financial situations. The 4F overview framed around family protection lands particularly well.",
+  },
+  {
+    id:"filipino", label:"Filipino", icon:"🌟",
+    desc:"Filipino-Canadian or Filipino-American backgrounds",
+    names:{
+      close_family:"Tita Carmen", best_friend:"Ryan", moms_friend:"Ate Gloria",
+      old_coworker:"Ronald", college_friend:"Maricel", neighbour:"Noel",
+      community_friend:"Christine", sports_buddy:"Jerome"
+    },
+    culturalContext:"Your natural market is deeply community and church-connected. Word of mouth travels fast — both positive and negative. Family financial obligations are strong including supporting parents and siblings. Nursing, healthcare, and government employment are common — stable income but limited financial planning knowledge. Community trust and financial education gap make this an ideal market for the 4F approach.",
+  },
+  {
+    id:"indigenous", label:"Indigenous / First Nations", icon:"🦅",
+    desc:"First Nations, Metis, Inuit (Canada) or Native American, Alaska Native (US)",
+    names:{
+      close_family:"Auntie Rose", best_friend:"Nathan", moms_friend:"Mary",
+      old_coworker:"James", college_friend:"Leah", neighbour:"Gordon",
+      community_friend:"Sandra", sports_buddy:"Tyler"
+    },
+    culturalContext:"Your natural market has deep community and family ties with significant historical distrust of institutions including financial services. Collective thinking is important — individual financial success is seen in context of community wellbeing. Many contacts have unique financial considerations. The values-first approach of the 4F Solution aligns well with community values. Building authentic relationship before any business conversation is non-negotiable.",
+  },
+  {
+    id:"mixed", label:"Mixed / Multicultural", icon:"🌍",
+    desc:"Diverse background — your natural market is a genuine mix of many cultures",
+    names:{
+      close_family:"Auntie Carol", best_friend:"Marcus", moms_friend:"Mrs. Chen",
+      old_coworker:"Omar", college_friend:"Sofia", neighbour:"Bob",
+      community_friend:"Anita", sports_buddy:"Darius"
+    },
+    culturalContext:"Your natural market is genuinely diverse — a mix of backgrounds, languages, and financial literacy levels. This reflects the reality of many urban Canadian and American communities. Each prospect brings a different cultural context to financial conversations. Your training across this diversity is excellent preparation for real-world practice.",
+  },
+];
+
+
+const REGIONS = {
+  ca: [
+    {id:'western', label:'Western Canada', hint:'BC, Alberta', cities:['Vancouver','Surrey','Burnaby','Calgary','Edmonton','Red Deer','Kelowna','Lethbridge','Kamloops','Saskatoon','Regina']},
+    {id:'prairies', label:'Prairies', hint:'SK, MB', cities:['Saskatoon','Regina','Moose Jaw','Winnipeg','Brandon','Portage la Prairie','Prince Albert','Swift Current']},
+    {id:'ontario', label:'Ontario', hint:'GTA, northern ON', cities:['Toronto','Mississauga','Brampton','Markham','Hamilton','Ottawa','London','Windsor','Kitchener','Barrie','Sudbury']},
+    {id:'quebec', label:'Quebec', hint:'Montreal, QC City', cities:['Montreal','Laval','Quebec City','Gatineau','Longueuil','Sherbrooke','Saguenay','Trois-Rivières']},
+    {id:'atlantic', label:'Atlantic Canada', hint:'NS, NB, NL, PEI', cities:['Halifax','Moncton','Fredericton','Saint John','St. John\'s','Charlottetown','Sydney','Dartmouth']},
+  ],
+  us: [
+    {id:'northeast', label:'Northeast', hint:'NY, NJ, MA, PA', cities:['New York','Brooklyn','Newark','Philadelphia','Boston','Hartford','Providence','Buffalo','Albany']},
+    {id:'southeast', label:'Southeast', hint:'FL, GA, NC, SC', cities:['Miami','Orlando','Tampa','Atlanta','Charlotte','Raleigh','Jacksonville','Savannah']},
+    {id:'midwest', label:'Midwest', hint:'IL, OH, MI, MN', cities:['Chicago','Columbus','Detroit','Minneapolis','Indianapolis','Cleveland','Milwaukee','Kansas City']},
+    {id:'south', label:'South', hint:'TX, LA, TN, AL', cities:['Houston','Dallas','Austin','San Antonio','Nashville','New Orleans','Memphis','Birmingham']},
+    {id:'west', label:'West', hint:'CA, WA, OR, AZ, CO', cities:['Los Angeles','San Jose','San Diego','Seattle','Portland','Phoenix','Denver','Las Vegas','Fresno']},
+  ],
+};
+
+// Per-background city overrides (culturally plausible concentrations)
+const BACKGROUND_CITIES = {
+  south_asian: {ca:['Brampton','Mississauga','Surrey','Edmonton','Calgary','Markham','Scarborough'], us:['Fremont','San Jose','Irving','Sugar Land','Edison','Jersey City','Artesia']},
+  east_asian:  {ca:['Richmond','Burnaby','Markham','Vancouver','Toronto','Mississauga'], us:['San Gabriel','Flushing','Richmond','Monterey Park','Sunnyvale','Bellevue']},
+  black:       {ca:['Brampton','Toronto','Montreal','Halifax','Ottawa'], us:['Atlanta','Houston','Chicago','Detroit','Washington DC','Baltimore','Charlotte']},
+  middle_eastern:{ca:['Ottawa','Montreal','Toronto','Mississauga','Edmonton'], us:['Dearborn','Anaheim','Houston','Paterson','Chicago','Jersey City']},
+  latin:       {ca:['Montreal','Toronto','Vancouver','Ottawa'], us:['Miami','Los Angeles','Houston','Chicago','Dallas','San Antonio','Phoenix']},
+  filipino:    {ca:['Winnipeg','Vancouver','Calgary','Edmonton','Toronto'], us:['Daly City','Los Angeles','Las Vegas','Honolulu','Chicago','Seattle']},
+  indigenous:  {ca:['Saskatoon','Winnipeg','Edmonton','Thunder Bay','Regina'], us:['Albuquerque','Rapid City','Minneapolis','Anchorage','Oklahoma City']},
+};
+
+function getCitiesForBackground(bgId, country) {
+  if (BACKGROUND_CITIES[bgId] && BACKGROUND_CITIES[bgId][country]) {
+    return BACKGROUND_CITIES[bgId][country];
+  }
+  const regions = REGIONS[country] || REGIONS.ca;
+  const all = regions.flatMap(r => r.cities);
+  return all;
+}
+
+function getRandomCity(bgId, country) {
+  const pool = getCitiesForBackground(bgId, country);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// ── DATA ──
 const PERSONAS=[
   {
-    id:"carol", name:"Priya", initial:"P", color:"#c0506a", rel:"Close Family", city:"Brampton",
-    age:54, gender:"female",
-    life:"Married 26 years to Suresh. Two adult kids, one still at home finishing university. Works part-time at a dental office. They own their home — mortgage almost paid. Suresh has a workplace pension, she has a small RRSP she hasn't looked at in years. Strong family ties, parents also nearby.",
-    relationship:"Your aunt on your dad's side. She's known you your whole life. When you call out of the blue her first instinct is always 'is everything okay?' She loves you but she worries. Has never thought of you in a professional context.",
-    financialMindset:"Assumes they're fine — Suresh handles the money. Has a nagging feeling they should look at things but hasn't made it a priority. The word investment makes her slightly nervous. Very community-oriented — cares about family security above everything.",
-    naturalObjection:"I'm too busy",
-    objectionStyle:"Gentle and apologetic — 'oh beta, I would love to but things are just so hectic right now.' She genuinely means it but it's also partly deflection.",
-    saysYesWhen:"You make it about the family and keeping them protected. 'I just want to make sure you and Suresh have the full picture' works. She responds to care, not logic.",
-    killsCall:"Any pressure or urgency. If it feels like she's being sold to she goes quiet and politely ends it.",
-    voiceStyle:"Warm, chatty. Asks about your parents first. Laughs easily. Texts in full sentences.",
-    smsStyle:"Full sentences, warm. Responds within an hour if she likes the message. Will ignore a text that feels impersonal.",
+    id:`carol', name:'Aunt Carol', initial:'C', color:'#c0506a', rel:'Close Family', city:'Calgary`,
+    age:54, gender:'female',
+    life:`Married 28 years to Gerald. Two adult kids, one still at home. Works part-time at a dental office. They own their home in Deer Run — mortgage almost paid off. Gerald has a pension, she has a small RRSP she hasn't looked at in years.`,
+    relationship:`Your dad's sister. She's known you your whole life. When you call out of the blue her first instinct is always "is everything okay?" She loves you but she worries. Has never thought of you in a professional context — you're still the kid at Christmas dinner to her.`,
+    financialMindset:`Assumes they're "fine" — Gerald handles the money. Has a nagging feeling they should look at things but hasn't made it a priority. Not sophisticated about finances at all. The word "investment" makes her slightly nervous.`,
+    naturalObjection:`I'm too busy`,
+    objectionStyle:`Gentle and apologetic — "oh honey, I would love to but things are just so hectic right now." She genuinely means it but it's also partly deflection.`,
+    saysYesWhen:`You make it about the family and keep it light. "I just want to make sure you and Gerald have the full picture" works. She responds to care, not to logic.`,
+    killsCall:`Any pressure, any urgency, any hint that she needs to make a decision. If it feels like she's being sold to she goes quiet and politely ends it.`,
+    voiceStyle:'Warm, chatty. Asks about your mom first. Laughs easily. Texts in full sentences with punctuation. Occasionally uses a heart emoji.',
+    smsStyle:'Full sentences, warm. Responds within an hour if she likes the message. Will ignore a text that feels impersonal.',
   },
   {
-    id:"mike", name:"Marcus", initial:"M", color:"#2a6ad8", rel:"Best Friend", city:"Edmonton",
-    age:34, gender:"male",
-    life:"Married to Kezia, two kids under 6. Works in industrial sales — good income but inconsistent. House in the south end, car payment, daycare costs. Feels like money goes out faster than it comes in. Has a group RRSP through work he never looks at.",
-    relationship:"Best friend since grade 9. You've seen each other through everything. He'll tease you mercilessly but would do anything for you. Has never seen you in a business context and will find it funny at first.",
-    financialMindset:"Knows he should be doing more but feels overwhelmed by the day-to-day. Classic I'm too busy right now mindset — genuinely, not as an excuse. Real stress under the humour.",
-    naturalObjection:"I'm too busy",
-    objectionStyle:"Honest and a bit self-deprecating — 'man I can barely keep up with the bills, I don't have time for this.' He laughs it off but there's real stress under it.",
-    saysYesWhen:"You don't make it weird. Keep the banter going, be real with him, land the ask naturally. He says yes to you, not to a concept.",
-    killsCall:"The moment it sounds like a rehearsed script he will call it out. He shuts down if it feels fake.",
-    voiceStyle:"Casual, jokes around, talks over you a bit. Texts in fragments. Replies fast.",
-    smsStyle:"Short, informal. Lots of emoji. Will reply immediately if it sounds like you. Will leave it on read if it sounds like a mass text.",
+    id:`mike', name:'Mike', initial:'M', color:'#2a6ad8', rel:'Best Friend', city:'Edmonton`,
+    age:34, gender:'male',
+    life:'Married to Sarah, two kids under 6. Works in industrial sales — good income but inconsistent. They have a house in Spruce Grove, car payment, daycare costs. Feels like money goes out faster than it comes in. Has a group RRSP through work he never looks at.',
+    relationship:`Best friend since grade 9. You've seen each other through everything. He'll tease you mercilessly but would do anything for you. Has never seen you in a business context and will find it hilarious at first.`,
+    financialMindset:`Knows he should be doing more but feels overwhelmed by the day-to-day. "We'll sort it out when the kids are in school." Classic "I'm too busy right now" mindset — genuinely, not as an excuse.`,
+    naturalObjection:`I'm too busy`,
+    objectionStyle:`Honest and a bit self-deprecating — "dude I can barely remember to pay the credit card on time." He laughs it off but there's real stress under it.`,
+    saysYesWhen:`You don't make it weird. Keep the banter going, be real with him, and land the ask naturally — "I'm not going to pitch you anything, I just think there's a thing you'd actually find useful." He says yes to you, not to a concept.`,
+    killsCall:`The moment it sounds like a rehearsed script he will call it out — "okay who are you and what have you done with Ryan." He shuts down if it feels fake.`,
+    voiceStyle:`Casual, jokes around, talks over you a bit. Texts in fragments. Uses "lol" and "haha" constantly. Replies fast.`,
+    smsStyle:'Short, informal. Lots of emoji. Will reply immediately if it sounds like you. Will leave it on read if it sounds like a mass text.',
   },
   {
-    id:"linda", name:"Grace", initial:"G", color:"#7040c8", rel:"Mom's Friend", city:"Vancouver",
-    age:57, gender:"female",
-    life:"Married to David, two grown kids. She's a retired nurse, he works in property management. They own their home in Burnaby — paid off. She has a small pension from her nursing years and some GICs. Born in the Philippines, came to Canada in her 30s. Very church-connected.",
-    relationship:"Your mom's closest friend from church, known you since you were a child. Genuine warmth for you. But calling her about finances feels oddly formal — she's used to seeing you at family gatherings.",
-    financialMindset:"Conservative with money. Distrusts anything that sounds like it could be risky. Has a financial advisor at the credit union she's lukewarm on but hasn't switched. Cares deeply about leaving something for the kids.",
-    naturalObjection:"I already have an advisor",
-    objectionStyle:"Said politely but firmly. 'I appreciate it anak but I do have someone I work with already.' Not hostile — she just means it.",
-    saysYesWhen:"You acknowledge her advisor exists and don't try to compete. 'This isn't about replacing anyone — it's just education.' She responds to being understood, not sold.",
-    killsCall:"Anything that sounds like you're criticising her current advisor or implying she's made poor decisions.",
-    voiceStyle:"Warm and measured. Articulate. Texts carefully — proper punctuation, no abbreviations.",
-    smsStyle:"Thoughtful replies. Takes her time. Won't reply to anything that feels dismissive.",
+    id:`linda', name:'Linda', initial:'L', color:'#7040c8', rel:"Mom's Friend", city:'Calgary`,
+    age:58, gender:'female',
+    life:`Divorced 8 years ago. Works as an office manager at a law firm. Good steady income but hasn't recovered financially from the divorce as much as she'd like. Her RRSP was split. Rents now. Daughter is at U of A. Quietly worried about retirement but hasn't faced it head-on.`,
+    relationship:`Your mom's closest friend since before you were born. She's watched you grow up. Has genuine affection for you. But calling her about finances feels oddly formal — she's used to seeing you at your mom's kitchen table.`,
+    financialMindset:`More financially aware than she lets on — the divorce taught her hard lessons. But she's also had bad experiences with financial people who didn't listen. Protective of her time and her trust. Has an "advisor" she's not sure she likes but hasn't switched.`,
+    naturalObjection:'I already have an advisor',
+    objectionStyle:`Said politely but firmly. "I appreciate it sweetie but I do have someone I work with already." Not hostile — she just means it.`,
+    saysYesWhen:`You acknowledge her advisor exists and don't try to compete with them. "This isn't about replacing anyone — it's just education, and I think there might be something in it that's relevant to where you're at." She responds to being understood, not sold.`,
+    killsCall:`Anything that sounds like you're criticising her current advisor or implying she's made poor decisions. She'll get quiet and polite-cold.`,
+    voiceStyle:'Measured and warm but with a professional edge. Articulate. Texts carefully — no abbreviations, proper punctuation.',
+    smsStyle:`Thoughtful replies. Takes her time. Won't reply to anything that feels dismissive of her situation.`,
   },
   {
-    id:"dave", name:"Omar", initial:"O", color:"#1a9060", rel:"Old Coworker", city:"Calgary",
-    age:43, gender:"male",
-    life:"Married, two teenagers. Born in Lebanon, came to Canada in his 20s. Works in project management at an engineering firm. Good income. Has a mortgage, a rental property he manages himself, and a self-directed RRSP he actively watches. Thinks he's on top of things — and mostly is.",
-    relationship:"You worked together for three years. Mutual respect. Not close friends but solid. Lost touch when he changed companies. The call will feel a bit out of the blue but not weird.",
-    financialMindset:"I've got it handled. Confident about money, reads financial news, has opinions. His real gap is tax efficiency — he's optimising the pieces but doesn't have a full picture. Won't admit he might be missing something easily.",
-    naturalObjection:"My finances are simple, I've got it covered",
-    objectionStyle:"Direct and a bit dismissive — 'yeah I'm pretty good on that front.' Not rude, just confident. Needs a reason to listen, not warmth.",
-    saysYesWhen:"You give him something concrete and specific. He responds to intellectual challenge, not soft sells.",
-    killsCall:"Vagueness. If you can't tell him what this is actually about in plain terms he dismisses it immediately.",
-    voiceStyle:"Direct, efficient. Speaks in statements. Replies same day.",
-    smsStyle:"Short and direct. Ignores texts that are too long or too vague.",
+    id:`dave', name:'Dave', initial:'D', color:'#1a9060', rel:'Old Coworker', city:'Red Deer`,
+    age:42, gender:'male',
+    life:`Married, two teenagers. Works in project management at an engineering firm. Good income. Has a mortgage, a rental property he manages himself, and a self-directed RRSP he actively watches. Thinks he's on top of things — and mostly is — but has blind spots he doesn't know about.`,
+    relationship:'You worked together for three years. Mutual respect. Not close friends but solid. Lost touch after he moved to Red Deer. The call will feel a bit out of the blue but not weird — you two always liked each other.',
+    financialMindset:`"I've got it handled." Confident about money, reads financial news, has opinions. His real gap is tax efficiency and estate planning — he's optimising the pieces but doesn't have a full picture. Won't admit he might be missing something easily.`,
+    naturalObjection:`My finances are simple / I've got it covered`,
+    objectionStyle:`Direct and a bit dismissive initially — "yeah I'm pretty good on that front." Not rude, just confident. Needs a reason to listen, not warmth.`,
+    saysYesWhen:`You give him something concrete. "Most people in your situation — good income, rental property, RRSP — have at least one gap in the Tax Efficiency piece they didn't know was there." That gets his attention. He responds to specificity and intellectual challenge.`,
+    killsCall:`Vagueness. If you can't tell him what this is actually about in plain terms he dismisses it immediately. Also hates when people waste his time.`,
+    voiceStyle:'Direct, efficient. Speaks in statements not questions. Texts in bullet-point fashion mentally even if not literally. Replies same day.',
+    smsStyle:'Short and direct. Gets to the point. Ignores texts that are too long or too vague.',
   },
   {
-    id:"jess", name:"Jess", initial:"J", color:"#b87020", rel:"College Friend", city:"Calgary",
-    age:31, gender:"female",
-    life:"Single, rents downtown. Works in marketing at a tech startup — decent salary but irregular bonus structure. Has student debt she's slowly paying down. Some TFSA savings. Mixed background — grew up in a multicultural household. Thinks about money but doesn't feel like she has enough to warrant planning.",
-    relationship:"Were close at university, drifted after graduation. You've kept up on Instagram. The call is a surprise — she'll be both happy and slightly wary about why you're reaching out.",
-    financialMindset:"Feels like financial planning is for people who have more figured out than she does. Has a mild distrust of the financial industry. Experiences financial anxiety but doesn't talk about it.",
-    naturalObjection:"I'm too busy, my finances are too simple",
-    objectionStyle:"Self-deprecating deflection — 'oh god I'm the worst person to talk to about money.' Laughs it off but it comes from real anxiety.",
-    saysYesWhen:"You meet her where she is. 'This is especially useful for people who feel like they're not there yet.' She responds to being normalised, not impressed.",
-    killsCall:"Any sense of judgment about where she's at financially. If the reconnection feels like a pretext to pitch her, she'll close off completely.",
-    voiceStyle:"Warm, a bit self-conscious. Lots of 'like' and 'honestly.' Texts quickly in short bursts.",
-    smsStyle:"Fast and casual. Will reply warmly if the message sounds like the actual you. Will ghost a corporate-sounding text.",
+    id:`jess', name:'Jess', initial:'J', color:'#b87020', rel:'College Friend', city:'Calgary`,
+    age:31, gender:'female',
+    life:`Single, rents a condo in Beltline. Works in marketing at a tech startup — decent salary but irregular bonus structure. Has student debt she's slowly paying down. Some TFSA savings. Thinks about money but doesn't feel like she has enough to warrant "planning." Experiences financial anxiety but doesn't talk about it.`,
+    relationship:`Were close at university, drifted after graduation. You've kept up on Instagram. The call is a surprise — she'll be both happy and slightly wary about why you're reaching out after a gap.`,
+    financialMindset:`Feels like financial planning is "for people who have more figured out than she does." Doesn't realise the 4F overview is exactly for where she is now. Has a mild distrust of the financial industry from watching her parents deal with a bad advisor.`,
+    naturalObjection:`I'm too busy / my finances are too simple`,
+    objectionStyle:`Self-deprecating deflection — "oh god I'm the worst person to talk to about money, I have like $400 in savings." Laughs it off but it comes from real anxiety.`,
+    saysYesWhen:`You meet her where she is. "Honestly this is especially useful for people who feel like they're not there yet — that's kind of the whole point." She responds to being normalised, not impressed.`,
+    killsCall:`Any sense of judgment about where she's at financially. Also — if the reconnection feels like it was just a pretext to pitch her, she'll feel used and close off completely.`,
+    voiceStyle:`Warm, a bit self-conscious. Lots of "like" and "honestly." Texts quickly in short bursts. Uses emoji naturally.`,
+    smsStyle:'Fast and casual. Will reply warmly if the message sounds like the actual you reaching out. Will ghost a corporate-sounding text.',
   },
   {
-    id:"bob", name:"Bob", initial:"B", color:"#3a6890", rel:"Neighbour", city:"Airdrie",
-    age:49, gender:"male",
-    life:"Married to Donna. Three kids, youngest just started high school. Electrician, runs his own small company. Good income but lumpy. No pension, self-employed, hasn't set up much for retirement because he's always been reinvesting in the business. Owns his home outright.",
-    relationship:"Next-door neighbour for four years. You wave in the driveway, have had a few beers in the backyard. Friendly but not deep. He knows you changed careers but doesn't really know what you do now.",
-    financialMindset:"Self-reliant by nature. Has a mental block around financial planning — associates it with suits and commissions and being sold things he doesn't need.",
-    naturalObjection:"I'm too busy — and mild resistance to the whole concept",
-    objectionStyle:"Gruff but not hostile. 'Yeah I keep meaning to look at that stuff but you know how it is.' Protective of his time.",
-    saysYesWhen:"You keep it low-key and neighbour-to-neighbour. No corporate language. Plain talk about the self-employed side specifically.",
-    killsCall:"Anything that sounds polished or scripted. He can smell a pitch from a mile away.",
-    voiceStyle:"Short sentences. Dry humour. Comfortable with silence.",
-    smsStyle:"Very short. One or two words is normal. Won't reply to anything that feels like a campaign.",
+    id:`bob', name:'Bob', initial:'B', color:'#3a6890', rel:'Neighbour', city:'Airdrie`,
+    age:49, gender:'male',
+    life:`Married to Donna. Three kids, youngest just started high school. Trades — electrician, runs his own small company. Does well but income is lumpy. No pension, self-employed, hasn't set up much for retirement because he's always been reinvesting in the business. Owns his home outright.`,
+    relationship:`Next-door neighbour for four years. You wave in the driveway, have had a few beers in the backyard. Friendly but not deep. He knows you changed careers but doesn't really know what you do now.`,
+    financialMindset:`Self-reliant by nature. "I've been taking care of myself since I was 18." Doesn't like asking for help, especially with money. Has a mental block around financial planning — associates it with suits and commissions and being sold things he doesn't need.`,
+    naturalObjection:`I'm too busy — and mild resistance to the whole concept`,
+    objectionStyle:`Gruff but not hostile. "Yeah I keep meaning to look at that stuff but you know how it is." Protective of his Saturday morning.`,
+    saysYesWhen:`You keep it low-key and neighbour-to-neighbour. No corporate language. "I'm not going to sit here and sell you anything, I just think there's some stuff around the self-employed side that's actually worth knowing about." He responds to peer respect, not sales technique.`,
+    killsCall:'Anything that sounds polished or scripted. He can smell a pitch from a mile away and it immediately puts his back up.',
+    voiceStyle:'Short sentences. Dry humour. Comfortable with silence. Texts rarely and briefly.',
+    smsStyle:`Very short. One or two words is normal for him. Will reply if the message is direct and doesn't oversell. Won't reply to anything that feels like a campaign.`,
   },
   {
-    id:"tanya", name:"Tanya", initial:"T", color:"#b04090", rel:"Community Friend", city:"Calgary",
-    age:38, gender:"female",
-    life:"Married to Marcus, two kids ages 8 and 11. She's a teacher, he's in property management. Combined decent income. They have RRSPs, a mortgage, and are starting to think about the kids' education. Tanya is the financial decision-maker in the house. Mixed Black and Caribbean background.",
-    relationship:"Met through a community sports league. See each other regularly. Friendly and warm. She respects you and would genuinely hear you out — she's just busy and protective of her time.",
-    financialMindset:"Engaged and thoughtful about money. Genuinely curious about whether they're doing everything they should be. Her gap is tax efficiency — she doesn't know what she doesn't know there.",
-    naturalObjection:"I'm too busy — but genuinely open once she understands what it is",
-    objectionStyle:"Pragmatic — 'I'd love to but between work and the kids I barely have time to breathe.' She means it, but she's a yes if the value is clear.",
-    saysYesWhen:"You tell her it's 45 minutes and give her a reason it's relevant to where they're at — kids, mortgage, dual income. She's an organiser; she responds to specificity.",
-    killsCall:"Vagueness about what the meeting actually is. She doesn't have time to show up to something unclear.",
-    voiceStyle:"Warm, organised, asks clarifying questions. Texts well — complete thoughts.",
-    smsStyle:"Responds thoughtfully. Will ask 'what's it about?' — that's her decision process, not resistance.",
+    id:`tanya', name:'Tanya', initial:'T', color:'#b04090', rel:'Community Friend', city:'Calgary`,
+    age:38, gender:'female',
+    life:`Married to Marcus, two kids ages 8 and 11. She's a teacher, he's in property management. Combined decent income. They have RRSPs, a mortgage, and are starting to think about the kids' education. Tanya is the financial decision-maker in the house — Marcus defers to her.`,
+    relationship:`Met through a community sports league. See each other regularly. Friendly and warm. She respects you and would genuinely hear you out — she's just busy and protective of her time.`,
+    financialMindset:`Engaged and thoughtful about money. Reads articles, has opinions. Genuinely curious about whether they're doing everything they should be. Would benefit from the 4F overview and would likely know it. Her gap is tax efficiency — she doesn't know what she doesn't know there.`,
+    naturalObjection:`I'm too busy — but genuinely open once she understands what it is`,
+    objectionStyle:`Pragmatic — "I'd love to but between work and the kids I barely have time to breathe." She means it, but she's also a yes if the value is clear.`,
+    saysYesWhen:`You tell her it's 45 minutes and give her a reason it's relevant to where they're at — kids, mortgage, dual income. She's an organiser; she responds to "here's what we'll cover and why it matters to you specifically."`,
+    killsCall:`Vagueness about what the meeting actually is. She doesn't have time to show up to something unclear.`,
+    voiceStyle:'Warm, organised, asks clarifying questions. Texts well — complete thoughts, emoji occasionally. Schedules things.',
+    smsStyle:`Responds thoughtfully. Will ask "what's it about?" — that's not resistance, that's her decision-making process. Answer it simply.`,
   },
   {
-    id:"kevin", name:"Tyler", initial:"T", color:"#c86020", rel:"Sports Buddy", city:"Edmonton",
-    age:36, gender:"male",
-    life:"Common-law with Ashley, no kids yet but talking about it. Works in oil and gas — good money but cyclical, been laid off twice. Has an RRSP and some investments he set up years ago and hasn't checked since. Indigenous background — grew up near Edmonton. Buys toys — truck, snowmobile, season tickets. Doesn't think about the future much.",
-    relationship:"Hockey league, four years. You have a good time together on the ice and at the bar after. He knows you changed jobs. Will give you a hard time about it in a friendly way before taking it seriously.",
-    financialMindset:"Lives for today. Not irresponsible, just not future-focused. Has heard 'you should get your finances sorted' before and it goes in one ear and out the other — unless someone makes it feel relevant to his actual life.",
-    naturalObjection:"I'm too busy, I'm good man",
-    objectionStyle:"Deflects with humour first — 'I got the Oilers to worry about, I don't have time for this stuff.' Then if pushed he goes quieter: 'honestly my finances are a mess, I wouldn't even know where to start.'",
-    saysYesWhen:"You make it concrete and non-threatening. Future-focused without being heavy — especially anything about him and Ashley taking the next step.",
-    killsCall:"Any lecture about not saving enough or not being prepared. He knows. He doesn't need to hear it from you.",
-    voiceStyle:"Loud, jovial, jokes constantly. Gets serious fast if you match his energy first.",
-    smsStyle:"Short, emoji-heavy, lots of hockey references. Replies fast. Ignores anything corporate.",
+    id:`kevin', name:'Kevin', initial:'K', color:'#c86020', rel:'Sports Buddy', city:'Edmonton`,
+    age:36, gender:'male',
+    life:`Common-law with Ashley, no kids yet but talking about it. Works in oil and gas — good money but cyclical, has been laid off twice. Has an RRSP and some investments he set up years ago and hasn't checked since. Buys toys — truck, snowmobile, season tickets. Doesn't think about the future much.`,
+    relationship:'Hockey league, four years. You have a good time together on the ice and at the bar after. He knows you changed jobs. Will give you a hard time about it in a friendly way before taking it seriously.',
+    financialMindset:`Lives for today. Not irresponsible, just not future-focused. Has heard "you should get your finances sorted" before and it goes in one ear and out the other — unless someone makes it feel relevant to his actual life.`,
+    naturalObjection:`I'm too busy / "I'm good man"`,
+    objectionStyle:`Deflects with humour first — "I got the Leafs to worry about, I don't have time for this stuff." Then if pushed he goes quieter and more serious: "honestly my finances are a mess, I wouldn't even know where to start."`,
+    saysYesWhen:`You make it concrete and non-threatening. "I promise it's not as boring as it sounds — there's actually stuff in here that's relevant when you and Ashley are thinking about the next step." Future-focused without being heavy.`,
+    killsCall:`Any lecture about not saving enough or not being prepared. He knows. He doesn't need to hear it from you.`,
+    voiceStyle:'Loud, jovial, jokes constantly. Gets serious fast if you match his energy first. Texts in short bursts with a lot of voice note energy.',
+    smsStyle:'Short, emoji-heavy, lots of hockey references. Replies fast when on his phone. Ignores anything that sounds corporate.',
   },
 ];
 
 const PERSONAS_US=[
   {
-    id:"carol", name:"Carmen", initial:"C", color:"#c0506a", rel:"Close Family", city:"Miami",
-    age:54, gender:"female",
-    life:"Married 26 years to Roberto. Two adult kids, one still at home. Works part-time at a dental office. They own their home in Hialeah — mortgage almost paid. Roberto has a 401(k) through his company, she has a small IRA she hasn't looked at in years. Strong Cuban-American family ties.",
-    relationship:"Your aunt on your dad's side. She's known you your whole life. When you call out of the blue her first instinct is always 'is everything okay?' She loves you but she worries.",
-    financialMindset:"Assumes they're fine — Roberto handles the money. Has a nagging feeling they should look at things but hasn't made it a priority. The word investment makes her slightly nervous.",
-    naturalObjection:"I'm too busy",
-    objectionStyle:"Gentle and apologetic. 'Ay mija, I would love to but things are just so crazy right now.' She genuinely means it but it's also partly deflection.",
-    saysYesWhen:"You make it about the family and keeping them protected. She responds to care, not logic.",
-    killsCall:"Any pressure or urgency. If it feels like she's being sold to she goes quiet and politely ends it.",
-    voiceStyle:"Warm, chatty. Asks about your parents first. Laughs easily.",
-    smsStyle:"Full sentences, warm. Responds within an hour if she likes the message.",
+    id:`carol', name:'Aunt Carol', initial:'C', color:'#c0506a', rel:'Close Family', city:'Phoenix, AZ`,
+    age:54, gender:'female',
+    life:`Married 28 years to Gerald. Two adult kids, one still at home. Works part-time at a dental office. They own their home in Chandler — mortgage almost paid. Gerald has a 401(k) through his company, she has a small IRA she hasn't looked at in years.`,
+    relationship:`Your dad's sister. She's known you your whole life. When you call out of the blue her first instinct is always "is everything okay?" She loves you but she worries. Has never thought of you in a professional context — you're still the kid at Christmas dinner to her.`,
+    financialMindset:`Assumes they're "fine" — Gerald handles the money. Has a nagging feeling they should look at things but hasn't made it a priority. Not sophisticated about finances. The word "investment" makes her slightly nervous. Medicare is coming up and she hasn't thought about what that means.`,
+    naturalObjection:`I'm too busy`,
+    objectionStyle:`Gentle and apologetic — "oh honey, I would love to but things are just so hectic right now." She genuinely means it but it's also partly deflection.`,
+    saysYesWhen:`You make it about the family and keep it light. "I just want to make sure you and Gerald have the full picture" works. She responds to care, not to logic.`,
+    killsCall:`Any pressure, any urgency, any hint that she needs to make a decision. If it feels like she's being sold to she goes quiet and politely ends it.`,
+    voiceStyle:'Warm, chatty. Asks about your mom first. Laughs easily. Texts in full sentences with punctuation.',
+    smsStyle:'Full sentences, warm. Responds within an hour if she likes the message. Will ignore a text that feels impersonal.',
   },
   {
-    id:"mike", name:"Darius", initial:"D", color:"#2a6ad8", rel:"Best Friend", city:"Atlanta",
-    age:34, gender:"male",
-    life:"Married to Simone, two kids under 6. Works in industrial sales — good income but inconsistent. House in Decatur, car payment, daycare costs. Has a 401(k) through work he never maximized. Feels like money goes out faster than it comes in.",
-    relationship:"Best friend since grade 9. You've seen each other through everything. He'll tease you mercilessly but would do anything for you.",
-    financialMindset:"Knows he should be doing more but feels overwhelmed by the day-to-day. Classic I'm too busy mindset — genuinely, not as an excuse.",
-    naturalObjection:"I'm too busy",
-    objectionStyle:"Honest and a bit self-deprecating — 'man I can barely keep up with the mortgage.' He laughs it off but there's real stress under it.",
-    saysYesWhen:"You don't make it weird. Keep the banter going, be real with him. He says yes to you, not to a concept.",
-    killsCall:"The moment it sounds like a rehearsed script. He shuts down if it feels fake.",
-    voiceStyle:"Casual, jokes around. Texts in fragments. Replies fast.",
-    smsStyle:"Short, informal. Lots of emoji. Will leave it on read if it sounds like a mass text.",
+    id:`mike', name:'Mike', initial:'M', color:'#2a6ad8', rel:'Best Friend', city:'Dallas, TX`,
+    age:34, gender:'male',
+    life:`Married to Sarah, two kids under 6. Works in industrial sales — good income but inconsistent. They have a house in Frisco, car payment, daycare costs. Has a 401(k) through work he's never maximized. Feels like money goes out faster than it comes in.`,
+    relationship:`Best friend since grade 9. You've seen each other through everything. He'll tease you mercilessly but would do anything for you. Has never seen you in a business context and will find it hilarious at first.`,
+    financialMindset:`Knows he should be doing more but feels overwhelmed by the day-to-day. "We'll sort it out when the kids are in school." Classic "I'm too busy right now" mindset — genuinely, not as an excuse.`,
+    naturalObjection:`I'm too busy`,
+    objectionStyle:`Honest and a bit self-deprecating — "dude I can barely keep up with the mortgage, I don't have time for this." He laughs it off but there's real stress under it.`,
+    saysYesWhen:`You don't make it weird. Keep the banter going, be real with him, land the ask naturally — "I'm not going to pitch you anything, I just think there's a thing you'd actually find useful." He says yes to you, not to a concept.`,
+    killsCall:'The moment it sounds like a rehearsed script he will call it out. He shuts down if it feels fake.',
+    voiceStyle:`Casual, jokes around, talks over you a bit. Texts in fragments. Uses "lol" and "haha" constantly. Replies fast.`,
+    smsStyle:'Short, informal. Lots of emoji. Will reply immediately if it sounds like you. Will leave it on read if it sounds like a mass text.',
   },
   {
-    id:"linda", name:"Grace", initial:"G", color:"#7040c8", rel:"Mom's Friend", city:"Daly City",
-    age:57, gender:"female",
-    life:"Married to David, two grown kids. She's a retired nurse, he works in property management. They own their home. She has a small 403(b) from her nursing years and some CDs. Born in the Philippines, came to the US in her 30s. Very church-connected.",
-    relationship:"Your mom's closest friend from church. Genuine warmth for you. Calling her about finances feels oddly formal — she's used to seeing you at family gatherings.",
-    financialMindset:"Conservative with money. Distrusts anything that sounds risky. Has a financial advisor she's lukewarm on. Cares about leaving something for the kids.",
-    naturalObjection:"I already have an advisor",
-    objectionStyle:"Politely but firmly. 'I appreciate it anak but I do have someone I work with already.' Not hostile — she just means it.",
-    saysYesWhen:"You acknowledge her advisor and don't compete. 'This isn't about replacing anyone — just education.' She responds to being understood, not sold.",
-    killsCall:"Anything implying she's made poor decisions.",
-    voiceStyle:"Warm and measured. Texts carefully — proper punctuation.",
-    smsStyle:"Thoughtful replies. Takes her time.",
+    id:`linda', name:'Linda', initial:'L', color:'#7040c8', rel:"Mom's Friend", city:'Scottsdale, AZ`,
+    age:58, gender:'female',
+    life:`Divorced 8 years ago. Works as an office manager at a law firm. Good steady income but didn't recover financially from the divorce as well as she'd like. Her 401(k) was split. Rents a condo. Daughter is at ASU. Quietly worried about retirement — Social Security won't be enough on its own.`,
+    relationship:`Your mom's closest friend since before you were born. She's watched you grow up. Has genuine affection for you. But calling her about finances feels oddly formal — she's used to seeing you at your mom's kitchen table.`,
+    financialMindset:`More financially aware than she lets on — the divorce taught her hard lessons. Protective of her trust. Has a financial advisor she's not sure she likes.`,
+    naturalObjection:'I already have an advisor',
+    objectionStyle:`Said politely but firmly. "I appreciate it sweetie but I do have someone I work with already." Not hostile — she just means it.`,
+    saysYesWhen:`You acknowledge her advisor exists and don't try to compete. "This isn't about replacing anyone — it's just education." She responds to being understood, not sold.`,
+    killsCall:`Anything that sounds like you're criticising her current advisor or implying she's made poor decisions.`,
+    voiceStyle:'Measured and warm but with a professional edge. Articulate. Texts carefully — no abbreviations.',
+    smsStyle:`Thoughtful replies. Takes her time. Won't reply to anything dismissive of her situation.`,
   },
   {
-    id:"dave", name:"Omar", initial:"O", color:"#1a9060", rel:"Old Coworker", city:"Houston",
-    age:43, gender:"male",
-    life:"Married, two teenagers. Born in Lebanon, came to the US in his 20s. Works in project management at an engineering firm. Good income. Has a mortgage, a rental property, and a Roth IRA he actively manages.",
-    relationship:"You worked together for three years. Mutual respect. Not close friends but solid. Lost touch when he changed companies.",
-    financialMindset:"I've got it handled. Confident, reads financial news. His real gap is tax efficiency — he's optimising the pieces but doesn't have the full picture.",
-    naturalObjection:"My finances are simple, I've got it covered",
-    objectionStyle:"Direct and a bit dismissive. 'Yeah I'm pretty good on that front.' Needs a reason to listen, not warmth.",
-    saysYesWhen:"You give him something concrete and specific. He responds to intellectual challenge.",
-    killsCall:"Vagueness. Can't tell him what this is about in plain terms, he dismisses it.",
-    voiceStyle:"Direct, efficient. Replies same day.",
-    smsStyle:"Short and direct. Ignores texts that are too long.",
+    id:`dave', name:'Dave', initial:'D', color:'#1a9060', rel:'Old Coworker', city:'Denver, CO`,
+    age:42, gender:'male',
+    life:`Married, two teenagers. Works in project management at an engineering firm. Good income. Has a mortgage, a rental property he manages himself, and a Roth IRA he actively manages. Thinks he's on top of things — and mostly is — but has blind spots around tax strategy he doesn't know about.`,
+    relationship:'You worked together for three years. Mutual respect. Not close friends but solid. Lost touch after he moved to Denver. The call will feel a bit out of the blue but not weird.',
+    financialMindset:`"I've got it handled." Confident, reads financial news, has opinions. His real gap is tax efficiency and estate planning — he doesn't have a full picture.`,
+    naturalObjection:`My finances are simple / I've got it covered`,
+    objectionStyle:`Direct and a bit dismissive initially — "yeah I'm pretty good on that front." Not rude, just confident. Needs a reason to listen.`,
+    saysYesWhen:`You give him something concrete. "Most people in your situation — rental property, Roth IRA — have at least one gap in the Tax Efficiency piece they didn't know was there." He responds to specificity.`,
+    killsCall:`Vagueness. If you can't tell him what this is actually about in plain terms he dismisses it.`,
+    voiceStyle:'Direct, efficient. Gets to the point. Replies same day.',
+    smsStyle:'Short and direct. Ignores texts that are too long or too vague.',
   },
   {
-    id:"jess", name:"Jess", initial:"J", color:"#b87020", rel:"College Friend", city:"Seattle",
-    age:31, gender:"female",
-    life:"Single, rents an apartment in Capitol Hill. Works in marketing at a tech startup — decent salary but irregular RSU vesting. Has student loans. Some Roth IRA savings. Mixed background. Experiences financial anxiety but doesn't talk about it.",
-    relationship:"Were close at university, drifted after graduation. You've kept up on Instagram. The call is a surprise.",
-    financialMindset:"Feels like financial planning is for people who have more figured out. Mild distrust of the financial industry.",
-    naturalObjection:"I'm too busy, my finances are too simple",
-    objectionStyle:"Self-deprecating deflection — 'oh god I'm the worst person to talk to about money.' Laughs it off but it comes from real anxiety.",
-    saysYesWhen:"You meet her where she is. 'This is especially useful for people who feel like they're not there yet.' She responds to being normalised.",
-    killsCall:"Any sense of judgment. If the reconnection feels like a pretext to pitch her, she'll close off.",
-    voiceStyle:"Warm, a bit self-conscious. Texts quickly in short bursts.",
-    smsStyle:"Fast and casual. Will ghost a corporate-sounding text.",
+    id:`jess', name:'Jess', initial:'J', color:'#b87020', rel:'College Friend', city:'Seattle, WA`,
+    age:31, gender:'female',
+    life:`Single, rents an apartment in Capitol Hill. Works in marketing at a tech startup — decent salary but irregular RSU vesting. Has student loans she's slowly paying down. Some Roth IRA savings. Experiences financial anxiety but doesn't talk about it much.`,
+    relationship:`Were close at university, drifted after graduation. Kept up on Instagram. The call is a surprise — she'll be both happy and slightly wary about why you're reaching out.`,
+    financialMindset:`Feels like financial planning is "for people who have more figured out." Doesn't realise the 4F overview is for where she is right now. Mild distrust of the financial industry.`,
+    naturalObjection:`I'm too busy / my finances are too simple`,
+    objectionStyle:`Self-deprecating deflection — "oh god I'm the worst person to talk to about money." Laughs it off but it comes from real anxiety.`,
+    saysYesWhen:`You meet her where she is. "Honestly this is especially useful for people who feel like they're not there yet." She responds to being normalised, not impressed.`,
+    killsCall:`Any sense of judgment about where she's at financially. Also — if the reconnection feels like a pretext to pitch her.`,
+    voiceStyle:`Warm, a bit self-conscious. Lots of "like" and "honestly." Texts quickly in short bursts.`,
+    smsStyle:'Fast and casual. Warms up if it sounds like the real you. Ghosts a corporate-sounding text.',
   },
   {
-    id:"bob", name:"Bob", initial:"B", color:"#3a6890", rel:"Neighbour", city:"Gilbert, AZ",
-    age:49, gender:"male",
-    life:"Married to Donna. Three kids, youngest just started high school. Electrician, runs his own small company. Good income but lumpy. No pension, self-employed, SEP-IRA he set up years ago but hasn't contributed to recently. Owns his home.",
-    relationship:"Next-door neighbour for four years. You wave in the driveway, had a few beers in the backyard. Friendly but not deep.",
-    financialMindset:"Self-reliant by nature. Associates financial planning with commissions and being sold things he doesn't need.",
-    naturalObjection:"I'm too busy — mild resistance to the whole concept",
-    objectionStyle:"Gruff but not hostile. 'Yeah I keep meaning to look at that stuff but you know how it is.'",
-    saysYesWhen:"You keep it low-key and neighbour-to-neighbour. Plain talk, no corporate language.",
-    killsCall:"Anything polished or scripted. He can smell a pitch from a mile away.",
-    voiceStyle:"Short sentences. Dry humour.",
-    smsStyle:"Very short. Won't reply to anything that feels like a campaign.",
+    id:`bob', name:'Bob', initial:'B', color:'#3a6890', rel:'Neighbour', city:'Calgary (US posting — change city)`,
+    age:49, gender:'male',
+    life:`Married to Donna. Three kids, youngest just started high school. Contractor — runs his own electrical business. Does well but income is lumpy. No pension, self-employed, SEP-IRA he set up years ago but hasn't contributed to recently. Owns his home outright.`,
+    relationship:'Next-door neighbour for four years. You wave in the driveway, have had a few beers in the backyard. Friendly but not deep.',
+    financialMindset:`Self-reliant by nature. "I've been taking care of myself since I was 18." Has a mental block around financial planning — associates it with commissions and being sold things.`,
+    naturalObjection:`I'm too busy — and mild resistance to the whole concept`,
+    objectionStyle:`Gruff but not hostile. "Yeah I keep meaning to look at that stuff but you know how it is."`,
+    saysYesWhen:`You keep it low-key and neighbour-to-neighbour. "I'm not going to sit here and sell you anything, I just think there's some stuff around the self-employed side that's worth knowing about."`,
+    killsCall:'Anything that sounds polished or scripted. He can smell a pitch from a mile away.',
+    voiceStyle:'Short sentences. Dry humour. Comfortable with silence.',
+    smsStyle:`Very short. One or two words is normal. Won't reply to anything that feels like a campaign.`,
   },
   {
-    id:"tanya", name:"Tanya", initial:"T", color:"#b04090", rel:"Community Friend", city:"Austin",
-    age:38, gender:"female",
-    life:"Married to Marcus, two kids ages 8 and 11. She's a teacher, he's in property management. Combined decent income. They have 403(b) and 401(k), a mortgage, starting to think about 529s. Tanya is the financial decision-maker. Mixed Black and Caribbean background.",
-    relationship:"Met through a community sports league. See each other regularly. She respects you and would genuinely hear you out.",
-    financialMindset:"Engaged and thoughtful. Genuinely curious whether they're doing everything they should. Her gap is tax efficiency at the distribution stage.",
-    naturalObjection:"I'm too busy — but genuinely open once she understands what it is",
-    objectionStyle:"Pragmatic. 'I'd love to but between work and the kids I barely have time to breathe.' She means it, but she's a yes if the value is clear.",
-    saysYesWhen:"You tell her it's 45 minutes and give her a reason it's relevant — kids, dual income, 529s. She responds to specificity.",
-    killsCall:"Vagueness about what the meeting actually is.",
-    voiceStyle:"Warm, organised, asks clarifying questions.",
-    smsStyle:"Responds thoughtfully. Will ask 'what's it about?' — that's her decision process.",
+    id:`tanya', name:'Tanya', initial:'T', color:'#b04090', rel:'Community Friend', city:'Austin, TX`,
+    age:38, gender:'female',
+    life:`Married to Marcus, two kids ages 8 and 11. She's a teacher, he's in property management. Combined decent income. They have 403(b) and 401(k) accounts, a mortgage, and starting to think about the kids' 529 plans. Tanya is the financial decision-maker in the house.`,
+    relationship:'Met through a community sports league. See each other regularly. Friendly and warm. She respects you and would genuinely hear you out.',
+    financialMindset:`Engaged and thoughtful. Genuinely curious about whether they're doing everything they should be. Her gap is tax efficiency at the distribution stage.`,
+    naturalObjection:`I'm too busy — but genuinely open once she understands what it is`,
+    objectionStyle:`Pragmatic — "I'd love to but between work and the kids I barely have time to breathe." She means it, but she's a yes if the value is clear.`,
+    saysYesWhen:`You tell her it's 45 minutes and give her a concrete reason it's relevant — kids, dual income, 529s. She responds to specificity and scheduling.`,
+    killsCall:'Vagueness about what the meeting actually is.',
+    voiceStyle:'Warm, organised, asks clarifying questions.',
+    smsStyle:`Responds thoughtfully. Will ask "what's it about?" — that's her decision process, not resistance.`,
   },
   {
-    id:"kevin", name:"Tyler", initial:"T", color:"#c86020", rel:"Sports Buddy", city:"Houston",
-    age:36, gender:"male",
-    life:"Common-law with Ashley, no kids yet but talking about it. Works in oil and gas — good money but cyclical. Has a 401(k) he hasn't checked since he set it up. Native American background. Buys toys — truck, boat, season tickets. Doesn't think about the future much.",
-    relationship:"Fantasy football league and pickup basketball. Good time together. He knows you changed jobs and will give you a hard time about it in a friendly way.",
-    financialMindset:"Lives for today. Has heard 'you should get your finances sorted' before and it goes in one ear and out the other — unless someone makes it feel relevant.",
-    naturalObjection:"I'm too busy, I'm good man",
-    objectionStyle:"Deflects with humour first — 'I got fantasy to worry about.' Then if pushed: 'honestly my finances are a mess, I wouldn't even know where to start.'",
-    saysYesWhen:"You make it concrete and non-threatening — especially anything about him and Ashley taking the next step.",
-    killsCall:"Any lecture about not saving enough. He knows. He doesn't need to hear it from you.",
-    voiceStyle:"Loud, jovial. Gets serious fast if you match his energy first.",
-    smsStyle:"Short, emoji-heavy. Ignores anything corporate.",
+    id:`kevin', name:'Kevin', initial:'K', color:'#c86020', rel:'Sports Buddy', city:'Houston, TX`,
+    age:36, gender:'male',
+    life:`Common-law with Ashley, no kids yet but talking about it. Works in oil and gas — good money but cyclical, been laid off twice. Has a 401(k) and some investments he set up years ago and hasn't checked since. Buys toys — truck, boat, season tickets. Doesn't think about the future much.`,
+    relationship:'Fantasy football league and pickup basketball, four years. You have a good time together. He knows you changed jobs and will give you a hard time about it in a friendly way.',
+    financialMindset:`Lives for today. Not irresponsible, just not future-focused. Has heard "you should get your finances sorted" before and it goes in one ear and out the other.`,
+    naturalObjection:`I'm too busy / "I'm good man"`,
+    objectionStyle:`Deflects with humour first — "I got fantasy to worry about, I don't have time for this stuff." Then if pushed: "honestly my finances are a mess, I wouldn't even know where to start."`,
+    saysYesWhen:`You make it concrete and non-threatening. "There's actually stuff in here that's relevant when you and Ashley are thinking about the next step." Future-focused without being heavy.`,
+    killsCall:`Any lecture about not saving enough or not being prepared. He knows. He doesn't need to hear it.`,
+    voiceStyle:'Loud, jovial, jokes constantly. Gets serious fast if you match his energy first.',
+    smsStyle:'Short, emoji-heavy, lots of sports references. Replies fast. Ignores anything corporate.',
   },
 ];
 
-function getPersonas(){ return cfg.country==="us" ? PERSONAS_US : PERSONAS; }
+function getPersonas(){ return cfg.country==='us'?PERSONAS_US:PERSONAS; }
 
 const TIERS=[
   {id:'close',label:'❤️ Close / BFF',desc:'Phone first — relationship earns the direct call'},
@@ -886,63 +1170,94 @@ const RF_ENTRIES={
 };
 
 // ── STATE ──
-let cfg={market:null,channel:null,tier:'close',useRF:null,rfEntry:null,persona:'mike',mood:'neutral',country:'ca'};
+let cfg={market:null,channel:null,tier:'close',useRF:null,rfEntry:null,persona:'mike',mood:'neutral',country:'ca',region:null,background:'european'};
+let agentPersonaNames={}; // custom names keyed by persona id
 let agentName='',agentCompany='';
-let sessionHistory=[],sessionScores={},sessionFeedback=[],sessionTurn=0,sessionProcessing=false;
+let sessionHistory=[],sessionScores={},sessionTurn=0,sessionProcessing=false;
 let recognition=null,listening=false,muted=false,timerInterval=null,callSeconds=0;
 const synth=window.speechSynthesis;
 
-// ── PHONE RING ──
-let _ringInterval=null;
-function startRing(){
-  stopRing();
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  function playRingTone(){
-    // North American double-ring pattern: two short bursts
-    function burst(startTime, duration){
-      const osc1=ctx.createOscillator();
-      const osc2=ctx.createOscillator();
-      const gain=ctx.createGain();
-      osc1.connect(gain); osc2.connect(gain); gain.connect(ctx.destination);
-      osc1.type='sine'; osc1.frequency.value=480;
-      osc2.type='sine'; osc2.frequency.value=440;
-      gain.gain.setValueAtTime(0,startTime);
-      gain.gain.linearRampToValueAtTime(0.18,startTime+0.02);
-      gain.gain.setValueAtTime(0.18,startTime+duration-0.02);
-      gain.gain.linearRampToValueAtTime(0,startTime+duration);
-      osc1.start(startTime); osc1.stop(startTime+duration);
-      osc2.start(startTime); osc2.stop(startTime+duration);
-    }
-    const t=ctx.currentTime;
-    burst(t, 0.4);        // first burst
-    burst(t+0.6, 0.4);    // second burst
-    // silence until 4s then repeat
-  }
-  playRingTone();
-  _ringInterval=setInterval(playRingTone,4000);
-  // update status text
-  const lv=document.getElementById('vc-live');
-  if(lv) lv.textContent='Calling... ringing';
-  showProc('Calling...');
-}
-function stopRing(){
-  if(_ringInterval){clearInterval(_ringInterval);_ringInterval=null;}
-}
-
 // ── SETUP LOGIC ──
 function setCountry(c){
-  cfg.country=c;
+  cfg.country=c;cfg.region=null;
   ['ca','us'].forEach(x=>{
     const el=document.getElementById('ctry-'+x);
     el.className='choice-btn'+(x===c?' sel':'');
   });
-  buildPersonaGrid();
+  buildRegionGrid();
+  buildBackgroundGrid();
+  cfg.region=null;
+  const sel=document.getElementById('region-select');
+  if(sel) sel.value='';
+  if(!document.getElementById('sc-prospect').classList.contains('locked')) buildPersonaGrid();
 }
 
+function buildRegionGrid(){
+  const regions=REGIONS[cfg.country]||REGIONS.ca;
+  const sel=document.getElementById('region-select');
+  if(!sel) return;
+  const current=cfg.region||'';
+  sel.innerHTML='<option value="">Select a region...</option>'+
+    regions.map(r=>`<option value="${r.id}" ${r.id===current?'selected':''}>${r.label} — ${r.hint}</option>`).join('');
+}
 
+function setRegion(id){
+  cfg.region=id;
+  checkReady();
+}
 
+function buildBackgroundGrid(){
+  const sel=document.getElementById('background-select');
+  if(!sel) return;
+  const current=cfg.background||'';
+  sel.innerHTML='<option value="">Select a background...</option>'+
+    BACKGROUNDS.map(b=>`<option value="${b.id}" ${b.id===current?'selected':''}>${b.icon} ${b.label} — ${b.desc.substring(0,50)}...</option>`).join('');
+}
 
-
+function setBackground(id){
+  cfg.background=id;
+  const bg=BACKGROUNDS.find(b=>b.id===id);
+  if(bg){
+    const roleMap={
+      close_family:"carol", best_friend:"mike", moms_friend:"linda",
+      old_coworker:"dave", college_friend:"jess", neighbour:"bob",
+      community_friend:"tanya", sports_buddy:"kevin"
+    };
+    Object.entries(bg.names).forEach(([role, defaultName])=>{
+      const pid=roleMap[role];
+      if(pid){
+        agentPersonaNames[pid]=defaultName;
+        const inp=document.getElementById('pname-'+pid);
+        if(inp) inp.value=defaultName;
+      }
+    });
+  }
+  buildPersonaNameInputs();
+  document.getElementById('persona-names-section').style.display='block';
+  checkReady();
+}
+function buildPersonaNameInputs(){
+  const bg=BACKGROUNDS.find(b=>b.id===cfg.background)||BACKGROUNDS[0];
+  const roleMap=[
+    {pid:'carol',role:'close_family',relLabel:'Close family'},
+    {pid:'mike',role:'best_friend',relLabel:'Best friend'},
+    {pid:'linda',role:'moms_friend',relLabel:"Mom's / family friend"},
+    {pid:'dave',role:'old_coworker',relLabel:'Old coworker'},
+    {pid:'jess',role:'college_friend',relLabel:'College / school friend'},
+    {pid:'bob',role:'neighbour',relLabel:'Neighbour'},
+    {pid:'tanya',role:'community_friend',relLabel:'Community friend'},
+    {pid:'kevin',role:'sports_buddy',relLabel:'Sports buddy'},
+  ];
+  document.getElementById('persona-name-inputs').innerHTML=roleMap.map(({pid,role,relLabel})=>{
+    const defaultName=bg.names[role]||pid;
+    const currentName=agentPersonaNames[pid]||defaultName;
+    return `<div>
+      <div class="nf-label" style="font-size:0.62rem;margin-bottom:3px">${relLabel}</div>
+      <input class="nf-input" id="pname-${pid}" type="text" value="${currentName}" maxlength="30"
+        placeholder="${defaultName}" oninput="agentPersonaNames['${pid}']=this.value">
+    </div>`;
+  }).join('');
+}
 
 function setMarket(m){
   cfg.market=m;
@@ -1042,7 +1357,7 @@ function lock(id){document.getElementById(id).classList.add('locked');}
 
 function checkReady(){
   const rfOk=cfg.useRF===false||(cfg.useRF===true&&cfg.rfEntry!==null);
-  const ready=cfg.market&&cfg.channel&&cfg.useRF!==null&&rfOk;
+  const ready=cfg.market&&cfg.channel&&cfg.useRF!==null&&rfOk&&cfg.region&&cfg.background;
   const btn=document.getElementById('start-btn');
   btn.disabled=!ready;
   if(ready){
@@ -1059,10 +1374,13 @@ function checkReady(){
 
 // ── BUILD SYSTEM PROMPT ──
 function buildSystem(){
-  const p=getPersonas().find(x=>x.id===cfg.persona)||getPersonas()[0];
+  const p=PERSONAS.find(x=>x.id===cfg.persona);
   const countryCtx=cfg.country==='us'
     ?'US FINANCIAL CONTEXT: Use US terminology — 401(k), Roth IRA, HSA, Social Security, Medicare. Refer to amounts in USD.'
     :'CANADIAN FINANCIAL CONTEXT: Use Canadian terminology — RRSP, TFSA, FHSA, CPP, OAS, GIC. Refer to amounts in CAD.';
+  const bg=BACKGROUNDS.find(b=>b.id===cfg.background)||BACKGROUNDS[0];
+  const bgCtx=bg.culturalContext||'';
+  const sessionCity=cfg._sessionCity||p.city||'';
 
   const moodCtx={
     warm:`${p.name} is relaxed and in a good mood. Open and patient.`,
@@ -1124,7 +1442,9 @@ ${cfg.channel==='sms'?(p.smsStyle||'Short, casual texts.'):(p.voiceStyle||'Natur
 
 MARKET: ${marketCtx}
 ${countryCtx}
-LOCATION: ${p.name} is based in ${p.city}.
+LOCATION: ${p.name} is based in ${sessionCity||p.city}.
+COMMUNITY CONTEXT:
+${bgCtx}
 ${tierCtx?'RELATIONSHIP TIER: '+tierCtx:''}
 MOOD TODAY: ${moodCtx}${rfCtx}
 AGENT GOAL: ${goalCtx}
@@ -1142,11 +1462,11 @@ ${cfg.useRF?'8. React to how '+agentName+' handles the Rapidfunnel — natural a
 
 After your in-character response append:
 ---COACH---
-{${skills.map(s=>`"${s.key}":0-100`).join(',')},"feedback":"Direct coaching TO the agent — what they said that worked or didn't, and one concrete suggestion. Use "you" language e.g. "You moved to the ask too fast — next time wait for her to ask a question first." Never describe the prospect's reaction; coach the agent's words and technique.","tags":["tag1","tag2"]}
+{${skills.map(s=>`"${s.key}":0-100`).join(',')},"feedback":"1-2 sentence specific coaching referencing this persona's triggers and what landed or didn't","tags":["tag1","tag2"]}
 ---END---
 Valid tags: ${validTags}
 
-The COACH block is only for the trainer — never reference it in your response. Speak directly to the agent as their coach using "you" language. Example: "You moved to the ask too fast — next time wait for them to show curiosity first." Never describe the prospect's reaction; only coach the agent's words and technique.`;
+The COACH block is only for the trainer — never reference it in your response.`;
 }
 
 function getSkillDefs(){
@@ -1164,14 +1484,20 @@ function getSkillDefs(){
 }
 
 function P(){
-  return getPersonas().find(x=>x.id===cfg.persona)||getPersonas()[0];
+  const base=getPersonas().find(x=>x.id===cfg.persona)||getPersonas()[0];
+  const customName=agentPersonaNames[base.id];
+  if(customName && customName.trim()) return {...base, name:customName.trim(), initial:customName.trim()[0].toUpperCase()};
+  return base;
 }
 
 // ── START SESSION ──
 function startSession(){
   agentName=document.getElementById('inp-name').value.trim()||'Ryan';
   agentCompany=document.getElementById('inp-company').value.trim()||'Experior Financial';
-  sessionHistory=[]; sessionScores={}; sessionFeedback=[]; sessionTurn=0; sessionProcessing=false;
+  initUsageBanner(agentName);
+  // Assign random city from background+country pool for this session
+  cfg._sessionCity=getRandomCity(cfg.background,cfg.country);
+  sessionHistory=[]; sessionScores={}; sessionTurn=0; sessionProcessing=false;
   getSkillDefs().forEach(s=>{sessionScores[s.key]=0;});
 
   const p=P();
@@ -1220,27 +1546,6 @@ function startSession(){
 }
 
 // ── VOICE ──
-// ── FETCH WITH RETRY ──
-async function fetchWithRetry(payload, attempts=3, delayMs=2000){
-  for(let i=0;i<attempts;i++){
-    try{
-      const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-      const d=await r.json();
-      if(d.type==='error'&&d.error?.type==='overloaded_error'&&i<attempts-1){
-        showProc('Server busy — retrying...');
-        await new Promise(res=>setTimeout(res,delayMs*(i+1)));
-        continue;
-      }
-      return d;
-    }catch(e){
-      if(i<attempts-1){
-        showProc('Retrying...');
-        await new Promise(res=>setTimeout(res,delayMs));
-      } else throw e;
-    }
-  }
-}
-
 function initVoice(){
   document.getElementById('vc-av').textContent=P().initial;
   document.getElementById('vc-av').style.background=P().color;
@@ -1250,24 +1555,26 @@ function initVoice(){
   callSeconds=0;updateTimer();
   timerInterval=setInterval(()=>{callSeconds++;updateTimer();},1000);
   setupRecognition();
-  startRing();
   getOpening();
 }
 
 async function getOpening(){
   showProc('Connecting...');
+  if(!await checkLimit(agentName)){hideProc();showLimitBanner();return;}
   const opener=cfg.useRF&&cfg.rfEntry==='questions'
     ?`You have a question about the Rapidfunnel ${agentName} sent you. Give a brief natural opening — "Hey ${agentName}, I got that thing you sent..." then ask your main question. 1-2 sentences.`
     :`${agentName} is calling you. Give a brief natural greeting — 1-2 sentences.`;
   try{
-    const d=await fetchWithRetry({model:'claude-sonnet-4-5',max_tokens:120,system:buildSystem(),messages:[{role:'user',content:opener}]});
-     hideProc(); stopRing();
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:120,system:buildSystem(),messages:[{role:'user',content:opener}]})});
+    const d=await r.json(); hideProc();
     const full=d.content?.[0]?.text||'';
     const txt=extractChar(full);
     sessionHistory.push({role:'user',content:opener});
     sessionHistory.push({role:'assistant',content:full});
     addLine('prospect',txt); speak(txt);
-  }catch(e){stopRing();hideProc();addLine('sys','Connection error — try again');}
+    await incrementUsage(agentName);
+  }catch(e){hideProc();addLine('sys','Connection error — try again');}
 }
 
 async function handleSpeech(txt){
@@ -1278,18 +1585,21 @@ async function handleSpeech(txt){
   addLine('agent',txt);
   sessionHistory.push({role:'user',content:txt});
   showProc('Responding...');
+  if(!await checkLimit(agentName)){hideProc();showLimitBanner();sessionProcessing=false;document.getElementById('vc-live').textContent='Press and hold mic to speak...';return;}
   try{
-    const d=await fetchWithRetry({model:'claude-sonnet-4-5',max_tokens:400,system:buildSystem(),messages:sessionHistory});
-     hideProc();
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:buildSystem(),messages:sessionHistory})});
+    const d=await r.json(); hideProc();
     const full=d.content?.[0]?.text||'';
     const txt2=extractChar(full); const cd=extractCoach(full);
     sessionHistory.push({role:'assistant',content:full});
     addLine('prospect',txt2); speak(txt2);
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++;
+    await incrementUsage(agentName);
   }catch(e){hideProc();addLine('sys','Error — try again.');}
   sessionProcessing=false;
-  document.getElementById('vc-live').textContent='Click mic to speak, click again to send';
+  document.getElementById('vc-live').textContent='Press and hold mic to speak...';
 }
 
 function addLine(type,text){
@@ -1316,21 +1626,10 @@ function setupRecognition(){
   recognition.onstart=()=>{listening=true;document.getElementById('mic-btn').classList.add('rec');document.getElementById('vc-live').textContent='Listening...';document.getElementById('vc-live').classList.add('listening');};
   recognition.onresult=(e)=>{let f='',i='';for(let x=e.resultIndex;x<e.results.length;x++){if(e.results[x].isFinal)f+=e.results[x][0].transcript;else i+=e.results[x][0].transcript;}document.getElementById('vc-live').textContent=f||i||'Listening...';if(f)recognition._final=(recognition._final||'')+f;};
   recognition.onerror=()=>stopListen();
-  recognition.onend=()=>{listening=false;document.getElementById('mic-btn').classList.remove('rec');const txt=(recognition._final||'').trim();recognition._final='';if(txt&&!sessionProcessing)handleSpeech(txt);else{document.getElementById('vc-live').textContent='Click mic to speak, click again to send';document.getElementById('vc-live').classList.remove('listening');}};
+  recognition.onend=()=>{listening=false;document.getElementById('mic-btn').classList.remove('rec');const txt=(recognition._final||'').trim();recognition._final='';if(txt&&!sessionProcessing)handleSpeech(txt);else{document.getElementById('vc-live').textContent='Press and hold mic to speak...';document.getElementById('vc-live').classList.remove('listening');}};
 }
-function toggleListen(){
-  if(sessionProcessing)return;
-  if(listening){
-    try{recognition.stop();}catch(err){}
-  } else {
-    if(!recognition) return;
-    if(synth.speaking) synth.cancel();
-    recognition._final='';
-    try{recognition.start();}catch(err){}
-  }
-}
-function startListen(e){if(e)e.preventDefault();toggleListen();}
-function stopListen(){}
+function startListen(e){if(e)e.preventDefault();if(!recognition||sessionProcessing)return;if(synth.speaking)synth.cancel();recognition._final='';try{recognition.start();}catch(err){}}
+function stopListen(){if(!listening)return;try{recognition.stop();}catch(err){}}
 function toggleMute(){muted=!muted;const b=document.getElementById('mute-btn');b.textContent=muted?'🔇':'🎤';b.classList.toggle('muted',muted);}
 function sendFallback(){const ta=document.getElementById('fallback-ta');const txt=ta.value.trim();if(!txt)return;ta.value='';handleSpeech(txt);}
 
@@ -1354,6 +1653,7 @@ function initSms(){
 async function sendSms(){
   const ta=document.getElementById('ph-ta');
   const txt=ta.value.trim();if(!txt||sessionProcessing)return;
+  if(!await checkLimit(agentName)){addSmsSys('⛔ Monthly limit reached (200 exchanges). Resets on the 1st of next month.');return;}
   sessionProcessing=true;ta.value='';handleSmsInput(ta);
   document.getElementById('ph-send').disabled=true;
   const chars=txt.length;
@@ -1362,8 +1662,9 @@ async function sendSms(){
   const typEl=addSmsTyping();
   await new Promise(r=>setTimeout(r,700+Math.random()*1000));
   try{
-    const d=await fetchWithRetry({model:'claude-sonnet-4-5',max_tokens:300,system:buildSystem(),messages:sessionHistory});
-    typEl.remove();
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:buildSystem(),messages:sessionHistory})});
+    const d=await r.json();typEl.remove();
     const full=d.content?.[0]?.text||'';
     const txt2=extractChar(full);const cd=extractCoach(full);
     const noReply=txt2.toLowerCase().startsWith('[no reply]');
@@ -1376,6 +1677,7 @@ async function sendSms(){
     }
     if(cd){const brief=chars<=160?100:chars<=320?55:20;cd.brief=brief;applyScores(cd);addFb(cd);}
     sessionTurn++;
+    await incrementUsage(agentName);
   }catch(e){typEl.remove();addSmsSys('Connection error — try again.');}
   sessionProcessing=false;
   document.getElementById('ph-send').disabled=false;
@@ -1435,6 +1737,12 @@ async function sendEmail(){
   const subject=document.getElementById('email-subject').value.trim();
   const body=document.getElementById('email-body').value.trim();
   if(!subject||!body||sessionProcessing)return;
+  if(!await checkLimit(agentName)){
+    const threadArea=document.getElementById('email-thread-area');threadArea.style.display='flex';
+    const d=document.createElement('div');d.style.cssText='padding:10px;color:var(--red);font-weight:700;font-size:0.8rem;';
+    d.textContent='⛔ Monthly limit reached (200 exchanges). Resets on the 1st of next month.';
+    threadArea.appendChild(d);return;
+  }
   sessionProcessing=true;
   document.getElementById('email-send-btn').disabled=true;
   // Show sent email
@@ -1448,8 +1756,9 @@ async function sendEmail(){
   const prompt=`${agentName} just sent you an email with subject line "${subject}" and body: "${body}". Reply naturally as ${P().name}. React to the quality — reply if it's good, or write a polite brush-off if it feels generic or salesy.`;
   sessionHistory.push({role:'user',content:prompt});
   try{
-    const d=await fetchWithRetry({model:'claude-sonnet-4-5',max_tokens:380,system:buildSystem(),messages:sessionHistory});
-    
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:380,system:buildSystem(),messages:sessionHistory})});
+    const d=await r.json();
     const full=d.content?.[0]?.text||'';
     const txt=extractChar(full);const cd=extractCoach(full);
     sessionHistory.push({role:'assistant',content:full});
@@ -1465,6 +1774,7 @@ async function sendEmail(){
     document.getElementById('email-send-btn').textContent='Send Reply';
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++;
+    await incrementUsage(agentName);
   }catch(e){document.getElementById('email-send-btn').disabled=false;}
   sessionProcessing=false;
 }
@@ -1510,13 +1820,11 @@ function addFb(d){
   const item=document.createElement('div');item.className='fb-item';
   item.innerHTML=`<div class="fb-turn">Exchange ${sessionTurn+1}</div><div>${d.feedback||''}</div>${tags?`<div class="tag-row">${tags}</div>`:''}`;
   log.insertBefore(item,log.firstChild);
-  sessionFeedback.unshift({turn:sessionTurn+1,feedback:d.feedback||d.feedback||'',tags:d.tags||[]});
 }
 
 // ── SUMMARY ──
 function showSummary(){
   if(timerInterval)clearInterval(timerInterval);
-  stopRing();
   if(synth)synth.cancel();
   const vals=Object.values(sessionScores).filter(v=>v>0);
   const avg=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):null;
@@ -1540,77 +1848,11 @@ function showSummary(){
     <div style="display:flex;gap:9px;margin-top:6px;flex-wrap:wrap;justify-content:center">
       <button onclick="location.reload()" style="padding:11px 22px;background:var(--green);color:#000;border:none;border-radius:9px;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer">New Session</button>
       <button onclick="backToSetup()" style="padding:11px 18px;background:var(--s1);border:1px solid var(--border2);color:var(--text2);border-radius:9px;font-family:'Instrument Sans',sans-serif;font-size:.82rem;cursor:pointer">Change Setup</button>
-      <button onclick="downloadSummary()" style="padding:11px 18px;background:var(--gold);color:#000;border:none;border-radius:9px;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer">⬇ Download Summary</button>
     </div>`;
   postToZapier(avg,p);
 }
 
 function backToSetup(){setScreen('setup');setJStep('setup');}
-
-function downloadSummary(){
-  const p=P();
-  const vals=Object.values(sessionScores).filter(v=>v>0);
-  const avg=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):null;
-  const skills=typeof getSkillDefs==='function'?getSkillDefs():SKILLS;
-  const date=new Date().toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'});
-  const time=new Date().toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'});
-  const ch={phone:'Phone call',sms:'SMS',email:'Email',linkedin:'LinkedIn'}[cfg.channel]||cfg.channel;
-  const sc=avg>=70?'#1a7a45':avg>=45?'#b8720a':'#cc3333';
-  const skillRows=skills.map(s=>{
-    const v=sessionScores[s.key]||0;
-    const c=v>=70?'#1a7a45':v>=45?'#b8720a':'#cc3333';
-    return '<tr><td style="padding:7px 10px;font-size:13px;color:#444">'+s.label+'</td>'
-      +'<td style="padding:7px 10px"><div style="background:#eee;border-radius:4px;height:8px;width:140px">'
-      +'<div style="background:'+c+';height:8px;border-radius:4px;width:'+Math.round(v*1.4)+'px"></div></div></td>'
-      +'<td style="padding:7px 10px;font-size:13px;font-weight:700;color:'+c+';text-align:right">'+(v||'—')+'%</td></tr>';
-  }).join('');
-  const good=['felt_natural','respected_relationship','created_curiosity','no_pressure','good_ask','values_first','education_framing','nothing_for_sale_mentioned','handled_objection','used_name','good_reconnect','natural_rf_reference','thanked_for_watching','booked_4F_overview','booked_overview','good_subject','good_opening_hook','brief','treated_as_peer','planted_right_question','no_pitch','handled_with_curiosity','left_door_open'];
-  const bad=['too_scripted','felt_like_pitch','rushed_to_business','missed_objection','skipped_rf_reference','over_explained','too_long','weak_subject','pitched_instead','led_with_compensation','argued_instead','burned_the_bridge'];
-  const fbRows=sessionFeedback.map(f=>{
-    const tgs=(f.tags||[]).map(t=>{
-      const c=good.includes(t)?'#1a7a45':bad.includes(t)?'#cc3333':'#b8720a';
-      const bg=good.includes(t)?'#eaf5ef':bad.includes(t)?'#faeaea':'#fef6e6';
-      return '<span style="display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:'+bg+';color:'+c+';margin:2px">'+t.replace(/_/g,' ')+'</span>';
-    }).join('');
-    return '<tr style="border-top:1px solid #eee"><td style="padding:10px;font-size:12px;color:#888;white-space:nowrap;vertical-align:top">Exchange '+f.turn+'</td>'
-      +'<td style="padding:10px"><div style="font-size:13px;color:#333;margin-bottom:5px">'+f.feedback+'</div>'+tgs+'</td></tr>';
-  }).join('');
-  const rfTxt=cfg.useRF&&cfg.rfEntry?(' &middot; Rapidfunnel: '+(typeof RF_ENTRIES!=='undefined'?RF_ENTRIES:RF_ENTRIES_RECRUIT)?.[cfg.rfEntry]?.title||''):'';
-  const html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>ProspectAI '+p.name+' '+date+'</title>'
-    +'<style>body{font-family:Helvetica Neue,Arial,sans-serif;background:#f5f2ed;margin:0;padding:24px}'
-    +'.card{background:#fff;border-radius:12px;max-width:680px;margin:0 auto;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)}'
-    +'.hdr{background:#1a2440;padding:22px 28px;display:flex;justify-content:space-between;align-items:center}'
-    +'.logo{font-size:18px;font-weight:800;color:#fff}.logo em{color:#e8940a;font-style:normal}'
-    +'.hdr-r{text-align:right;font-size:12px;color:rgba(255,255,255,.5)}'
-    +'.body{padding:24px 28px}'
-    +'.title{font-size:20px;font-weight:700;color:#1e1a14;margin-bottom:3px}'
-    +'.meta{font-size:13px;color:#888;margin-bottom:18px}'
-    +'.hero{text-align:center;padding:20px;background:#f9f6f1;border-radius:10px;margin-bottom:20px}'
-    +'.snum{font-size:52px;font-weight:800;color:'+sc+';line-height:1}'
-    +'.slbl{font-size:11px;color:#bbb;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}'
-    +'h3{font-size:12px;font-weight:700;color:#1a2440;text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid #e8940a;padding-bottom:5px;margin:20px 0 8px}'
-    +'table{width:100%;border-collapse:collapse}'
-    +'.ftr{background:#f0ece6;padding:12px 28px;font-size:11px;color:#bbb;text-align:center}'
-    +'@media print{body{background:#fff;padding:0}.card{box-shadow:none;max-width:100%}}'
-    +'</style></head><body>'
-    +'<div class="card"><div class="hdr"><div class="logo">Prospect<em>AI</em></div>'
-    +'<div class="hdr-r">'+date+' &middot; '+time+'<br>'+( agentName||'Agent')+'</div></div>'
-    +'<div class="body">'
-    +'<div class="title">'+p.name+' &middot; '+p.rel+'</div>'
-    +'<div class="meta">'+ch+' &middot; '+(cfg.market==='natural'?'Natural Market':'Possibility Market')+' &middot; '+cfg.mood+' mood'+rfTxt+'</div>'
-    +'<div class="hero"><div class="snum">'+(avg||'&mdash;')+'<span style="font-size:22px;color:#ccc">%</span></div><div class="slbl">Overall Score</div></div>'
-    +'<h3>Skill Scores</h3><table>'+skillRows+'</table>'
-    +(fbRows?'<h3>Coach Feedback</h3><table>'+fbRows+'</table>':'')
-    +'</div><div class="ftr">ProspectAI &middot; Powered by the 4F Solution &middot; Experior Financial</div></div>'
-    +'</body></html>';
-  const blob=new Blob([html],{type:'text/html'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='ProspectAI-'+p.name.replace(/\s+/g,'-')+'-'+new Date().toISOString().slice(0,10)+'.html';
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 function postToZapier(avg,p){
   const agent=window._sd||{};
