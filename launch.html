@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opening Practice Simulator...</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f5f2ed;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+  .card{background:#fff;border-radius:16px;padding:40px 32px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.10);}
+  .icon{font-size:2.5rem;margin-bottom:16px;}
+  .title{font-size:1.2rem;font-weight:700;color:#1e1a14;margin-bottom:8px;}
+  .sub{font-size:0.85rem;color:#6a6258;margin-bottom:24px;line-height:1.5;}
+  .status{font-size:0.82rem;padding:10px 14px;border-radius:8px;margin-bottom:16px;}
+  .status.checking{background:#fff8e6;border:1px solid rgba(232,148,10,0.3);color:#7a5500;}
+  .status.ok{background:#eaf5ef;border:1px solid rgba(26,122,69,0.3);color:#1a5a30;}
+  .status.blocked{background:#faeaea;border:1px solid rgba(204,51,51,0.3);color:#7a1a1a;text-align:left;line-height:1.6;}
+  .btn{padding:12px 28px;background:#e8940a;color:#fff;border:none;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:background 0.15s;}
+  .btn:hover{background:#f5a82a;}
+  .skip{display:block;margin-top:12px;font-size:0.75rem;color:#a89e90;cursor:pointer;text-decoration:underline;}
+  .skip:hover{color:#6a6258;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">🎯</div>
+  <div class="title">Opening Practice Simulator</div>
+  <div class="sub">We need microphone access for voice practice. Click below to allow — you'll only need to do this once per browser.</div>
+  <div class="status checking" id="status">🎙️ Checking microphone...</div>
+  <button class="btn" id="btn" onclick="requestMic()" style="display:none">Allow Microphone →</button>
+  <span class="skip" id="skip" onclick="goToTrainer()" style="display:none">Skip — use text or SMS mode instead</span>
+</div>
+
+<script>
+// Read params passed from SuiteDash text link
+const params = new URLSearchParams(window.location.search);
+const name = params.get('name') || '';
+const email = params.get('email') || '';
+
+// Build trainer URL with params forwarded
+const trainerBase = 'https://rtongsy.github.io/4F-Solution-training/unified-trainer.html';
+const trainerUrl = trainerBase + '?name=' + encodeURIComponent(name) + '&email=' + encodeURIComponent(email);
+
+function goToTrainer() {
+  window.location.href = trainerUrl;
+}
+
+function requestMic() {
+  const status = document.getElementById('status');
+  const btn = document.getElementById('btn');
+  status.className = 'status checking';
+  status.textContent = '🎙️ Requesting microphone permission...';
+  btn.disabled = true;
+
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function(stream) {
+      stream.getTracks().forEach(function(t) { t.stop(); });
+      status.className = 'status ok';
+      status.textContent = '✓ Microphone ready — opening simulator...';
+      setTimeout(goToTrainer, 800);
+    })
+    .catch(function() {
+      status.className = 'status blocked';
+      status.innerHTML = '⚠ Microphone blocked.<br>Click the <strong>lock icon</strong> in your address bar → set Microphone to <strong>Allow</strong> → refresh this page.<br><br><span style="opacity:0.7;font-size:0.75rem">Or skip to use text/SMS mode instead.</span>';
+      btn.disabled = false;
+      btn.textContent = 'Try Again';
+      btn.style.display = 'inline-block';
+      document.getElementById('skip').style.display = 'block';
+    });
+}
+
+// On load — check if mic already granted, otherwise show button
+(function init() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    // No mic support — go straight to trainer
+    goToTrainer();
+    return;
+  }
+  if (navigator.permissions) {
+    navigator.permissions.query({ name: 'microphone' }).then(function(r) {
+      if (r.state === 'granted') {
+        // Already allowed — go straight through
+        document.getElementById('status').className = 'status ok';
+        document.getElementById('status').textContent = '✓ Microphone ready — opening simulator...';
+        setTimeout(goToTrainer, 600);
+      } else {
+        // Show the allow button
+        document.getElementById('status').className = 'status checking';
+        document.getElementById('status').textContent = 'Click below to allow microphone access.';
+        document.getElementById('btn').style.display = 'inline-block';
+        document.getElementById('skip').style.display = 'block';
+      }
+    }).catch(function() {
+      // Can't query — just show the button
+      document.getElementById('status').className = 'status checking';
+      document.getElementById('status').textContent = 'Click below to allow microphone access.';
+      document.getElementById('btn').style.display = 'inline-block';
+      document.getElementById('skip').style.display = 'block';
+    });
+  } else {
+    // No permissions API — show the button
+    document.getElementById('status').className = 'status checking';
+    document.getElementById('status').textContent = 'Click below to allow microphone access.';
+    document.getElementById('btn').style.display = 'inline-block';
+    document.getElementById('skip').style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>
