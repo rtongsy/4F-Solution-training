@@ -297,43 +297,38 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 /* ── SUMMARY ── */
 #summary{align-items:center;justify-content:center;background:var(--bg);gap:14px;padding:30px;overflow-y:auto;}
 
-/* ── REGISTRATION GATE ── */
-#reg-gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;}
-#reg-gate.hidden{display:none;}
-.reg-card{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:36px 32px;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.10);}
-.reg-logo{height:32px;width:auto;margin-bottom:20px;}
-.reg-title{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:6px;}
-.reg-sub{font-size:0.82rem;color:var(--text2);margin-bottom:24px;line-height:1.5;}
-.reg-field{margin-bottom:16px;}
-.reg-field label{display:block;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);margin-bottom:6px;}
-.reg-field input{width:100%;padding:10px 12px;border:1px solid var(--border2);border-radius:8px;font-size:0.9rem;color:var(--text);background:var(--s2);outline:none;transition:border-color 0.15s;}
-.reg-field input:focus{border-color:var(--gold);}
-.reg-field input[readonly]{opacity:0.65;cursor:default;}
-.reg-btn{width:100%;padding:12px;background:var(--gold);color:#fff;border:none;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;margin-top:8px;transition:background 0.15s;}
-.reg-btn:hover{background:var(--gold2);}
-.reg-btn:disabled{opacity:0.5;cursor:not-allowed;}
-.reg-err{font-size:0.78rem;color:var(--red);margin-top:8px;min-height:18px;}
+/* ── MIC CHECK OVERLAY ── */
+#mic-gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;}
+#mic-gate.hidden{display:none;}
+.mic-card{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:36px 32px;max-width:400px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.10);text-align:center;}
+.mic-icon{font-size:2.8rem;margin-bottom:16px;}
+.mic-title{font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px;}
+.mic-sub{font-size:0.82rem;color:var(--text2);line-height:1.6;margin-bottom:20px;}
+.mic-status{font-size:0.82rem;padding:10px 14px;border-radius:8px;margin-bottom:16px;display:none;}
+.mic-status.checking{display:block;background:#fff8e6;border:1px solid rgba(232,148,10,0.3);color:#7a5500;}
+.mic-status.ok{display:block;background:#eaf5ef;border:1px solid rgba(26,122,69,0.3);color:#1a5a30;}
+.mic-status.blocked{display:block;background:#faeaea;border:1px solid rgba(204,51,51,0.3);color:#7a1a1a;}
+.mic-btn{padding:12px 28px;background:var(--gold);color:#fff;border:none;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:background 0.15s;}
+.mic-btn:hover{background:var(--gold2);}
+.mic-skip{display:block;margin-top:12px;font-size:0.75rem;color:var(--text3);cursor:pointer;text-decoration:underline;}
+.mic-skip:hover{color:var(--text2);}
+
+
 
 ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 </style>
 </head>
 <body>
 
-<!-- ══ REGISTRATION GATE ══ -->
-<div id="reg-gate">
-  <div class="reg-card">
-    <div class="reg-title">Welcome to the Practice Simulator</div>
-    <div class="reg-sub">Please confirm your details to get started. You'll only need to do this once.</div>
-    <div class="reg-field">
-      <label>Full Name</label>
-      <input type="text" id="reg-name" placeholder="Your name" autocomplete="name">
-    </div>
-    <div class="reg-field">
-      <label>Email Address</label>
-      <input type="email" id="reg-email" placeholder="Your email" autocomplete="email">
-    </div>
-    <div class="reg-err" id="reg-err"></div>
-    <button class="reg-btn" id="reg-btn" onclick="submitRegistration()">Access Simulator →</button>
+<!-- ══ MIC CHECK OVERLAY ══ -->
+<div id="mic-gate">
+  <div class="mic-card">
+    <div class="mic-icon">🎙️</div>
+    <div class="mic-title">Microphone Access Needed</div>
+    <div class="mic-sub">This simulator uses your microphone for voice practice. Click below to allow access — you'll only need to do this once.</div>
+    <div class="mic-status" id="mic-status"></div>
+    <button class="mic-btn" id="mic-btn" onclick="requestMic()">Allow Microphone →</button>
+    <span class="mic-skip" onclick="skipMic()">Skip — I'll use text input instead</span>
   </div>
 </div>
 
@@ -382,14 +377,8 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
         </button>
       </div>
 
-      <!-- Prospect Region + Background dropdowns -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        <div>
-          <div class="nf-label" style="margin-bottom:5px">Prospect region <span style="font-weight:400;color:var(--text3);font-size:0.63rem">— where your contacts are based</span></div>
-          <select id="region-select" class="nf-input" onchange="setRegion(this.value)" style="cursor:pointer">
-            <option value="">Select a region...</option>
-          </select>
-        </div>
+      <!-- Background dropdown -->
+      <div style="margin-bottom:14px">
         <div>
           <div class="nf-label" style="margin-bottom:5px">Prospect community <span style="font-weight:400;color:var(--text3);font-size:0.63rem">— who your natural market looks like</span></div>
           <select id="background-select" class="nf-input" onchange="setBackground(this.value)" style="cursor:pointer">
@@ -728,77 +717,62 @@ function showLimitBanner(){
   });
 }
 
-// ── URL PARAMS (SuiteDash) ──
+// ── URL PARAMS (SuiteDash iframe) ──
 (function(){
   const p=new URLSearchParams(window.location.search);
-  const n=p.get('name'),e=p.get('email'),c=p.get('company');
-  if(n){const el=document.getElementById('inp-name');el.value=n;el.readOnly=true;el.style.opacity='0.6';}
-  if(c){const el=document.getElementById('inp-company');el.value=c;el.readOnly=true;el.style.opacity='0.6';}
-  window._sd={name:n||'',email:e||'',company:c||'Experior Financial'};
+  const n=p.get('name'),e=p.get('email');
+  if(n){const el=document.getElementById('inp-name');if(el){el.value=n;el.readOnly=true;el.style.opacity='0.6';}}
+  window._sd={name:n||'',email:e||'',company:'Experior Financial'};
 })();
-
-// ── REGISTRATION GATE ──
-document.addEventListener('DOMContentLoaded', async function initRegistration(){
-  const sd = window._sd;
-  // Pre-fill from SuiteDash params
-  if(sd.name){
-    const el=document.getElementById('reg-name');
-    if(el){el.value=sd.name; el.readOnly=true;}
-  }
-  if(sd.email){
-    const el=document.getElementById('reg-email');
-    if(el){el.value=sd.email; el.readOnly=true;}
-  }
-
-  // Check if already registered
-  const email=(sd.email||'').trim().toLowerCase();
-  if(email){
-    try{
-      const r=await window.storage.get('reg:'+email);
-      if(r && r.value){
-        sessionStorage.setItem('_auth','Step2connect');
-        document.getElementById('reg-gate').classList.add('hidden');
-        return;
-      }
-    }catch(e){}
-  }
-  // Show gate (already visible by default)
-});
-
-async function submitRegistration(){
-  const nameEl=document.getElementById('reg-name');
-  const emailEl=document.getElementById('reg-email');
-  const errEl=document.getElementById('reg-err');
-  const btn=document.getElementById('reg-btn');
-  const name=(nameEl.value||'').trim();
-  const email=(emailEl.value||'').trim().toLowerCase();
-
-  errEl.textContent='';
-  if(!name){errEl.textContent='Please enter your name.';return;}
-  if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';return;}
-
-  btn.disabled=true; btn.textContent='Saving...';
-  try{
-    await window.storage.set('reg:'+email, JSON.stringify({
-      name, email,
-      registeredAt: new Date().toISOString(),
-      tool: 'unified-trainer'
-    }));
-    sessionStorage.setItem('_auth','Step2connect');
-    document.getElementById('reg-gate').classList.add('hidden');
-  }catch(e){
-    errEl.textContent='Could not save registration. Please try again.';
-    btn.disabled=false; btn.textContent='Access Simulator →';
-  }
-}
 
 // Init profile builder on page load
 document.addEventListener('DOMContentLoaded',()=>{
-  buildRegionGrid();
   buildBackgroundGrid();
 });
 
-// ── BACKGROUND & REGION DATA ──
+// ── MIC CHECK ──
+(function(){
+  // If browser doesn't support mic at all, skip gate
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    document.getElementById('mic-gate').classList.add('hidden');
+    return;
+  }
+  // If permission already granted, skip gate silently
+  if(navigator.permissions){
+    navigator.permissions.query({name:'microphone'}).then(function(r){
+      if(r.state==='granted'){
+        document.getElementById('mic-gate').classList.add('hidden');
+      }
+    }).catch(function(){});
+  }
+})();
+
+function requestMic(){
+  const status=document.getElementById('mic-status');
+  const btn=document.getElementById('mic-btn');
+  status.className='mic-status checking';
+  status.textContent='🎙️ Requesting microphone permission...';
+  btn.disabled=true;
+  navigator.mediaDevices.getUserMedia({audio:true})
+    .then(function(stream){
+      stream.getTracks().forEach(function(t){t.stop();});
+      status.className='mic-status ok';
+      status.textContent='✓ Microphone ready — loading simulator...';
+      setTimeout(function(){
+        document.getElementById('mic-gate').classList.add('hidden');
+      },800);
+    })
+    .catch(function(){
+      status.className='mic-status blocked';
+      status.innerHTML='⚠ Microphone blocked. Click the <strong>lock icon</strong> in your address bar → set Microphone to <strong>Allow</strong> → refresh the page.<br><span style="opacity:0.7;font-size:0.75rem">Or skip to use text/SMS mode instead.</span>';
+      btn.disabled=false;
+      btn.textContent='Try Again';
+    });
+}
+
+function skipMic(){
+  document.getElementById('mic-gate').classList.add('hidden');
+}
 
 const BACKGROUNDS = [
   {
@@ -894,23 +868,6 @@ const BACKGROUNDS = [
 ];
 
 
-const REGIONS = {
-  ca: [
-    {id:'western', label:'Western Canada', hint:'BC, Alberta', cities:['Vancouver','Surrey','Burnaby','Calgary','Edmonton','Red Deer','Kelowna','Lethbridge','Kamloops','Saskatoon','Regina']},
-    {id:'prairies', label:'Prairies', hint:'SK, MB', cities:['Saskatoon','Regina','Moose Jaw','Winnipeg','Brandon','Portage la Prairie','Prince Albert','Swift Current']},
-    {id:'ontario', label:'Ontario', hint:'GTA, northern ON', cities:['Toronto','Mississauga','Brampton','Markham','Hamilton','Ottawa','London','Windsor','Kitchener','Barrie','Sudbury']},
-    {id:'quebec', label:'Quebec', hint:'Montreal, QC City', cities:['Montreal','Laval','Quebec City','Gatineau','Longueuil','Sherbrooke','Saguenay','Trois-Rivières']},
-    {id:'atlantic', label:'Atlantic Canada', hint:'NS, NB, NL, PEI', cities:['Halifax','Moncton','Fredericton','Saint John','St. John\'s','Charlottetown','Sydney','Dartmouth']},
-  ],
-  us: [
-    {id:'northeast', label:'Northeast', hint:'NY, NJ, MA, PA', cities:['New York','Brooklyn','Newark','Philadelphia','Boston','Hartford','Providence','Buffalo','Albany']},
-    {id:'southeast', label:'Southeast', hint:'FL, GA, NC, SC', cities:['Miami','Orlando','Tampa','Atlanta','Charlotte','Raleigh','Jacksonville','Savannah']},
-    {id:'midwest', label:'Midwest', hint:'IL, OH, MI, MN', cities:['Chicago','Columbus','Detroit','Minneapolis','Indianapolis','Cleveland','Milwaukee','Kansas City']},
-    {id:'south', label:'South', hint:'TX, LA, TN, AL', cities:['Houston','Dallas','Austin','San Antonio','Nashville','New Orleans','Memphis','Birmingham']},
-    {id:'west', label:'West', hint:'CA, WA, OR, AZ, CO', cities:['Los Angeles','San Jose','San Diego','Seattle','Portland','Phoenix','Denver','Las Vegas','Fresno']},
-  ],
-};
-
 // Per-background city overrides (culturally plausible concentrations)
 const BACKGROUND_CITIES = {
   south_asian: {ca:['Brampton','Mississauga','Surrey','Edmonton','Calgary','Markham','Scarborough'], us:['Fremont','San Jose','Irving','Sugar Land','Edison','Jersey City','Artesia']},
@@ -926,9 +883,12 @@ function getCitiesForBackground(bgId, country) {
   if (BACKGROUND_CITIES[bgId] && BACKGROUND_CITIES[bgId][country]) {
     return BACKGROUND_CITIES[bgId][country];
   }
-  const regions = REGIONS[country] || REGIONS.ca;
-  const all = regions.flatMap(r => r.cities);
-  return all;
+  // Fallback city pools by country
+  const fallback = {
+    ca: ['Toronto','Calgary','Vancouver','Edmonton','Ottawa','Winnipeg','Montreal','Mississauga','Brampton','Surrey'],
+    us: ['Houston','Phoenix','Chicago','Los Angeles','Dallas','San Antonio','San Diego','Seattle','Denver','Atlanta']
+  };
+  return fallback[country] || fallback.ca;
 }
 
 function getRandomCity(bgId, country) {
@@ -1170,7 +1130,7 @@ const RF_ENTRIES={
 };
 
 // ── STATE ──
-let cfg={market:null,channel:null,tier:'close',useRF:null,rfEntry:null,persona:'mike',mood:'neutral',country:'ca',region:null,background:'european'};
+let cfg={market:null,channel:null,tier:'close',useRF:null,rfEntry:null,persona:'mike',mood:'neutral',country:'ca',background:'european'};
 let agentPersonaNames={}; // custom names keyed by persona id
 let agentName='',agentCompany='';
 let sessionHistory=[],sessionScores={},sessionTurn=0,sessionProcessing=false;
@@ -1179,31 +1139,13 @@ const synth=window.speechSynthesis;
 
 // ── SETUP LOGIC ──
 function setCountry(c){
-  cfg.country=c;cfg.region=null;
+  cfg.country=c;
   ['ca','us'].forEach(x=>{
     const el=document.getElementById('ctry-'+x);
     el.className='choice-btn'+(x===c?' sel':'');
   });
-  buildRegionGrid();
   buildBackgroundGrid();
-  cfg.region=null;
-  const sel=document.getElementById('region-select');
-  if(sel) sel.value='';
   if(!document.getElementById('sc-prospect').classList.contains('locked')) buildPersonaGrid();
-}
-
-function buildRegionGrid(){
-  const regions=REGIONS[cfg.country]||REGIONS.ca;
-  const sel=document.getElementById('region-select');
-  if(!sel) return;
-  const current=cfg.region||'';
-  sel.innerHTML='<option value="">Select a region...</option>'+
-    regions.map(r=>`<option value="${r.id}" ${r.id===current?'selected':''}>${r.label} — ${r.hint}</option>`).join('');
-}
-
-function setRegion(id){
-  cfg.region=id;
-  checkReady();
 }
 
 function buildBackgroundGrid(){
@@ -1357,7 +1299,7 @@ function lock(id){document.getElementById(id).classList.add('locked');}
 
 function checkReady(){
   const rfOk=cfg.useRF===false||(cfg.useRF===true&&cfg.rfEntry!==null);
-  const ready=cfg.market&&cfg.channel&&cfg.useRF!==null&&rfOk&&cfg.region&&cfg.background;
+  const ready=cfg.market&&cfg.channel&&cfg.useRF!==null&&rfOk&&cfg.background;
   const btn=document.getElementById('start-btn');
   btn.disabled=!ready;
   if(ready){
@@ -1495,6 +1437,7 @@ function startSession(){
   agentName=document.getElementById('inp-name').value.trim()||'Ryan';
   agentCompany=document.getElementById('inp-company').value.trim()||'Experior Financial';
   initUsageBanner(agentName);
+  logActivity();
   // Assign random city from background+country pool for this session
   cfg._sessionCity=getRandomCity(cfg.background,cfg.country);
   sessionHistory=[]; sessionScores={}; sessionTurn=0; sessionProcessing=false;
@@ -1864,6 +1807,37 @@ function postToZapier(avg,p){
     difficulty:cfg.mood,top_skills:tags,source:'ProspectAI Unified Trainer',
     timestamp:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})
   })});}catch(e){}
+}
+
+// ── ACTIVITY LOGGING ──
+async function logActivity(){
+  const agent=window._sd||{};
+  const name=agent.name&&!agent.name.includes('{{')?agent.name:agentName;
+  const email=agent.email&&!agent.email.includes('{{')?agent.email:'';
+  const company=agent.company&&!agent.company.includes('{{')?agent.company:agentCompany;
+  const ts=new Date().toISOString();
+  const entry={
+    name, email, company,
+    tool:'Practice Simulator',
+    channel:cfg.channel,
+    market:cfg.market,
+    country:cfg.country,
+    timestamp:ts
+  };
+  // Save to persistent storage
+  try{
+    const key='activity:'+email+':'+ts;
+    await window.storage.set(key,JSON.stringify(entry),true);
+  }catch(e){}
+  // Post to Zapier
+  try{
+    fetch('https://hooks.zapier.com/hooks/catch/236545/unc6gn1/',{method:'POST',mode:'no-cors',body:new URLSearchParams({
+      agent_name:name, agent_email:email, agent_company:company,
+      tool:'Practice Simulator', channel:cfg.channel, market:cfg.market,
+      country:cfg.country, event:'session_started',
+      timestamp:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})
+    })});
+  }catch(e){}
 }
 
 // ── UTILS ──
