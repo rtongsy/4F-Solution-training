@@ -300,6 +300,8 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 /* ── SUMMARY ── */
 #summary{align-items:center;justify-content:center;background:var(--bg);gap:14px;padding:30px;overflow-y:auto;}
 
+
+
 ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
 /* ── RECRUITING-SPECIFIC ── */
@@ -401,6 +403,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
     <div class="jstep" id="js-summary">✓ Summary</div>
   </div>
   <div class="jright" id="jright"></div>
+  <div id="usage-banner" style="font-size:0.65rem;color:var(--text3);padding-left:12px;white-space:nowrap;"></div>
 </div>
 
 <!-- ══ SETUP ══ -->
@@ -670,16 +673,57 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 
 <script>
 const API = "https://api.anthropic.com/v1/messages";
-const MODEL = "claude-sonnet-4-6";
-let API_KEY = "";
+const MONTHLY_LIMIT = 200;
 
-function apiHeaders(){
-  return {
-    "Content-Type": "application/json",
-    "x-api-key": API_KEY,
-    "anthropic-version": "2023-06-01",
-    "anthropic-dangerous-direct-browser-access": "true"
-  };
+// ── USAGE LIMIT (persistent storage, keyed by agentName) ──
+function usageKey(name){return 'usage:'+name.trim().toLowerCase();}
+function currentMonth(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');}
+
+async function getUsage(name){
+  try{
+    const r=await window.storage.get(usageKey(name));
+    if(!r) return {month:currentMonth(),count:0};
+    const d=JSON.parse(r.value);
+    if(d.month!==currentMonth()) return {month:currentMonth(),count:0};
+    return d;
+  }catch(e){return {month:currentMonth(),count:0};}
+}
+
+async function incrementUsage(name){
+  const d=await getUsage(name);
+  d.count+=1;
+  try{await window.storage.set(usageKey(name),JSON.stringify(d));}catch(e){}
+  updateUsageBanner(name,d.count);
+}
+
+async function checkLimit(name){
+  const d=await getUsage(name);
+  return d.count<MONTHLY_LIMIT;
+}
+
+async function updateUsageBanner(name,count){
+  const el=document.getElementById('usage-banner');
+  if(!el) return;
+  const remaining=Math.max(0,MONTHLY_LIMIT-count);
+  el.textContent=`Monthly usage: ${count} / ${MONTHLY_LIMIT} exchanges (${remaining} remaining)`;
+  el.style.color=remaining<=10?'var(--red)':remaining<=30?'var(--gold)':'var(--text3)';
+}
+
+async function initUsageBanner(name){
+  const d=await getUsage(name);
+  updateUsageBanner(name,d.count);
+}
+
+function showLimitBanner(){
+  const msg='⛔ Monthly limit reached (200 exchanges). Your limit resets on the 1st of next month.';
+  ['vc-trans','sms-log'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){
+      const d=document.createElement('div');d.className='tl sys';
+      const p=document.createElement('p');p.style.cssText='margin:0;color:var(--red);font-weight:700;';p.textContent=msg;
+      d.appendChild(p);el.appendChild(d);el.scrollTop=el.scrollHeight;
+    }
+  });
 }
 
 // ── INIT ──
@@ -687,13 +731,12 @@ document.addEventListener("DOMContentLoaded", function(){
   buildProspectGrid();
 });
 
-// SuiteDash URL params
+// ── URL PARAMS (SuiteDash iframe) ──
 (function(){
-  const p = new URLSearchParams(window.location.search);
-  const n = p.get("name"), e = p.get("email"), c = p.get("company"), k = p.get("key");
-  if(n){ const el=document.getElementById("inp-name"); el.value=n; el.readOnly=true; el.style.opacity="0.6"; }
-  if(k) API_KEY = k;
-  window._sd = { name:n||"", email:e||"", company:c||"Experior Financial" };
+  const p=new URLSearchParams(window.location.search);
+  const n=p.get('name'),e=p.get('email');
+  if(n){const el=document.getElementById('inp-name');if(el){el.value=n;el.readOnly=true;el.style.opacity='0.6';}}
+  window._sd={name:n||'',email:e||'',company:'Experior Financial'};
 })();
 
 // ── PROSPECT DATA ──
@@ -1090,6 +1133,8 @@ function startSession(){
   agentYears = document.getElementById("inp-years").value.trim()||"4";
   sessionHistory=[]; sessionScores={}; sessionTurn=0; sessionProcessing=false;
   SKILLS.forEach(s=>{ sessionScores[s.key]=0; });
+  initUsageBanner(agentName);
+  logActivity();
 
   const p = P();
   // Left panel
@@ -1163,16 +1208,18 @@ function initVoice(){
 
 async function getOpening(){
   showProc("Connecting...");
+  if(!await checkLimit(agentName)){hideProc();showLimitBanner();return;}
   const opener=`${agentName} is calling you — a colleague from the financial industry. Give a brief natural greeting as ${P().name}. 1-2 sentences. You're mildly curious why they're calling.`;
   try{
-    const r=await fetch(API,{method:"POST",headers:apiHeaders(),
-      body:JSON.stringify({model:MODEL,max_tokens:120,system:buildSystem(),messages:[{role:"user",content:opener}]})});
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:buildSystem(),messages:[{role:"user",content:opener}]})});
     const d=await r.json(); hideProc();
     const full=d.content?.[0]?.text||"";
     const txt=extractChar(full);
     sessionHistory.push({role:"user",content:opener});
     sessionHistory.push({role:"assistant",content:full});
     addLine("prospect",txt); speak(txt);
+    await incrementUsage(agentName);
   }catch(e){hideProc();addLine("sys","Connection error");}
 }
 
@@ -1184,9 +1231,10 @@ async function handleSpeech(txt){
   addLine("agent",txt);
   sessionHistory.push({role:"user",content:txt});
   showProc("Responding...");
+  if(!await checkLimit(agentName)){hideProc();showLimitBanner();sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
   try{
-    const r=await fetch(API,{method:"POST",headers:apiHeaders(),
-      body:JSON.stringify({model:MODEL,max_tokens:400,system:buildSystem(),messages:sessionHistory})});
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json(); hideProc();
     const full=d.content?.[0]?.text||"";
     const txt2=extractChar(full); const cd=extractCoach(full);
@@ -1194,6 +1242,7 @@ async function handleSpeech(txt){
     addLine("prospect",txt2); speak(txt2);
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++; advanceStage(sessionTurn);
+    await incrementUsage(agentName);
   }catch(e){hideProc();addLine("sys","Error — try again.");}
   sessionProcessing=false;
   document.getElementById("vc-live").textContent="Press and hold mic to speak...";
@@ -1248,6 +1297,7 @@ function initSms(){
 async function sendSms(){
   const ta=document.getElementById("ph-ta");
   const txt=ta.value.trim(); if(!txt||sessionProcessing)return;
+  if(!await checkLimit(agentName)){addSmsSys("⛔ Monthly limit reached (200 exchanges). Resets on the 1st of next month.");return;}
   sessionProcessing=true; ta.value=""; handleSmsInput(ta);
   document.getElementById("ph-send").disabled=true;
   addSmsBubble("sent",txt,"Delivered");
@@ -1255,8 +1305,8 @@ async function sendSms(){
   const typEl=addSmsTyping();
   await new Promise(r=>setTimeout(r,800+Math.random()*1200));
   try{
-    const r=await fetch(API,{method:"POST",headers:apiHeaders(),
-      body:JSON.stringify({model:MODEL,max_tokens:300,system:buildSystem(),messages:sessionHistory})});
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json(); typEl.remove();
     const full=d.content?.[0]?.text||"";
     const txt2=extractChar(full); const cd=extractCoach(full);
@@ -1270,6 +1320,7 @@ async function sendSms(){
     }
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++; advanceStage(sessionTurn);
+    await incrementUsage(agentName);
   }catch(e){typEl.remove();addSmsSys("Connection error — try again.");}
   sessionProcessing=false; document.getElementById("ph-send").disabled=false;
   document.getElementById("ph-ta").focus();
@@ -1379,6 +1430,33 @@ function postZapier(avg, p){
     source:"ProspectAI Professional Recruiting Trainer",
     timestamp:new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"})
   })});}catch(e){}
+}
+
+// ── ACTIVITY LOGGING ──
+async function logActivity(){
+  const agent=window._sd||{};
+  const name=agent.name&&!agent.name.includes('{{')?agent.name:agentName;
+  const email=agent.email&&!agent.email.includes('{{')?agent.email:'';
+  const company=agent.company&&!agent.company.includes('{{')?agent.company:'Experior Financial';
+  const ts=new Date().toISOString();
+  const entry={
+    name, email, company,
+    tool:'Recruiting Simulator',
+    timestamp:ts
+  };
+  // Save to persistent storage
+  try{
+    const key='activity:'+email+':'+ts;
+    await window.storage.set(key,JSON.stringify(entry),true);
+  }catch(e){}
+  // Post to Zapier
+  try{
+    fetch('https://hooks.zapier.com/hooks/catch/236545/unc6gn1/',{method:'POST',mode:'no-cors',body:new URLSearchParams({
+      agent_name:name, agent_email:email, agent_company:company,
+      tool:'Recruiting Simulator', event:'session_started',
+      timestamp:new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})
+    })});
+  }catch(e){}
 }
 
 // ── UTILS ──
