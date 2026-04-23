@@ -1211,7 +1211,7 @@ async function getOpening(){
   if(!await checkLimit(agentName)){hideProc();showLimitBanner();return;}
   const opener=`${agentName} is calling you — a colleague from the financial industry. Give a brief natural greeting as ${P().name}. 1-2 sentences. You're mildly curious why they're calling.`;
   try{
-    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:buildSystem(),messages:[{role:"user",content:opener}]})});
     if(!r.ok){hideProc();addLine("sys","API error "+r.status+" — "+r.statusText);return;}
     const d=await r.json(); hideProc();
@@ -1235,7 +1235,7 @@ async function handleSpeech(txt){
   showProc("Responding...");
   if(!await checkLimit(agentName)){hideProc();showLimitBanner();sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
   try{
-    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:buildSystem(),messages:sessionHistory})});
     if(!r.ok){hideProc();addLine("sys","API error "+r.status+" — "+r.statusText);sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
     const d=await r.json(); hideProc();
@@ -1309,7 +1309,7 @@ async function sendSms(){
   const typEl=addSmsTyping();
   await new Promise(r=>setTimeout(r,800+Math.random()*1200));
   try{
-    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,system:buildSystem(),messages:sessionHistory})});
     typEl.remove();
     if(!r.ok){addSmsSys("API error "+r.status+" — "+r.statusText);sessionProcessing=false;document.getElementById("ph-send").disabled=false;document.getElementById("ph-ta").focus();return;}
