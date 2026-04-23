@@ -1213,6 +1213,7 @@ async function getOpening(){
   try{
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:buildSystem(),messages:[{role:"user",content:opener}]})});
+    if(!r.ok){hideProc();addLine("sys","API error "+r.status+" — "+r.statusText);return;}
     const d=await r.json(); hideProc();
     if(!d.content){addLine("sys","API error: "+(d.error?.message||JSON.stringify(d)));return;}
     const full=d.content?.[0]?.text||"";
@@ -1221,7 +1222,7 @@ async function getOpening(){
     sessionHistory.push({role:"assistant",content:full});
     addLine("prospect",txt); speak(txt);
     await incrementUsage(agentName);
-  }catch(e){hideProc();addLine("sys","Connection error: "+e.message);}
+  }catch(e){hideProc();addLine("sys","Error: "+e.message+"  |  "+e.name);}
 }
 
 async function handleSpeech(txt){
@@ -1236,6 +1237,7 @@ async function handleSpeech(txt){
   try{
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:buildSystem(),messages:sessionHistory})});
+    if(!r.ok){hideProc();addLine("sys","API error "+r.status+" — "+r.statusText);sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
     const d=await r.json(); hideProc();
     if(!d.content){addLine("sys","API error: "+(d.error?.message||JSON.stringify(d)));sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
     const full=d.content?.[0]?.text||"";
@@ -1245,7 +1247,7 @@ async function handleSpeech(txt){
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++; advanceStage(sessionTurn);
     await incrementUsage(agentName);
-  }catch(e){hideProc();addLine("sys","Error: "+e.message);}
+  }catch(e){hideProc();addLine("sys","Error: "+e.message+" | "+e.name);}
   sessionProcessing=false;
   document.getElementById("vc-live").textContent="Press and hold mic to speak...";
 }
@@ -1309,7 +1311,9 @@ async function sendSms(){
   try{
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,system:buildSystem(),messages:sessionHistory})});
-    const d=await r.json(); typEl.remove();
+    typEl.remove();
+    if(!r.ok){addSmsSys("API error "+r.status+" — "+r.statusText);sessionProcessing=false;document.getElementById("ph-send").disabled=false;document.getElementById("ph-ta").focus();return;}
+    const d=await r.json();
     if(!d.content){addSmsSys("API error: "+(d.error?.message||JSON.stringify(d)));sessionProcessing=false;document.getElementById("ph-send").disabled=false;return;}
     const full=d.content?.[0]?.text||"";
     const txt2=extractChar(full); const cd=extractCoach(full);
@@ -1324,7 +1328,7 @@ async function sendSms(){
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++; advanceStage(sessionTurn);
     await incrementUsage(agentName);
-  }catch(e){typEl.remove();addSmsSys("Connection error — "+e.message);}
+  }catch(e){if(typEl.parentNode)typEl.remove();addSmsSys("Error: "+e.message+" | "+e.name);}
   sessionProcessing=false; document.getElementById("ph-send").disabled=false;
   document.getElementById("ph-ta").focus();
 }
