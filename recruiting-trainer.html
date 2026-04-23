@@ -281,6 +281,21 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 .email-client{width:100%;max-width:600px;background:#ffffff;border:1px solid rgba(0,0,0,0.12);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
 .email-toolbar{padding:9px 14px;background:#f5f2ed;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;gap:8px;}
 .etb-dot{width:9px;height:9px;border-radius:50%;}
+.email-field{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:0.5px solid var(--border);}
+.ef-label{font-size:0.68rem;font-weight:600;color:var(--text3);width:48px;flex-shrink:0;}
+.ef-val{font-size:0.82rem;color:var(--text);}
+.subject-score{padding:6px 16px;background:var(--green-dim);border-bottom:1px solid rgba(40,201,122,0.2);font-size:0.7rem;color:var(--green);display:none;}
+.subject-score.on{display:block;}
+.email-input-ta{width:100%;min-height:200px;padding:14px 16px;background:#ffffff;border:none;color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:0.82rem;line-height:1.65;resize:none;outline:none;}
+.email-input-ta::placeholder{color:var(--text3);}
+.email-actions{padding:11px 16px;background:#f5f2ed;border-top:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;gap:10px;}
+.email-send-btn{padding:7px 18px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.14s;}
+.email-send-btn:hover{background:#2a6ae0;}
+.email-send-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.email-word-count{font-size:0.7rem;color:var(--text3);}
+.email-client{width:100%;max-width:600px;background:#ffffff;border:1px solid rgba(0,0,0,0.12);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+.email-toolbar{padding:9px 14px;background:#f5f2ed;border-bottom:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;gap:8px;}
+.etb-dot{width:9px;height:9px;border-radius:50%;}
 .email-subject-bar{padding:0;border-bottom:1px solid var(--border);}
 .email-field{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:0.5px solid var(--border);}
 .ef-label{font-size:0.68rem;font-weight:600;color:var(--text3);width:48px;flex-shrink:0;}
@@ -468,14 +483,14 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
         </div>
         <div class="choice-btn" id="cb-sms" onclick="setChannel('sms')">
           <div class="cb-icon">💬</div>
-          <div class="cb-title">SMS / Text</div>
-          <div class="cb-desc">Softer opener for someone you don't know well. Creates curiosity before the call.</div>
+          <div class="cb-title">Text / Message</div>
+          <div class="cb-desc">SMS or LinkedIn message. Softer opener — creates curiosity before the call.</div>
           <span class="cb-badge badge-navy">Low pressure</span>
         </div>
-        <div class="choice-btn" id="cb-linkedin" onclick="setChannel('linkedin')">
-          <div class="cb-icon">💼</div>
-          <div class="cb-title">LinkedIn Message</div>
-          <div class="cb-desc">Possibility market — someone you found, not someone you know. Professional tone.</div>
+        <div class="choice-btn" id="cb-email" onclick="setChannel('email')">
+          <div class="cb-icon">📧</div>
+          <div class="cb-title">Email</div>
+          <div class="cb-desc">Professional outreach email. Practice subject lines and opening messages.</div>
           <span class="cb-badge badge-blue">Cold outreach</span>
         </div>
       </div>
@@ -494,10 +509,38 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
     </div>
   </div>
 
-  <!-- STEP 4: OPENNESS -->
+  <!-- STEP 4: RAPIDFUNNEL -->
+  <div class="step-card locked" id="sc-rf">
+    <div class="step-hdr">
+      <div class="step-num" id="sn-rf">4</div>
+      <div class="step-title">Using Rapidfunnel?</div>
+      <div class="step-chosen" id="ch-rf" style="display:none"></div>
+    </div>
+    <div class="step-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="choice-btn" id="rf-no" onclick="setRF(false)">
+          <div class="cb-icon">🚫</div>
+          <div class="cb-title">No — Direct outreach</div>
+          <div class="cb-desc">Standard phone, text, or email first contact with no Rapidfunnel involved.</div>
+        </div>
+        <div class="choice-btn" id="rf-yes" onclick="setRF(true)">
+          <div class="cb-icon">⚡</div>
+          <div class="cb-title">Yes — Rapidfunnel path</div>
+          <div class="cb-desc">Rapidfunnel sends a business overview video. Practice what to say at any stage.</div>
+          <span class="cb-badge badge-gold">Rapidfunnel</span>
+        </div>
+      </div>
+      <div id="rf-entry-section" style="display:none;margin-top:10px;">
+        <div class="nf-label" style="margin-bottom:6px">Where are you in the Rapidfunnel process?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;" id="rf-entry-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: OPENNESS -->
   <div class="step-card locked" id="sc-mood">
     <div class="step-hdr">
-      <div class="step-num" id="sn-mood">4</div>
+      <div class="step-num" id="sn-mood">5</div>
       <div class="step-title">Their Professional Openness</div>
     </div>
     <div class="step-body">
@@ -520,34 +563,6 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
       </div>
       <div style="margin-top:10px;padding:9px 12px;background:var(--red-dim);border:1px solid rgba(204,51,51,0.18);border-radius:7px;font-size:0.72rem;color:var(--text2);line-height:1.55;">
         <strong style="color:var(--red)">Guarded mode raises:</strong> "I'm happy where I am" · "I have clients I can't take" · "I'm under a non-solicit" · "I don't want to rebuild" · "What does compensation look like?"
-      </div>
-    </div>
-  </div>
-
-  <!-- STEP 5: RAPIDFUNNEL -->
-  <div class="step-card locked" id="sc-rf">
-    <div class="step-hdr">
-      <div class="step-num" id="sn-rf">5</div>
-      <div class="step-title">Using Rapidfunnel?</div>
-      <div class="step-chosen" id="ch-rf" style="display:none"></div>
-    </div>
-    <div class="step-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div class="choice-btn" id="rf-no" onclick="setRF(false)">
-          <div class="cb-icon">🚫</div>
-          <div class="cb-title">No — Direct outreach</div>
-          <div class="cb-desc">Standard phone, SMS, or LinkedIn first contact with no Rapidfunnel involved.</div>
-        </div>
-        <div class="choice-btn" id="rf-yes" onclick="setRF(true)">
-          <div class="cb-icon">⚡</div>
-          <div class="cb-title">Yes — Rapidfunnel path</div>
-          <div class="cb-desc">Rapidfunnel sends a business overview video. Practice what to say at any stage.</div>
-          <span class="cb-badge badge-gold">Rapidfunnel</span>
-        </div>
-      </div>
-      <div id="rf-entry-section" style="display:none;margin-top:10px;">
-        <div class="nf-label" style="margin-bottom:6px">Where are you in the Rapidfunnel process?</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;" id="rf-entry-grid"></div>
       </div>
     </div>
   </div>
@@ -639,7 +654,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
     </div>
   </div>
 
-  <!-- SMS / LINKEDIN -->
+  <!-- SMS / TEXT MESSAGE -->
   <div class="sms-area" id="sms-area" style="display:none">
     <div class="phone" style="position:relative">
       <div class="notch"><div class="notch-cam"></div><div class="notch-spk"></div><div class="notch-cam"></div></div>
@@ -662,6 +677,37 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
         <button class="ph-send" id="ph-send" onclick="sendSms()" disabled>↑</button>
       </div>
       <div class="ph-home"><div class="ph-home-bar"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EMAIL AREA ══ -->
+<div class="screen" id="email-screen">
+  <div class="left" id="left-panel-email"></div>
+  <div class="email-area" id="email-area" style="display:flex">
+    <div class="email-client">
+      <div class="email-toolbar">
+        <div class="etb-dot" style="background:#e84848"></div>
+        <div class="etb-dot" style="background:#e09030"></div>
+        <div class="etb-dot" style="background:#28c97a"></div>
+        <div style="font-size:0.78rem;color:var(--text2);margin-left:8px">New Message</div>
+      </div>
+      <div class="subject-score" id="subject-score"></div>
+      <div class="email-field">
+        <div class="ef-label">To</div>
+        <div class="ef-val" id="email-to">prospect@email.com</div>
+      </div>
+      <div class="email-field">
+        <div class="ef-label">Subject</div>
+        <input id="email-subject" type="text" placeholder="Write a compelling subject line..." style="flex:1;background:transparent;border:none;color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:0.82rem;outline:none;" oninput="scoreSubject(this.value)">
+      </div>
+      <div id="email-thread-area" style="display:none;flex-direction:column;overflow-y:auto;max-height:280px;padding:12px 16px;gap:10px;"></div>
+      <textarea class="email-input-ta" id="email-body" placeholder="Write your email here..." oninput="updateWordCount(this.value)"></textarea>
+      <div class="email-actions">
+        <button class="email-send-btn" id="email-send-btn" onclick="sendEmail()">Send</button>
+        <div class="email-word-count" id="word-count">0 words</div>
+        <button onclick="showSummary()" style="margin-left:auto;padding:6px 14px;background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:7px;font-size:0.75rem;cursor:pointer;">End Session →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -994,8 +1040,8 @@ function setCountry(c){
 
 function setChannel(ch){
   cfg.channel=ch;
-  ["phone","sms","linkedin"].forEach(x=>document.getElementById("cb-"+x).className="choice-btn"+(x===ch?" sel":""));
-  document.getElementById("ch-channel").textContent={phone:"📞 Phone",sms:"💬 SMS",linkedin:"💼 LinkedIn"}[ch];
+  ["phone","sms","email"].forEach(x=>document.getElementById("cb-"+x).className="choice-btn"+(x===ch?" sel":""));
+  document.getElementById("ch-channel").textContent={phone:"📞 Phone",sms:"💬 Text / Message",email:"📧 Email"}[ch];
   document.getElementById("ch-channel").style.display="block";
   document.getElementById("sc-channel").classList.add("done");
   unlock("sc-prospect"); buildProspectGrid(); checkReady();
@@ -1046,7 +1092,7 @@ function checkReady(){
   const btn = document.getElementById("start-btn");
   btn.disabled = !ready;
   if(ready){
-    const labels={phone:"📞 Start Recruiting Call",sms:"💬 Start SMS Session",linkedin:"💼 Start LinkedIn Message"};
+    const labels={phone:"📞 Start Recruiting Call",sms:"💬 Start Text Session",email:"📧 Start Email Session"};
     btn.textContent = labels[cfg.channel];
   } else {
     btn.textContent = "Choose your options above to begin";
@@ -1065,7 +1111,7 @@ function buildSystem(){
   const channelCtx = {
     phone:`This is a phone call between two financial professionals. Keep responses 1-4 sentences. Speak as a peer, not a sales prospect.`,
     sms:`This is a text message exchange between professionals. Keep responses 1-2 sentences. Professional but casual tone.`,
-    linkedin:`This is a LinkedIn message exchange. Responses are professional and measured. This person did not initiate contact.`
+    email:`This is a professional email exchange. Write like a real person replying to an email. 3-6 sentences. Professional peer-to-peer tone.`
   }[cfg.channel];
 
   const objectionGuidance = {
@@ -1164,13 +1210,16 @@ function startSession(){
   document.getElementById("score-num").style.color="var(--navy)";
   resetStages();
   document.getElementById("jright").textContent=agentName+" → "+p.name;
-  setJStep("session"); setScreen("session");
-
-  document.getElementById("voice-area").style.display=cfg.channel==="phone"?"flex":"none";
-  document.getElementById("sms-area").style.display=(cfg.channel==="sms"||cfg.channel==="linkedin")?"flex":"none";
-
-  if(cfg.channel==="phone") initVoice();
-  else initSms();
+  if(cfg.channel==="email"){
+    setJStep("session"); setScreen("email-screen");
+    initEmail();
+  } else {
+    setJStep("session"); setScreen("session");
+    document.getElementById("voice-area").style.display=cfg.channel==="phone"?"flex":"none";
+    document.getElementById("sms-area").style.display=cfg.channel==="sms"?"flex":"none";
+    if(cfg.channel==="phone") initVoice();
+    else initSms();
+  }
 }
 
 // ── STAGES ──
@@ -1288,11 +1337,11 @@ function initSms(){
   document.getElementById("sms-hdr-av").style.background=p.color;
   document.getElementById("sms-hdr-name").textContent=p.name;
   document.getElementById("sms-hdr-sub").textContent=p.role+" · "+p.company;
-  document.getElementById("sms-banner").textContent=cfg.channel==="linkedin"?"LinkedIn message — professional recruiting":"SMS — professional recruiting";
+  document.getElementById("sms-banner").textContent="Text message — professional recruiting";
   document.getElementById("ph-thread").innerHTML="";
   updateSmsTime();
   addSmsDate("Today");
-  addSmsSys(cfg.channel==="linkedin"?"LinkedIn message — write your opening":"Write your first message");
+  addSmsSys("Write your opening message");
   document.getElementById("ph-ta").disabled=false;
   document.getElementById("ph-send").disabled=false;
   document.getElementById("ph-ta").focus();
@@ -1345,6 +1394,87 @@ function addSmsTyping(){const t=document.getElementById("ph-thread");const w=doc
 function handleSmsInput(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,68)+"px";}
 function handleSmsKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendSms();}}
 function updateSmsTime(){const n=new Date(),h=n.getHours()%12||12,m=n.getMinutes().toString().padStart(2,"0");document.getElementById("sms-time").textContent=`${h}:${m}`;}
+
+// ── EMAIL ──
+function initEmail(){
+  const p=P();
+  document.getElementById('email-to').textContent=p.name.toLowerCase().split(' ')[0]+'@email.com';
+  document.getElementById('email-subject').value='';
+  document.getElementById('email-body').value='';
+  document.getElementById('subject-score').classList.remove('on');
+  document.getElementById('email-thread-area').style.display='none';
+  document.getElementById('email-thread-area').innerHTML='';
+  document.getElementById('word-count').textContent='0 words';
+  document.getElementById('email-send-btn').disabled=false;
+  document.getElementById('email-body').style.display='block';
+  document.getElementById('email-body').focus();
+}
+
+function scoreSubject(val){
+  const el=document.getElementById('subject-score');
+  if(!val){el.classList.remove('on');return;}
+  const len=val.length;
+  const hasQuestion=val.includes('?');
+  const hasPersonal=/you|your/i.test(val);
+  const tooSalesy=/free|discount|offer|buy|sale|deal|opportunity/i.test(val);
+  let score='';
+  if(tooSalesy) score='⚠ Sounds like a pitch — likely to be ignored';
+  else if(len<20) score='Subject is very short — add more context';
+  else if(len>60) score='Subject is long — trim for mobile preview';
+  else if(hasQuestion||hasPersonal) score='✓ Good — creates curiosity and feels peer-to-peer';
+  else score='Neutral — try adding a question or personal reference';
+  el.textContent=score;el.classList.add('on');
+}
+
+function updateWordCount(val){
+  const words=val.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('word-count').textContent=words+' words'+(words>200?' — consider trimming':'');
+}
+
+async function sendEmail(){
+  const subject=document.getElementById('email-subject').value.trim();
+  const body=document.getElementById('email-body').value.trim();
+  if(!subject||!body||sessionProcessing)return;
+  if(!await checkLimit(agentName)){
+    const threadArea=document.getElementById('email-thread-area');threadArea.style.display='flex';
+    const d=document.createElement('div');d.style.cssText='padding:10px;color:var(--red);font-weight:700;font-size:0.8rem;';
+    d.textContent='⛔ Monthly limit reached (200 exchanges). Resets on the 1st of next month.';
+    threadArea.appendChild(d);return;
+  }
+  sessionProcessing=true;
+  document.getElementById('email-send-btn').disabled=true;
+  const threadArea=document.getElementById('email-thread-area');
+  threadArea.style.display='flex';
+  const sentDiv=document.createElement('div');
+  sentDiv.style.cssText='padding:12px;background:var(--blue-dim);border:1px solid rgba(72,136,240,0.15);border-radius:9px;';
+  sentDiv.innerHTML=`<div style="font-size:0.62rem;font-weight:700;color:var(--blue);margin-bottom:5px;letter-spacing:.08em;text-transform:uppercase">You — ${agentName}</div><div style="font-size:0.8rem;color:var(--text2);font-weight:600;margin-bottom:4px">Subject: ${subject}</div><div style="font-size:0.8rem;color:var(--text2);white-space:pre-wrap;line-height:1.6">${body}</div>`;
+  threadArea.appendChild(sentDiv);
+  document.getElementById('email-body').style.display='none';
+  const prompt=`${agentName} just sent you an email with subject line "${subject}" and body: "${body}". Reply naturally as ${P().name}. React to the quality — reply if it feels genuine and peer-to-peer, or write a polite brush-off if it feels like a recruiting template.`;
+  sessionHistory.push({role:'user',content:prompt});
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:380,system:buildSystem(),messages:sessionHistory})});
+    if(!r.ok){document.getElementById('email-send-btn').disabled=false;sessionProcessing=false;return;}
+    const d=await r.json();
+    const full=d.content?.[0]?.text||'';
+    const txt=extractChar(full);const cd=extractCoach(full);
+    sessionHistory.push({role:'assistant',content:full});
+    const replyDiv=document.createElement('div');
+    replyDiv.style.cssText='padding:12px;background:var(--s2);border:1px solid var(--border2);border-radius:9px;';
+    replyDiv.innerHTML=`<div style="font-size:0.62rem;font-weight:700;color:var(--gold);margin-bottom:5px;letter-spacing:.08em;text-transform:uppercase">${P().name}</div><div style="font-size:0.8rem;color:var(--text2);white-space:pre-wrap;line-height:1.6">${txt}</div>`;
+    threadArea.appendChild(replyDiv);
+    threadArea.scrollTop=threadArea.scrollHeight;
+    const replyBody=document.getElementById('email-body');
+    replyBody.style.display='block';replyBody.value='';replyBody.placeholder='Write your reply...';
+    document.getElementById('email-send-btn').disabled=false;
+    document.getElementById('email-send-btn').textContent='Send Reply';
+    if(cd){applyScores(cd);addFb(cd);}
+    sessionTurn++; advanceStage(sessionTurn);
+    await incrementUsage(agentName);
+  }catch(e){document.getElementById('email-send-btn').disabled=false;}
+  sessionProcessing=false;
+}
 
 // ── SCORES ──
 function buildSkillBars(){
@@ -1403,7 +1533,7 @@ function showSummary(){
       <div style="font-size:0.62rem;color:var(--text2);margin-top:2px">${s.label}</div>
     </div>`;
   }).join("");
-  const channel={phone:"📞 Phone call",sms:"💬 SMS",linkedin:"💼 LinkedIn"}[cfg.channel];
+  const channel={phone:"📞 Phone call",sms:"💬 Text / Message",email:"📧 Email"}[cfg.channel];
   document.getElementById("sum-inner").innerHTML=`
     <div style="text-align:center">
       <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Session Complete</div>
