@@ -718,7 +718,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 </div>
 
 <script>
-const API = "https://api.anthropic.com/v1/messages";
+const API = "https://calm-mountain-27e8.rainmaker-ag.workers.dev";
 const MONTHLY_LIMIT = 200;
 
 // ── USAGE LIMIT (persistent storage, keyed by agentName) ──
@@ -1260,7 +1260,7 @@ async function getOpening(){
   if(!await checkLimit(agentName)){hideProc();showLimitBanner();return;}
   const opener=`${agentName} is calling you — a colleague from the financial industry. Give a brief natural greeting as ${P().name}. 1-2 sentences. You're mildly curious why they're calling.`;
   try{
-    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:buildSystem(),messages:[{role:"user",content:opener}]})});
     if(!r.ok){hideProc();addLine("sys","API error "+r.status+" — "+r.statusText);return;}
     const d=await r.json(); hideProc();
@@ -1284,7 +1284,7 @@ async function handleSpeech(txt){
   showProc("Responding...");
   if(!await checkLimit(agentName)){hideProc();showLimitBanner();sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
   try{
-    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:buildSystem(),messages:sessionHistory})});
     if(!r.ok){hideProc();addLine("sys","API error "+r.status+" — "+r.statusText);sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
     const d=await r.json(); hideProc();
@@ -1358,7 +1358,7 @@ async function sendSms(){
   const typEl=addSmsTyping();
   await new Promise(r=>setTimeout(r,800+Math.random()*1200));
   try{
-    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,system:buildSystem(),messages:sessionHistory})});
     typEl.remove();
     if(!r.ok){addSmsSys("API error "+r.status+" — "+r.statusText);sessionProcessing=false;document.getElementById("ph-send").disabled=false;document.getElementById("ph-ta").focus();return;}
@@ -1453,7 +1453,7 @@ async function sendEmail(){
   const prompt=`${agentName} just sent you an email with subject line "${subject}" and body: "${body}". Reply naturally as ${P().name}. React to the quality — reply if it feels genuine and peer-to-peer, or write a polite brush-off if it feels like a recruiting template.`;
   sessionHistory.push({role:'user',content:prompt});
   try{
-    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:380,system:buildSystem(),messages:sessionHistory})});
     if(!r.ok){document.getElementById('email-send-btn').disabled=false;sessionProcessing=false;return;}
     const d=await r.json();

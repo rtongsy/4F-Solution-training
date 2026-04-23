@@ -617,7 +617,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
 <div class="screen" id="summary"></div>
 
 <script>
-const API='https://api.anthropic.com/v1/messages';
+const API='https://calm-mountain-27e8.rainmaker-ag.workers.dev';
 const MONTHLY_LIMIT=200;
 
 // ── URL PARAMS (SuiteDash) ──
@@ -1372,7 +1372,7 @@ async function getOpening(){
     ?`You have a question about the Rapidfunnel ${agentName} sent you. Give a brief natural opening — "Hey ${agentName}, I got that thing you sent..." then ask your main question. 1-2 sentences.`
     :`${agentName} is calling you. Give a brief natural greeting — 1-2 sentences.`;
   try{
-    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:120,system:buildSystem(),messages:[{role:'user',content:opener}]})});
     const d=await r.json(); hideProc();
     const full=d.content?.[0]?.text||'';
@@ -1394,7 +1394,7 @@ async function handleSpeech(txt){
   showProc('Responding...');
   if(!await checkLimit(agentName)){hideProc();showLimitBanner();sessionProcessing=false;document.getElementById('vc-live').textContent='Press and hold mic to speak...';return;}
   try{
-    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json(); hideProc();
     const full=d.content?.[0]?.text||'';
@@ -1469,7 +1469,7 @@ async function sendSms(){
   const typEl=addSmsTyping();
   await new Promise(r=>setTimeout(r,700+Math.random()*1000));
   try{
-    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json();typEl.remove();
     const full=d.content?.[0]?.text||'';
@@ -1563,7 +1563,7 @@ async function sendEmail(){
   const prompt=`${agentName} just sent you an email with subject line "${subject}" and body: "${body}". Reply naturally as ${P().name}. React to the quality — reply if it's good, or write a polite brush-off if it feels generic or salesy.`;
   sessionHistory.push({role:'user',content:prompt});
   try{
-    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:380,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json();
     const full=d.content?.[0]?.text||'';
