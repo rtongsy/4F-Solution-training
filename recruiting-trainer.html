@@ -445,7 +445,7 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--t
     </div>
     <div class="step-body">
       <div class="name-row">
-        <div><div class="nf-label">Your First Name</div><input class="nf-input" id="inp-name" type="text" placeholder="e.g. Ryan" maxlength="30"></div>
+        <div><div class="nf-label">Your First Name</div><input class="nf-input" id="inp-name" type="text" placeholder="e.g. Ryan" maxlength="30" oninput="if(this.value.trim()){document.getElementById('sc-agent').classList.add('done');}"></div>
         <div><div class="nf-label">Years at Experior</div><input class="nf-input" id="inp-years" type="text" placeholder="e.g. 4" maxlength="5"></div>
       </div>
     </div>
@@ -731,11 +731,11 @@ document.addEventListener("DOMContentLoaded", function(){
   buildProspectGrid();
 });
 
-// ── URL PARAMS (SuiteDash iframe) ──
+// ── URL PARAMS (SuiteDash) ──
 (function(){
   const p=new URLSearchParams(window.location.search);
   const n=p.get('name'),e=p.get('email');
-  if(n){const el=document.getElementById('inp-name');if(el){el.value=n;el.readOnly=true;el.style.opacity='0.6';}}
+  if(n){const el=document.getElementById('inp-name');if(el){el.value=n;el.readOnly=true;el.style.opacity='0.6';const sc=document.getElementById('sc-agent');if(sc)sc.classList.add('done');}}
   window._sd={name:n||'',email:e||'',company:'Experior Financial'};
 })();
 
@@ -1214,13 +1214,14 @@ async function getOpening(){
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:buildSystem(),messages:[{role:"user",content:opener}]})});
     const d=await r.json(); hideProc();
+    if(!d.content){addLine("sys","API error: "+(d.error?.message||JSON.stringify(d)));return;}
     const full=d.content?.[0]?.text||"";
     const txt=extractChar(full);
     sessionHistory.push({role:"user",content:opener});
     sessionHistory.push({role:"assistant",content:full});
     addLine("prospect",txt); speak(txt);
     await incrementUsage(agentName);
-  }catch(e){hideProc();addLine("sys","Connection error");}
+  }catch(e){hideProc();addLine("sys","Connection error: "+e.message);}
 }
 
 async function handleSpeech(txt){
@@ -1236,6 +1237,7 @@ async function handleSpeech(txt){
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json(); hideProc();
+    if(!d.content){addLine("sys","API error: "+(d.error?.message||JSON.stringify(d)));sessionProcessing=false;document.getElementById("vc-live").textContent="Press and hold mic to speak...";return;}
     const full=d.content?.[0]?.text||"";
     const txt2=extractChar(full); const cd=extractCoach(full);
     sessionHistory.push({role:"assistant",content:full});
@@ -1243,7 +1245,7 @@ async function handleSpeech(txt){
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++; advanceStage(sessionTurn);
     await incrementUsage(agentName);
-  }catch(e){hideProc();addLine("sys","Error — try again.");}
+  }catch(e){hideProc();addLine("sys","Error: "+e.message);}
   sessionProcessing=false;
   document.getElementById("vc-live").textContent="Press and hold mic to speak...";
 }
@@ -1308,11 +1310,12 @@ async function sendSms(){
     const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,system:buildSystem(),messages:sessionHistory})});
     const d=await r.json(); typEl.remove();
+    if(!d.content){addSmsSys("API error: "+(d.error?.message||JSON.stringify(d)));sessionProcessing=false;document.getElementById("ph-send").disabled=false;return;}
     const full=d.content?.[0]?.text||"";
     const txt2=extractChar(full); const cd=extractCoach(full);
     const noReply=txt2.toLowerCase().startsWith("[no reply]")||txt2.toLowerCase().includes("did not respond");
     if(noReply){ addSmsSys(P().name+" didn't respond to that"); }
-    else{
+    else if(txt2){
       sessionHistory.push({role:"assistant",content:full});
       addSmsBubble("recv",txt2,null);
       const receipts=document.querySelectorAll("#ph-thread .rcpt");
@@ -1321,7 +1324,7 @@ async function sendSms(){
     if(cd){applyScores(cd);addFb(cd);}
     sessionTurn++; advanceStage(sessionTurn);
     await incrementUsage(agentName);
-  }catch(e){typEl.remove();addSmsSys("Connection error — try again.");}
+  }catch(e){typEl.remove();addSmsSys("Connection error — "+e.message);}
   sessionProcessing=false; document.getElementById("ph-send").disabled=false;
   document.getElementById("ph-ta").focus();
 }
