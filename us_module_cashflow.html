@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F Solution — US Track: Cash Flow</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e6de;
+      --color-text-secondary: #9c9a92;
+      --color-text-tertiary: #6b6963;
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #272724;
+      --color-border-tertiary: rgba(255,255,255,0.10);
+      --color-border-secondary: rgba(255,255,255,0.18);
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .container { background: var(--color-background-primary); border-radius: 16px; border: 0.5px solid var(--color-border-tertiary); padding: 2rem; max-width: 680px; width: 100%; }
+  .mod { width: 100%; }
+  .progress-bar { display: flex; gap: 6px; margin-bottom: 2rem; align-items: center; }
+  .prog-step { height: 5px; flex: 1; border-radius: 2px; background: var(--color-border-tertiary); transition: background .3s; }
+  .prog-step.done { background: #1D9E75; }
+  .prog-step.active { background: #5DCAA5; }
+  .step-label { font-size: 17px; color: var(--color-text-tertiary); min-width: 80px; text-align: right; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .tag { display: inline-block; font-size: 17px; font-weight: 700; padding: 5px 14px; border-radius: 20px; background: #E1F5EE; color: #085041; margin-bottom: 1rem; letter-spacing: .03em; }
+  h2 { font-size: 28px; font-weight: 700; line-height: 1.35; margin-bottom: .6rem; color: var(--color-text-primary); }
+  .sub { font-size: 20px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 1.5rem; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
+  .card-title { font-size: 20px; font-weight: 600; margin-bottom: .4rem; color: var(--color-text-primary); }
+  .card-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
+  .highlight-box { padding: 1.1rem 1.35rem; margin-bottom: 1.5rem; }
+  .hb-purple { background: #EEEDFE; border-left: 3px solid #534AB7; }
+  .hb-teal { background: #E1F5EE; border-left: 3px solid #0F6E56; }
+  .hb-coral { background: #FAECE7; border-left: 3px solid #993C1D; }
+  .hb-green { background: #EAF3DE; border-left: 3px solid #3B6D11; }
+  .hb-amber { background: #FAEEDA; border-left: 3px solid #854F0B; }
+  .hb-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; }
+  .hb-purple .hb-label { color: #534AB7; }
+  .hb-teal .hb-label { color: #0F6E56; }
+  .hb-coral .hb-label { color: #993C1D; }
+  .hb-green .hb-label { color: #3B6D11; }
+  .hb-amber .hb-label { color: #854F0B; }
+  .hb-text { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+  .quiz-option { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; margin-bottom: .65rem; cursor: pointer; font-size: 20px; color: var(--color-text-primary); transition: all .2s; line-height: 1.55; font-family: var(--font-sans); width: 100%; text-align: left; }
+  .quiz-option:hover { border-color: #5DCAA5; background: #E1F5EE; color: #085041; }
+  .quiz-option.correct { border-color: #0F6E56; background: #E1F5EE; color: #085041; }
+  .quiz-option.wrong { border-color: #993C1D; background: #FAECE7; color: #712B13; }
+  .feedback { font-size: 20px; line-height: 1.65; padding: 1rem 1.2rem; border-radius: var(--border-radius-md); margin-top: .75rem; margin-bottom: 1rem; display: none; }
+  .feedback.show { display: block; }
+  .fb-correct { background: #E1F5EE; color: #085041; }
+  .fb-wrong { background: #FAECE7; color: #712B13; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+  .nav-btn { font-size: 20px; padding: 10px 22px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; font-family: var(--font-sans); transition: background .2s; }
+  .nav-btn:hover { background: var(--color-background-secondary); }
+  .nav-btn.primary { background: #0F6E56; border-color: #0F6E56; color: #E1F5EE; font-weight: 600; }
+  .nav-btn.primary:hover { background: #085041; }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .counter { font-size: 17px; color: var(--color-text-tertiary); min-width: 60px; text-align: center; }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .badge { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .65rem 1rem; font-size: 18px; color: var(--color-text-secondary); }
+  .badge-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .q-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #0F6E56; }
+  .q-card.coral { border-left-color: #993C1D; }
+  .q-card.amber { border-left-color: #854F0B; }
+  .q-card.purple { border-left-color: #534AB7; }
+  .q-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #0F6E56; margin-bottom: .4rem; }
+  .q-card.coral .q-label { color: #993C1D; }
+  .q-card.amber .q-label { color: #854F0B; }
+  .q-card.purple .q-label { color: #534AB7; }
+  .q-text { font-size: 20px; font-weight: 600; color: var(--color-text-primary); line-height: 1.5; margin-bottom: .3rem; }
+  .q-why { font-size: 20px; color: var(--color-text-secondary); line-height: 1.6; }
+  .audio-bar { display: flex; align-items: center; gap: 12px; padding: .75rem 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 1.25rem; }
+  .audio-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; cursor: pointer; font-size: 16px; font-family: var(--font-sans); color: var(--color-text-primary); transition: background .2s; white-space: nowrap; }
+  .audio-btn:hover { background: var(--color-background-primary); }
+  .audio-btn.playing { color: #0F6E56; border-color: #0F6E56; }
+  .audio-icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .audio-label { font-size: 15px; color: var(--color-text-tertiary); flex: 1; }
+  .program-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; border-left: 3px solid #0F6E56; }
+  .program-card.coral { border-left-color: #993C1D; }
+  .program-card.purple { border-left-color: #534AB7; }
+  .program-card.amber { border-left-color: #854F0B; }
+  .program-name { font-size: 20px; font-weight: 600; color: var(--color-text-primary); margin-bottom: .3rem; }
+  .program-body { font-size: 20px; color: var(--color-text-secondary); line-height: 1.65; }
+  .program-amount { font-size: 17px; font-weight: 700; color: #0F6E56; margin-top: .4rem; }
+  .program-card.coral .program-amount { color: #993C1D; }
+  .program-card.purple .program-amount { color: #534AB7; }
+  .program-card.amber .program-amount { color: #854F0B; }
+  .program-note { font-size: 17px; color: var(--color-text-tertiary); margin-top: .3rem; font-style: italic; }
+  .flag-card { background: #FAEEDA; border-left: 3px solid #854F0B; border-radius: var(--border-radius-lg); padding: 1.1rem 1.35rem; margin-bottom: .75rem; }
+  .flag-label { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #854F0B; margin-bottom: .4rem; }
+  .flag-body { font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--color-text-primary); }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="mod">
+<div class="progress-bar">
+  <div class="prog-step active" id="p0"></div>
+  <div class="prog-step" id="p1"></div>
+  <div class="prog-step" id="p2"></div>
+  <div class="prog-step" id="p3"></div>
+  <div class="prog-step" id="p4"></div>
+  <div class="prog-step" id="p5"></div>
+  <div class="prog-step" id="p6"></div>
+  <div class="prog-step" id="p7"></div>
+  <div class="prog-step" id="p8"></div>
+  <div class="prog-step" id="p9"></div>
+  <div class="prog-step" id="p10"></div>
+  <div class="prog-step" id="p11"></div>
+  <span class="step-label" id="step-label">1 of 12</span>
+</div>
+
+<!-- S0 Intro -->
+<div class="screen active" id="s0">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s0" onclick="toggleAudio('s0')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s0" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s0" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s0">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s0"></span>
+  </div>
+  <div class="tag">4F Solution — US Track: Cash Flow</div>
+  <h2>The American layer — tools, programs, and what clients actually find</h2>
+  <p class="sub">This module builds directly on Module 3. The methodology — discovery, values, tracking, alignment — stays the same. What changes is the US context: the spending patterns professionals should expect, and the specific tools and programs available to act on what the tracking reveals.</p>
+  <div class="badge-row">
+    <div class="badge"><div class="badge-dot" style="background:#0F6E56"></div>7 lessons</div>
+    <div class="badge"><div class="badge-dot" style="background:#1D9E75"></div>5 knowledge checks</div>
+    <div class="badge"><div class="badge-dot" style="background:#854F0B"></div>🇺🇸 Requires Module 3</div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">What you will learn</div>
+    <div class="hb-text">What American clients typically find when they actually track their spending. The US-specific debt tools that reduce outflows. The federal programs and strategies that increase inflows. How to identify clients who are missing entitlements they did not know existed. The discovery questions that surface US cash flow opportunities. How to connect every finding back to values and the complete plan.</div>
+  </div>
+  <div class="highlight-box hb-coral">
+    <div class="hb-label">Prerequisite</div>
+    <div class="hb-text">This module assumes you have completed Module 3: Cash Flow. The universal methodology — the discovery conversation, spending vs values, the tracking assignment, and the discipline signal — is covered there and not repeated here. This module applies that methodology in a specifically American context.</div>
+  </div>
+</div>
+
+<!-- S1 What tracking reveals -->
+<div class="screen" id="s1">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s1" onclick="toggleAudio('s1')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s1" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s1" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s1">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s1"></span>
+  </div>
+  <div class="tag">4F Solution — US Lesson 1: What the tracking reveals</div>
+  <h2>When American clients actually look — here is what they find</h2>
+  <p class="sub">Most clients underestimate their spending by 20–40% from memory. These five patterns appear repeatedly across US households. Knowing them prepares the professional to guide the alignment conversation with confidence.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#854F0B;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px">
+        <div style="font-size:18px;color:rgba(255,255,255,0.7);font-weight:700">#1</div>
+        <div style="font-size:20px">🍔</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem">Food outside the home</div>
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Takeout, delivery apps, coffee, workplace lunches. Happens in small amounts multiple times daily — invisible until tracked. Client estimates $200/mo; actual is often $500–$900.</div>
+      </div>
+      <div style="background:#FAEEDA;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#854F0B">$300–700</div>
+        <div style="font-size:13px;color:#633806;font-weight:600">/month gap</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#534AB7;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px">
+        <div style="font-size:18px;color:rgba(255,255,255,0.7);font-weight:700">#2</div>
+        <div style="font-size:20px">📱</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem">Subscriptions and recurring charges</div>
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Streaming, gym, apps, cloud storage, meal kits, software. Automatic charges never feel like spending. Clients regularly pay for services they forgot they have.</div>
+      </div>
+      <div style="background:#EEEDFE;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#534AB7">$150–450</div>
+        <div style="font-size:13px;color:#3C3489;font-weight:600">/month unnamed</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#993C1D;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px">
+        <div style="font-size:18px;color:rgba(255,255,255,0.7);font-weight:700">#3</div>
+        <div style="font-size:20px">💳</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem">Credit card interest carrying costs <span style="font-size:13px;background:#FAECE7;color:#993C1D;padding:2px 7px;border-radius:10px;font-weight:700;vertical-align:middle">🇺🇸 US</span></div>
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">US credit cards average 20–28% APR. A $10,000 balance costs approximately $175–$235/month in interest alone — producing nothing the client values. Most clients have never calculated this number.</div>
+      </div>
+      <div style="background:#FAECE7;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#993C1D">~$200</div>
+        <div style="font-size:13px;color:#712B13;font-weight:600">/month on $10K</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#0F6E56;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px">
+        <div style="font-size:18px;color:rgba(255,255,255,0.7);font-weight:700">#4</div>
+        <div style="font-size:20px">🏠</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem">Mortgage and housing costs <span style="font-size:13px;background:#E1F5EE;color:#085041;padding:2px 7px;border-radius:10px;font-weight:700;vertical-align:middle">🇺🇸 US</span></div>
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">US clients who refinanced into a 30-year mortgage, added PMI, property tax, HOA, and maintenance discover their total housing cost is 35–50% of take-home pay. This is the single largest leverage point in cash flow for most American homeowners.</div>
+      </div>
+      <div style="background:#E1F5EE;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#0F6E56">35–50%</div>
+        <div style="font-size:13px;color:#085041;font-weight:600">of take-home</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#3B6D11;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px">
+        <div style="font-size:18px;color:rgba(255,255,255,0.7);font-weight:700">#5</div>
+        <div style="font-size:20px">🎉</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:.2rem">Convenience and lifestyle creep</div>
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Amazon purchases, rideshare, retail therapy, impulse buys. Small-amount, high-frequency spending that adds up to $300–$600/month. Invisible in aggregate. Visible only in tracking data.</div>
+      </div>
+      <div style="background:#EAF3DE;padding:.75rem .9rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#3B6D11">$300–600</div>
+        <div style="font-size:13px;color:#2A5009;font-weight:600">/month</div>
+      </div>
+    </div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">The professional's role in this conversation</div>
+    <div class="hb-text">Do not announce what the client found. Ask. "What surprised you most?" The realisation belongs to the client. The professional's job is to guide the alignment conversation — connecting what they found to what they said matters most.</div>
+  </div>
+</div>
+
+<!-- S2 Debt restructuring — lever one reduce outflows -->
+<div class="screen" id="s2">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s2" onclick="toggleAudio('s2')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s2" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s2" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s2">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s2"></span>
+  </div>
+  <div class="tag">4F Solution — US Lesson 2: Lever One — reducing outflows</div>
+  <h2>Debt restructuring — the US toolkit</h2>
+  <p class="sub">When the tracking data reveals high-interest debt, these are the tools available in the US context. The discipline check from Module 3 applies to all of them: never restructure debt without first confirming the spending behaviour that created it has changed.</p>
+
+  <div style="font-size:16px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;margin-top:1rem">Tools that restructure rate</div>
+  <div class="program-card">
+    <div class="program-name">Personal debt consolidation loan</div>
+    <div class="program-body">A fixed-rate unsecured loan that retires multiple high-rate balances into a single lower-rate payment. Available through banks, credit unions, and online lenders. Best for clients with good credit (720+) carrying $5,000–$40,000 in credit card debt. The payment is fixed and the debt remains unsecured — the client's home is not at risk.</div>
+    <div class="program-amount">Typical APR: 8–20% vs credit card rates of 20–28% — meaningful monthly savings</div>
+    <div class="program-note">Discipline check: confirms the spending behavior is resolved before applying. Monthly payment must fit comfortably within the revised cash flow plan.</div>
+  </div>
+  <div class="program-card coral">
+    <div class="program-name">Balance transfer credit card (0% intro APR)</div>
+    <div class="program-body">Many US issuers offer 0% APR for 12–21 months on transferred balances. A client who can realistically retire the balance within the promotional window gets an interest-free window. Balance transfer fee is typically 3–5% of the transferred amount — still well below months of high-rate interest. After the promotional period, the rate reverts — often higher than the original card.</div>
+    <div class="program-amount">Window: 12–21 months; transfer fee: 3–5% of balance</div>
+    <div class="program-note">Only appropriate for clients whose discipline problem is genuinely resolved. Using a 0% window to spend more creates a compounding problem at reversal.</div>
+  </div>
+  <div class="program-card purple">
+    <div class="program-name">Home Equity Line of Credit (HELOC)</div>
+    <div class="program-body">A revolving line of credit secured against home equity. US HELOCs typically have variable rates tied to prime — currently significantly below credit card rates. Consolidating $20,000+ in credit card debt into a HELOC can reduce monthly interest by $300–$500. The critical distinction: credit card debt is unsecured — a HELOC converts it to a loan secured by the client's home. This is not an upgrade in risk-free terms; it is a trade.</div>
+    <div class="program-amount">Rate: typically Prime + 1–3% (currently far below credit card rates)</div>
+    <div class="program-note">Variable rate risk: if rates rise significantly, the payment increases. Discipline check is non-negotiable here — a HELOC with remaining credit card spending capacity is a high-risk combination.</div>
+  </div>
+  <div class="program-card amber">
+    <div class="program-name">Cash-out mortgage refinance</div>
+    <div class="program-body">Refinancing an existing mortgage for more than the current balance and taking the difference as cash — used to retire high-interest debt. In rate environments where mortgage rates are competitive, this can dramatically reduce total monthly debt payments. The trade-off: extending the mortgage term and converting short-term debt into a 15–30-year obligation against the home. Best analyzed with a mortgage professional calculating total cost over the life of the loan — not just the monthly payment reduction.</div>
+    <div class="program-amount">Must compare: total interest over life of loan — not just monthly payment change</div>
+    <div class="program-note">Refer to a licensed mortgage professional. This is not a casual recommendation — it requires a full refinance analysis and disclosure process.</div>
+  </div>
+
+  <div class="flag-card" style="margin-top:1rem">
+    <div class="flag-label">The discipline check — always</div>
+    <div class="flag-body">The correct sequencing is: tracking → alignment conversation → spending behaviour shift confirmed → then restructuring. A client whose discipline problem is unresolved will re-accumulate the credit card debt and now also carry the restructured obligation. The professional's job is to surface this risk clearly — not to avoid the debt conversation, but to time it correctly.</div>
+  </div>
+</div>
+
+<!-- S3 Overwhelming debt — US referral options -->
+<div class="screen" id="s3">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s3" onclick="toggleAudio('s3')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s3" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s3" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s3">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s3"></span>
+  </div>
+  <div class="tag">4F Solution — US Lesson 3: Lever One continued — when debt is overwhelming</div>
+  <h2>When restructuring is not enough — US legal options</h2>
+  <p class="sub">Sometimes the total debt load is beyond what restructuring can address. These are the formal legal tools in the US context — each has real consequences and each requires a referral to the right professional.</p>
+
+  <div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.25rem">
+    <div style="border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#0F6E56;padding:.8rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:white">Nonprofit credit counseling / Debt Management Plan (DMP)</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">For clients who can repay over 3–5 years with reduced interest rates</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.4rem">A nonprofit credit counseling agency negotiates reduced interest rates with creditors and consolidates payments into a single monthly payment over 3–5 years. Not a debt forgiveness option — the client repays 100% of what is owed, just at a lower rate with a structured timeline. Best for clients with steady income who need a structured framework rather than a legal process.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:.4rem">
+          <span style="font-size:13px;background:#E1F5EE;color:#085041;padding:3px 8px;border-radius:10px;font-weight:600">Full repayment — no forgiveness</span>
+          <span style="font-size:13px;background:#E1F5EE;color:#085041;padding:3px 8px;border-radius:10px;font-weight:600">Reduced interest rates</span>
+          <span style="font-size:13px;background:#E1F5EE;color:#085041;padding:3px 8px;border-radius:10px;font-weight:600">Minor credit impact</span>
+        </div>
+        <div style="font-size:13px;color:var(--color-text-tertiary);margin-top:.4rem">Refer only to NFCC-member nonprofit agencies. Avoid for-profit debt settlement companies claiming similar services — they are not the same.</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#534AB7;padding:.8rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:white">Chapter 13 Bankruptcy — Reorganization</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">For clients with regular income who want to keep assets (especially a home) and repay under court supervision over 3–5 years</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.4rem">A federally supervised repayment plan that restructures debt obligations over 3–5 years. The client retains most assets — including their home, which is critical for clients facing foreclosure. At completion, remaining unsecured debt is discharged. Stops all collection actions and foreclosure proceedings immediately upon filing.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:.4rem">
+          <span style="font-size:13px;background:#EEEDFE;color:#3C3489;padding:3px 8px;border-radius:10px;font-weight:600">Assets generally retained</span>
+          <span style="font-size:13px;background:#EEEDFE;color:#3C3489;padding:3px 8px;border-radius:10px;font-weight:600">Foreclosure stays halted</span>
+          <span style="font-size:13px;background:#FAECE7;color:#712B13;padding:3px 8px;border-radius:10px;font-weight:600">Credit impact: 7 years</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#993C1D;padding:.8rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:white">Chapter 7 Bankruptcy — Liquidation</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">For clients who cannot repay and pass the means test — discharges most unsecured debt within 3–6 months</div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.4rem">The fastest form of bankruptcy protection — most unsecured debt (credit cards, medical bills, personal loans) is discharged within 3–6 months. Non-exempt assets may be liquidated. Exemptions vary by state — homestead exemption in some states fully protects a primary residence. Requires passing a means test (income below state median, or disposable income test). Student loans, child support, and recent taxes are not dischargeable.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:.4rem">
+          <span style="font-size:13px;background:#FAECE7;color:#712B13;padding:3px 8px;border-radius:10px;font-weight:600">Non-exempt assets liquidated</span>
+          <span style="font-size:13px;background:#FAEEDA;color:#633806;padding:3px 8px;border-radius:10px;font-weight:600">Credit impact: 10 years</span>
+          <span style="font-size:13px;background:#FAECE7;color:#712B13;padding:3px 8px;border-radius:10px;font-weight:600">State exemptions vary widely</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;margin-bottom:1rem;border-left:3px solid #0F6E56">
+    <div style="font-size:15px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">The correct referral — always a bankruptcy attorney</div>
+    <div style="font-size:16px;color:var(--color-text-secondary);line-height:1.6">Only a licensed attorney can file bankruptcy in the US. Bankruptcy attorneys typically offer a free or low-cost initial consultation. They are not debt collectors — they are legal professionals whose job is to find the best outcome for the client. Avoid debt settlement companies that promise to negotiate lump-sum forgiveness — most operate on high fees and do not produce the protections of a formal legal process.</div>
+  </div>
+  <div style="background:#E1F5EE;border-left:3px solid #0F6E56;border-radius:var(--border-radius-lg);padding:1rem 1.1rem">
+    <div style="font-size:15px;font-weight:700;color:#0F6E56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">How to have this conversation</div>
+    <div style="font-size:16px;color:var(--color-text-primary);line-height:1.65">"What I'm seeing in your numbers is that the debt has reached a point where reducing the rate alone is unlikely to change the outcome — the balance is too large relative to what's available to put toward it. There are legal options specifically designed for this situation. I'd like to refer you to a bankruptcy attorney — most offer a free consultation, and they are the right person to walk you through what's actually available. Getting to the other side of this is what makes the rest of the plan possible."</div>
+  </div>
+</div>
+
+<!-- S4 Federal programs reducing outflows -->
+<div class="screen" id="s4">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s4" onclick="toggleAudio('s4')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s4" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s4" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s4">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s4"></span>
+  </div>
+  <div class="tag">4F Solution — US Lesson 4: Lever One continued — cost reduction programs</div>
+  <h2>Federal programs that reduce the cost of living</h2>
+  <p class="sub">Beyond debt restructuring, several federal programs directly reduce what qualifying clients pay out of pocket — creating cash flow through lower expenses rather than higher income. These are not strategies to implement. They are programs to surface and refer.</p>
+
+  <div class="program-card">
+    <div class="program-name">ACA Marketplace Health Insurance Subsidies</div>
+    <div class="program-body">Premium Tax Credits (PTCs) are available to individuals and families whose household income falls between 100% and 400% of the federal poverty level — and in many cases above 400% under current expanded subsidy provisions. For clients who are self-employed, between jobs, or whose employer does not offer affordable coverage, this can reduce monthly health insurance premiums by hundreds of dollars. Health insurance is frequently the largest single line item discovered in client tracking data that can be materially reduced through program access.</div>
+    <div class="program-amount">Eligibility: income-based; applied through healthcare.gov during open enrollment or qualifying life events</div>
+    <div class="program-note">Clients must apply through the Marketplace — not directly through an insurer — to access the subsidy. Many eligible Americans pay full price because no one has walked them through the process.</div>
+  </div>
+  <div class="program-card purple">
+    <div class="program-name">LIHEAP — Low Income Home Energy Assistance Program</div>
+    <div class="program-body">Federal block grant program that helps low-income households cover heating and cooling costs. Administered by states — benefit amounts and eligibility thresholds vary significantly. For clients whose utility costs appear as an unexpected line item in tracking data, LIHEAP can provide direct bill reduction or credits. Many eligible households do not know the program exists or believe they do not qualify because income thresholds are higher than they assume.</div>
+    <div class="program-amount">Eligibility: varies by state; typically income at or below 150% of poverty level</div>
+    <div class="program-note">Direct clients to Benefits.gov or their state energy office to check eligibility and apply. State programs supplement federal LIHEAP in many jurisdictions.</div>
+  </div>
+  <div class="program-card amber">
+    <div class="program-name">SNAP — Supplemental Nutrition Assistance Program</div>
+    <div class="program-body">Federal food assistance program for low-income households. For qualifying clients, SNAP directly reduces food expenditures — one of the largest spending categories that clients consistently underestimate during tracking. Average benefit for a family of four is meaningful monthly relief. Many working families qualify and do not know it, particularly those with fluctuating income or recent income changes.</div>
+    <div class="program-amount">Average benefit: $230–$740/month depending on household size and income</div>
+    <div class="program-note">Applied through the state SNAP agency. Benefits.gov lists state contacts. Not means-tested at a single point — recent income changes affect eligibility in the client's favor.</div>
+  </div>
+  <div class="highlight-box hb-teal">
+    <div class="hb-label">State programs</div>
+    <div class="hb-text">Every state has additional benefit programs that reduce the cost of living — Medicaid expansion, prescription drug assistance, rental assistance, childcare subsidies, and more. These vary significantly by state and are covered in the state supplement materials. Complete the supplement for every state in which you are licensed before working with clients in that state.</div>
+  </div>
+</div>
+
+<!-- S5 Federal benefit programs — increasing inflows -->
+<div class="screen" id="s5">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s5" onclick="toggleAudio('s5')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s5" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s5" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s5">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s5"></span>
+  </div>
+  <div class="tag">4F Solution — US Lesson 5: Lever Two — earning more</div>
+  <h2>Increasing inflows — entitlements and income generation</h2>
+  <p class="sub">Two distinct approaches to putting more money in the client's hands. First: money they are already entitled to but not receiving. Second: income they could be generating but have not considered.</p>
+
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr auto;background:#0F6E56">
+        <div style="padding:.75rem 1rem">
+          <div style="font-size:17px;font-weight:700;color:white">Child Tax Credit (CTC)</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">Families with qualifying children under 17 · Based on AGI</div>
+        </div>
+        <div style="padding:.75rem 1rem;text-align:right;border-left:1px solid rgba(255,255,255,0.2)">
+          <div style="font-size:22px;font-weight:700;color:white">$2,000</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">per qualifying child</div>
+          <div style="font-size:18px;font-weight:700;color:rgba(255,255,255,0.9);margin-top:.1rem">Up to $1,700</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">refundable (ACTC)</div>
+        </div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:.4rem">Phases out beginning at $200,000 AGI (single) and $400,000 (married filing jointly). The refundable Additional Child Tax Credit portion can result in a refund even when tax liability is zero. <strong style="color:var(--color-text-primary)">Requires filing</strong> — a non-filing client with children receives nothing.</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr auto;background:#534AB7">
+        <div style="padding:.75rem 1rem">
+          <div style="font-size:17px;font-weight:700;color:white">Earned Income Tax Credit (EITC)</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">Low and moderate income working individuals and families</div>
+        </div>
+        <div style="padding:.75rem 1rem;text-align:right;border-left:1px solid rgba(255,255,255,0.2)">
+          <div style="font-size:20px;font-weight:700;color:white">Up to $7,830</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">3+ children (2024)</div>
+          <div style="font-size:18px;font-weight:700;color:rgba(255,255,255,0.9);margin-top:.2rem">$632</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">no children</div>
+        </div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55">Fully refundable — if the credit exceeds the client's tax liability, the IRS sends the difference as a refund. One of the most significant cash payments available to working-income clients. IRS estimates that approximately 20% of eligible taxpayers do not claim it. <strong style="color:var(--color-text-primary)">Filing is the trigger — the IRS will not contact non-filers to notify them of eligibility.</strong></div>
+      </div>
+    </div>
+    <div style="border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr auto;background:#854F0B">
+        <div style="padding:.75rem 1rem">
+          <div style="font-size:17px;font-weight:700;color:white">Child and Dependent Care Credit</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">Working parents with childcare or dependent care expenses</div>
+        </div>
+        <div style="padding:.75rem 1rem;text-align:right;border-left:1px solid rgba(255,255,255,0.2)">
+          <div style="font-size:18px;font-weight:700;color:white">Up to $1,050</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">1 child</div>
+          <div style="font-size:18px;font-weight:700;color:rgba(255,255,255,0.9);margin-top:.2rem">Up to $2,100</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">2+ children</div>
+        </div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55">Childcare is consistently one of the largest spending surprises in client tracking data. A client paying $1,500–$3,000/month in daycare costs may be eligible for this credit and not have claimed it. Separate from employer-sponsored Dependent Care FSA — both can be used strategically in the same tax year.</div>
+      </div>
+    </div>
+    <div style="border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr auto;background:#993C1D">
+        <div style="padding:.75rem 1rem">
+          <div style="font-size:17px;font-weight:700;color:white">Social Security Disability Insurance (SSDI)</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:.2rem">Workers with qualifying disabilities who have sufficient work credits</div>
+        </div>
+        <div style="padding:.75rem 1rem;text-align:right;border-left:1px solid rgba(255,255,255,0.2)">
+          <div style="font-size:18px;font-weight:700;color:white">~$1,540/mo</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">average 2024</div>
+        </div>
+      </div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.55">Many disabled Americans have not applied or were initially denied — SSDI denials are common and appeals frequently succeed. A client with a qualifying disability who has not applied may be leaving a significant monthly benefit on the table. Refer to a disability attorney or benefits specialist — initial consultations are typically free and attorneys work on contingency.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:16px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem;margin-top:1.25rem">Active income generation — what the client can create</div>
+  <p style="font-size:17px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:1rem">Government programs surface money the client is entitled to but not receiving. Income generation is a different conversation — it is about helping the client see options they have not considered. The professional's role is to ask the question and open the door, not to implement the strategy.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;border-left:3px solid #0F6E56">
+      <div style="font-size:16px;font-weight:700;color:#0F6E56;margin-bottom:.3rem">💼 Skills and consulting</div>
+      <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Freelance, contract, or consulting work alongside employment. Many clients have expertise with real market value outside their current role — they simply have not thought of it as a cash flow lever.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;border-left:3px solid #534AB7">
+      <div style="font-size:16px;font-weight:700;color:#534AB7;margin-bottom:.3rem">🏠 Asset utilization</div>
+      <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Renting a spare room, short-term rental, storage space, or vehicle. Underutilized assets sitting idle while the client carries high-interest debt is a direct misallocation.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;border-left:3px solid #993C1D">
+      <div style="font-size:16px;font-weight:700;color:#993C1D;margin-bottom:.3rem">📦 Gig and platform work</div>
+      <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Rideshare, delivery, task platforms. Flexible hours that fit around employment. Not a long-term strategy — a short-term cash flow lever to retire debt faster during the discipline-resolved phase.</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;border-left:3px solid #854F0B">
+      <div style="font-size:16px;font-weight:700;color:#854F0B;margin-bottom:.3rem">🛒 Selling unused assets</div>
+      <div style="font-size:15px;color:var(--color-text-secondary);line-height:1.5">Vehicles, equipment, electronics, collections. One-time cash generation that can make a material difference when directed toward high-rate debt reduction.</div>
+    </div>
+  </div>
+  <div class="q-card">
+    <div class="q-label">Income generation question</div>
+    <div class="q-text">"Are there skills, assets, or time you have that you are not currently converting to income?"</div>
+    <div class="q-why">Opens the conversation without prescribing. Lets the client identify their own options. The professional surfaces the possibility — the client decides what is realistic.</div>
+  </div>
+</div>
+
+<!-- S6 Discovery questions -->
+<div class="screen" id="s6">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s6" onclick="toggleAudio('s6')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s6" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s6" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s6">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s6"></span>
+  </div>
+  <div class="tag">4F Solution — US Lesson 6: Discovery questions</div>
+  <h2>The questions that surface US cash flow opportunities</h2>
+  <p class="sub">These questions are asked during discovery — not after. Each one opens a category of opportunity that would otherwise remain invisible. They are simple to ask and frequently produce the highest-value moments in the entire conversation.</p>
+
+  <div class="q-card">
+    <div class="q-label">Health coverage</div>
+    <div class="q-text">"How are you currently covering health insurance — employer plan, Marketplace, or no coverage? And do you know if you qualify for a subsidy?"</div>
+    <div class="q-why">Health insurance is one of the largest cash flow line items for American households. A self-employed or independently insured client paying full Marketplace premiums without subsidy may be eligible for significant premium reduction. This question costs nothing to ask and frequently surfaces hundreds of dollars per month in unnecessary cost.</div>
+  </div>
+  <div class="q-card amber">
+    <div class="q-label">Disability</div>
+    <div class="q-text">"Is anyone in your household living with a disability — yourself, a spouse, or a child?"</div>
+    <div class="q-why">Surfaces potential SSDI eligibility, SSI eligibility, and ABLE account access. One of the most under-asked questions in a financial discovery conversation. Many disabled Americans have not applied or were denied without attempting an appeal.</div>
+  </div>
+  <div class="q-card coral">
+    <div class="q-label">Tax filing</div>
+    <div class="q-text">"Do you file your taxes every year — even in years where you have little or no income?"</div>
+    <div class="q-why">Filing is the trigger for the Earned Income Tax Credit and Child Tax Credit. A non-filing client with children or low-to-moderate income may be missing thousands of dollars per year in unclaimed refundable credits. The IRS does not contact eligible non-filers to notify them. This question is the highest-return question a professional can ask for clients in the applicable income range.</div>
+  </div>
+  <div class="q-card purple">
+    <div class="q-label">Employer benefits</div>
+    <div class="q-text">"Are you using all of the benefits your employer offers — 401(k) match, FSA, HSA, dependent care FSA?"</div>
+    <div class="q-why">Uncaptured employer 401(k) match is the most commonly missed cash flow lever in American households — it is a guaranteed 50–100% return on every dollar contributed, left on the table. HSA and FSA utilization surfaces tax-preferred dollars for healthcare spending that most clients are already incurring. This connects directly to Cash Flow, Growth, and Tax Efficiency simultaneously.</div>
+  </div>
+  <div class="q-card">
+    <div class="q-label">Student loan status</div>
+    <div class="q-text">"Do you carry federal student loans — and do you know whether you are on an income-driven repayment plan or whether you might qualify for any forgiveness programs?"</div>
+    <div class="q-why">Income-driven repayment (IDR) plans can dramatically reduce monthly federal student loan payments for clients whose loan balances are high relative to income. Public Service Loan Forgiveness (PSLF) applies to many government and nonprofit employees who are not aware they qualify. This is one of the largest single restructuring opportunities available to American clients under 45.</div>
+  </div>
+</div>
+
+<!-- S7 Complete summary + connections -->
+<div class="screen" id="s7">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s7" onclick="toggleAudio('s7')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s7" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s7" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s7">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s7"></span>
+  </div>
+  <div class="tag">4F Solution — US summary review</div>
+  <h2>The US cash flow picture — complete</h2>
+  <p class="sub">The universal methodology from Module 3 plus the American layer. Scan before the quiz.</p>
+  <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem">
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#854F0B;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">1</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#854F0B;margin-bottom:.2rem">What clients find when they track</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">Food outside home · Subscriptions · Credit card interest · Housing total cost · Convenience spending. Patterns are predictable — the realisation belongs to the client.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#993C1D;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">2</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#993C1D;margin-bottom:.2rem">Debt restructuring — when it fits</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">Personal loan · Balance transfer · HELOC · Cash-out refinance. Match tool to client profile. Never recommend to a client whose discipline problem is unresolved.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#534AB7;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">3</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#534AB7;margin-bottom:.2rem">Overwhelming debt — refer appropriately</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">Nonprofit DMP · Chapter 13 · Chapter 7. Only a licensed attorney can file bankruptcy. Avoid for-profit debt settlement companies. Free initial consultation — not a failure, a legal protection.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#0F6E56;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">4</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Cost reduction programs</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">ACA Marketplace subsidies · LIHEAP energy assistance · SNAP food assistance · State programs. Awareness is the tool — referral is the action.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#0F6E56;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">5</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:.2rem">Federal benefit programs + income generation</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">Child Tax Credit · EITC · Child and Dependent Care Credit · SSDI. All triggered by filing and eligibility. Plus: skills, assets, gig work, selling unused assets. Ask: "Are there skills, assets, or time you're not converting to income?"</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#854F0B;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">6</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#854F0B;margin-bottom:.2rem">The filing gap</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">Filing taxes every year — including zero-income years — is the highest-return cash flow action for lower-income clients. Non-filers miss EITC and CTC simultaneously.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)">
+      <div style="background:#534AB7;padding:.75rem 1rem;display:flex;align-items:center;justify-content:center;min-width:36px"><div style="font-size:20px;font-weight:700;color:white">7</div></div>
+      <div style="background:var(--color-background-secondary);padding:.75rem 1rem">
+        <div style="font-size:17px;font-weight:700;color:#534AB7;margin-bottom:.2rem">Income splitting → Tax Efficiency</div>
+        <div style="font-size:15px;color:var(--color-text-secondary)">A real cash flow lever. Cannot be addressed without the full tax picture. Flag it here — address it in Module 6.</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.2rem;border:0.5px solid var(--color-border-tertiary)">
+    <div style="font-size:15px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">The professional's scope — always</div>
+    <div style="font-size:16px;color:var(--color-text-secondary);line-height:1.65">Surface what exists. Ask the right questions. Refer to the right professionals. The professional who knows what to look for — and asks about it — creates more value in a single conversation than one who only knows what to sell.</div>
+  </div>
+</div>
+
+<!-- S8 Knowledge check -->
+<div class="screen" id="s8">
+  <div class="audio-bar">
+    <button class="audio-btn" id="audio-btn-s8" onclick="toggleAudio('s8')">
+      <svg class="audio-icon" viewBox="0 0 18 18" fill="none"><polygon id="audio-icon-play-s8" points="4,2 16,9 4,16" fill="currentColor"/><g id="audio-icon-pause-s8" style="display:none"><rect x="3" y="2" width="4" height="14" rx="1" fill="currentColor"/><rect x="11" y="2" width="4" height="14" rx="1" fill="currentColor"/></g></svg>
+      <span id="audio-btn-label-s8">Listen to this screen</span>
+    </button>
+    <span class="audio-label" id="audio-status-s8"></span>
+  </div>
+  <div class="tag">4F Solution — Knowledge check</div>
+  <h2>Knowledge check — 5 questions</h2>
+  <p class="sub">Choose the best answer for each question.</p>
+
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A US client returns after the tracking assignment and reports their food spending was double what they expected. They also carry $14,000 in credit card debt at 24% APR. What is the correct sequence for the professional to follow?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Immediately recommend a balance transfer credit card to get the interest rate to 0% while they sort out spending</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q1')" data-q="q1">First run the alignment conversation — let the client connect their spending to their values — then surface the debt restructuring opportunity as part of what becomes possible if they redirect that spending</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Focus on the debt first — the spending pattern is a separate conversation</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q1')" data-q="q1">Refer immediately to a HELOC lender to convert the unsecured debt to a lower-rate secured facility</button>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has $28,000 in credit card debt at 22% APR and owns their home with significant equity. They tracked their spending and found $700/month going to takeout and subscriptions. What should the professional consider before recommending HELOC consolidation?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Whether the HELOC variable rate is likely to stay below the credit card rate long enough to justify the closing costs</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q2')" data-q="q2">Whether the spending behaviour that created the debt has actually changed — consolidating into a HELOC converts unsecured debt to a loan secured by the client's home, without removing the risk of re-accumulation</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Whether the client qualifies for a Chapter 13 as an alternative debt restructuring path</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q2')" data-q="q2">Whether the client is current on their mortgage payments</button>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A self-employed client mentions they bought their health insurance directly through an insurer and are paying $800/month in premiums. Their household income is approximately $72,000. What is the most significant cash flow opportunity to surface?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Suggest a high-deductible health plan to reduce the premium regardless of marketplace options</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Recommend the client add the premium as a business deduction to reduce their taxable income</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q3')" data-q="q3">The client is likely paying full price by purchasing directly through an insurer instead of through the ACA Marketplace — at $72,000 household income they may qualify for a significant Premium Tax Credit that could reduce their monthly premium by hundreds of dollars</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q3')" data-q="q3">Suggest the client look into joining a professional association that offers group health rates</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+  <div style="margin-bottom:1.5rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client's mortgage is up for refinancing. They plan to call their current lender and ask what rate they can offer. Their current rate is 6.9% on a $350,000 balance. How should the professional frame this moment?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Agree — the existing lender will typically offer the best retention rate to keep the client</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Advise against refinancing — closing costs typically outweigh the savings on a 30-year mortgage</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q4')" data-q="q4">Position it as a significant cash flow opportunity — a mortgage broker comparing multiple lenders creates far more value than accepting one lender's offer, and even a 0.5% rate difference on a $350,000 balance represents approximately $100/month in cash flow over the life of the loan</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q4')" data-q="q4">Focus on whether a 15-year refinance is better long-term, even if the monthly payment is higher</button>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+  <div style="margin-bottom:1rem">
+    <div class="card-body" style="margin-bottom:.75rem;font-weight:500;font-size:20px;color:var(--color-text-primary)">A client has two children under 10 and works as a teacher in a public school. During the cash flow conversation you learn they have been paying full price for student loan repayment since graduation 8 years ago. What is the most significant cash flow opportunity to surface?</div>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Suggest a balance transfer to consolidate any remaining credit card debt alongside the student loans</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Recommend refinancing the student loans to a private lender to get a lower interest rate</button>
+    <button class="quiz-option" onclick="checkQ(this,true,'q5')" data-q="q5">As a public school teacher with federal student loans, this client may qualify for Public Service Loan Forgiveness (PSLF) — their employer is a qualifying organization, and after 10 years of qualifying payments the remaining balance is forgiven; they may also benefit from income-driven repayment to reduce their monthly payment immediately</button>
+    <button class="quiz-option" onclick="checkQ(this,false,'q5')" data-q="q5">Advise them to pay off the student loans aggressively before building any other part of the plan</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+</div>
+
+<!-- S9 Submit -->
+<div class="screen" id="s9">
+  <div class="tag">4F Solution — US Track: Cash Flow complete</div>
+  <h2>Module complete</h2>
+  <p class="sub">Submit your results below — a minimum score of 80% is required.</p>
+  <div id="score-summary" style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.25rem;margin-top:1.25rem">
+    <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:1rem">Quiz results</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:36px;font-weight:700;color:#0F6E56" id="score-display">—</div>
+        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Score</div>
+      </div>
+      <div style="background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:36px;font-weight:700;color:#0F6E56" id="correct-display">—</div>
+        <div style="font-size:17px;color:var(--color-text-secondary);margin-top:.25rem">Correct of 5</div>
+      </div>
+    </div>
+    <div id="q-breakdown" style="font-size:18px;color:var(--color-text-secondary);line-height:1.8"></div>
+  </div>
+  <div id="submit-section" style="margin-bottom:1.25rem">
+    <div style="font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-tertiary);margin-bottom:.75rem">Send results to facilitator</div>
+    <input type="text" id="participant-name" placeholder="Your full name" style="width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:26px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);margin-bottom:.75rem;">
+    <div id="name-warning" style="display:none;font-size:17px;color:#993C1D;margin-bottom:.75rem">Please enter your name before submitting.</div>
+    <button class="nav-btn primary" onclick="submitResults()" style="width:100%;padding:.85rem 1.25rem;margin-bottom:.75rem">Submit results</button>
+    <div style="font-size:17px;color:var(--color-text-tertiary);line-height:1.6">Your results will be sent to your facilitator automatically on submission.</div>
+    <div id="submit-status" style="display:none;margin-top:.75rem;font-size:21px;padding:.85rem 1rem;border-radius:var(--border-radius-md)"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.5rem">
+    <button class="nav-btn" onclick="retakeQuiz()" style="width:100%">Retake quiz</button>
+    <button class="nav-btn" style="width:100%" onclick="window.print()">Print / save as PDF</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>Back</button>
+  <span class="counter" id="counter">1 of 10</span>
+  <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next</button>
+</div>
+</div>
+</div>
+
+<script>
+var TOTAL_SCREENS = 10;
+var QUIZ_SCREEN_INDEX = 8;
+var TOTAL_QUESTIONS = 5;
+var MODULE_NAME = '4F Solution — US Track: Cash Flow';
+var WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+var cur = 0;
+var qAnswered = { q1:false, q2:false, q3:false, q4:false, q5:false };
+var scores = { q1:null, q2:null, q3:null, q4:null, q5:null };
+var qLabels = { q1:'Q1', q2:'Q2', q3:'Q3', q4:'Q4', q5:'Q5' };
+
+var feedbackText = {
+  q1: { correct: 'Correct. The discipline check comes first — always. Surfacing the debt restructuring opportunity before the alignment conversation removes the emotional context that makes the strategy meaningful.', wrong: 'Not quite. The alignment conversation must come before any debt restructuring recommendation. The client needs to connect their spending to their values first — then the restructuring becomes part of what the change makes possible.' },
+  q2: { correct: 'Correct. A HELOC converts unsecured consumer debt to a loan secured by the client\'s home. Without confirming the spending behaviour has changed, this trade amplifies risk — the client can re-accumulate credit card debt while the home equity is now pledged.', wrong: 'Not quite. The critical check is the discipline question, not the rate math. Converting unsecured debt to a secured facility backed by the home is a material increase in risk if spending behaviour has not changed.' },
+  q3: { correct: 'Correct. Purchasing directly through an insurer bypasses the ACA Marketplace entirely, which means no Premium Tax Credit. At $72,000 household income, this client likely qualifies for a meaningful subsidy that could reduce their premium by hundreds of dollars per month.', wrong: 'Not quite. The most significant opportunity is the ACA Marketplace subsidy. Self-employed clients who buy health insurance directly rather than through healthcare.gov often pay full price when they are eligible for a Premium Tax Credit.' },
+  q4: { correct: 'Correct. A mortgage broker comparing multiple lenders creates meaningful value. One lender\'s retention offer is rarely their best possible rate. Even a 0.5% difference on a large balance compounds to significant savings — and the referral to a licensed mortgage professional is the correct action here.', wrong: 'Not quite. Accepting one lender\'s offer without comparison leaves significant money on the table. A mortgage broker can compare multiple lenders simultaneously, and the refinancing conversation is a key cash flow opportunity for homeowners.' },
+  q5: { correct: 'Correct. As a public school employee, this client\'s employer qualifies for PSLF. After 10 years of qualifying payments on an income-driven repayment plan, the remaining balance is forgiven. Refinancing to a private lender would disqualify them from PSLF entirely.', wrong: 'Not quite. Refinancing federal student loans to a private lender eliminates PSLF eligibility permanently. For a public school teacher, PSLF is the highest-value student loan opportunity — after 10 years of qualifying payments the remaining balance is forgiven tax-free.' }
+};
+
+function updateUI() {
+  for (var i = 0; i < TOTAL_SCREENS; i++) {
+    var s = document.getElementById('s' + i);
+    var p = document.getElementById('p' + i);
+    if (s) s.classList.toggle('active', i === cur);
+    if (p) { p.classList.remove('done','active'); if (i < cur) p.classList.add('done'); else if (i === cur) p.classList.add('active'); }
+  }
+  document.getElementById('back-btn').disabled = cur === 0;
+  var nextBtn = document.getElementById('next-btn');
+  document.getElementById('counter').textContent = (cur + 1) + ' of ' + TOTAL_SCREENS;
+  document.getElementById('step-label').textContent = (cur + 1) + ' of ' + TOTAL_SCREENS;
+  if (cur === TOTAL_SCREENS - 1) {
+    nextBtn.style.display = 'none';
+  } else {
+    nextBtn.style.display = '';
+    nextBtn.textContent = cur === QUIZ_SCREEN_INDEX - 1 ? 'Begin quiz' : 'Next';
+    nextBtn.classList.toggle('primary', true);
+  }
+  if (cur === QUIZ_SCREEN_INDEX) updateScoreSummary();
+  window.scrollTo(0, 0);
+}
+
+function goNext() { if (cur < TOTAL_SCREENS - 1) { cur++; updateUI(); } }
+function goBack() { if (cur > 0) { cur--; updateUI(); } }
+
+function checkQ(btn, isCorrect, qId) {
+  if (qAnswered[qId]) return;
+  qAnswered[qId] = true;
+  scores[qId] = isCorrect;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  document.querySelectorAll('[data-q="' + qId + '"]').forEach(function(b) { b.style.pointerEvents = 'none'; if (isCorrect && b !== btn) { /* leave neutral */ } });
+  if (!isCorrect) {
+    document.querySelectorAll('[data-q="' + qId + '"]').forEach(function(b) {
+      if (b.onclick && b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  var fb = document.getElementById('fb-' + qId);
+  if (fb) {
+    fb.textContent = feedbackText[qId][isCorrect ? 'correct' : 'wrong'];
+    fb.className = 'feedback show ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+  }
+}
+
+function updateScoreSummary() {
+  var qs = Object.keys(qLabels);
+  var correct = qs.filter(function(q) { return scores[q] === true; }).length;
+  var attempted = qs.filter(function(q) { return scores[q] !== null; }).length;
+  if (attempted === 0) return;
+  var pct = Math.round((correct / TOTAL_QUESTIONS) * 100);
+  document.getElementById('score-display').textContent = pct + '%';
+  document.getElementById('correct-display').textContent = correct + '/5';
+  var bd = document.getElementById('q-breakdown');
+  bd.innerHTML = qs.map(function(q) {
+    var r = scores[q];
+    var col = r === null ? '#888780' : r ? '#0F6E56' : '#993C1D';
+    var sym = r === null ? '—' : r ? '✓' : '✗';
+    return '<span style="color:' + col + ';margin-right:1rem">' + sym + ' ' + qLabels[q] + '</span>';
+  }).join('');
+  var submitBtn = document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if (pct < 80 && !document.getElementById('score-gate-msg')) {
+    var warn = document.createElement('div');
+    warn.id = 'score-gate-msg';
+    warn.style.cssText = 'font-size:17px;color:#993C1D;margin-bottom:.75rem';
+    warn.textContent = 'A minimum score of 80% is required to submit. Please retake the quiz.';
+    submitBtn.parentNode.insertBefore(warn, submitBtn);
+    submitBtn.disabled = true;
+  } else if (pct >= 80) {
+    var warn = document.getElementById('score-gate-msg');
+    if (warn) warn.remove();
+    if (submitBtn) submitBtn.disabled = false;
+  }
+}
+
+function retakeQuiz() {
+  Object.keys(qLabels).forEach(function(q) {
+    qAnswered[q] = false; scores[q] = null;
+    document.querySelectorAll('[data-q="' + q + '"]').forEach(function(btn) { btn.classList.remove('correct','wrong'); btn.style.pointerEvents = ''; });
+    var fb = document.getElementById('fb-' + q);
+    if (fb) { fb.className = 'feedback'; fb.textContent = ''; }
+  });
+  document.getElementById('score-display').textContent = '—';
+  document.getElementById('correct-display').textContent = '—';
+  document.getElementById('q-breakdown').innerHTML = '';
+  var st = document.getElementById('submit-status');
+  st.style.display = 'none'; st.textContent = '';
+  var btn = document.querySelector('#submit-section button[onclick="submitResults()"]');
+  if (btn) { btn.disabled = false; btn.textContent = 'Submit results'; }
+  var warn = document.getElementById('score-gate-msg');
+  if (warn) warn.remove();
+  cur = QUIZ_SCREEN_INDEX;
+  updateUI();
+  window.scrollTo(0, 0);
+}
+
+function submitResults() {
+  var nm = document.getElementById('participant-name').value.trim();
+  if (!nm) { document.getElementById('name-warning').style.display = 'block'; document.getElementById('participant-name').focus(); return; }
+  document.getElementById('name-warning').style.display = 'none';
+  var st = document.getElementById('submit-status');
+  var qs = Object.keys(qLabels);
+  var correct = qs.filter(function(q) { return scores[q] === true; }).length;
+  var pct = Math.round((correct / TOTAL_QUESTIONS) * 100);
+  if (pct < 80) {
+    st.style.display = 'block'; st.style.background = '#FAECE7'; st.style.color = '#712B13';
+    st.textContent = 'A minimum score of 80% is required to submit. You scored ' + pct + '% (' + correct + '/' + TOTAL_QUESTIONS + '). Please retake the quiz.';
+    return;
+  }
+  var btn = document.querySelector('#submit-section button[onclick="submitResults()"]');
+  st.style.display = 'block'; st.style.background = '#E1F5EE'; st.style.color = '#085041';
+  st.textContent = 'Sending results...';
+  if (btn) btn.disabled = true;
+  var payload = { participant_name: nm, module: MODULE_NAME, completed_at: new Date().toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' }), score_percent: pct + '%', correct_of_total: correct + '/' + TOTAL_QUESTIONS };
+  qs.forEach(function(q) { payload[q] = scores[q] === null ? 'Not attempted' : scores[q] ? 'Correct' : 'Incorrect'; });
+  var params = new URLSearchParams(payload);
+  fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', body:params })
+    .then(function() {
+      st.style.background = '#E1F5EE'; st.style.color = '#085041';
+      st.textContent = 'Results submitted. ' + nm + ' scored ' + pct + '% (' + correct + '/' + TOTAL_QUESTIONS + ' correct). Your facilitator will receive the full breakdown.';
+      if (btn) btn.textContent = 'Submitted';
+    })
+    .catch(function() {
+      st.style.background = '#FAECE7'; st.style.color = '#712B13';
+      st.textContent = 'Submission failed — please check your internet connection and try again.';
+      if (btn) btn.disabled = false;
+    });
+}
+
+var ttsActive = null;
+function getScreenText(screenId) {
+  var screen = document.getElementById(screenId);
+  if (!screen) return '';
+  var clone = screen.cloneNode(true);
+  clone.querySelectorAll('.audio-bar, button, .feedback, .nav, input').forEach(function(el) { if (el.parentNode) el.parentNode.removeChild(el); });
+  return clone.innerText || clone.textContent || '';
+}
+function stopAudio() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (ttsActive) {
+    var btn = document.getElementById('audio-btn-' + ttsActive);
+    var lbl = document.getElementById('audio-btn-label-' + ttsActive);
+    var st = document.getElementById('audio-status-' + ttsActive);
+    var play = document.getElementById('audio-icon-play-' + ttsActive);
+    var pause = document.getElementById('audio-icon-pause-' + ttsActive);
+    if (btn) btn.classList.remove('playing');
+    if (lbl) lbl.textContent = 'Listen to this screen';
+    if (st) st.textContent = '';
+    if (play) play.style.display = '';
+    if (pause) pause.style.display = 'none';
+    ttsActive = null;
+  }
+}
+function toggleAudio(screenId) {
+  if (ttsActive === screenId) { stopAudio(); return; }
+  stopAudio();
+  var text = getScreenText(screenId);
+  if (!text.trim()) return;
+  if (!window.speechSynthesis) { var st = document.getElementById('audio-status-' + screenId); if (st) st.textContent = 'Audio not supported in this browser.'; return; }
+  ttsActive = screenId;
+  var btn = document.getElementById('audio-btn-' + screenId);
+  var lbl = document.getElementById('audio-btn-label-' + screenId);
+  var st = document.getElementById('audio-status-' + screenId);
+  var play = document.getElementById('audio-icon-play-' + screenId);
+  var pause = document.getElementById('audio-icon-pause-' + screenId);
+  if (btn) btn.classList.add('playing');
+  if (lbl) lbl.textContent = 'Stop';
+  if (st) st.textContent = 'Playing...';
+  if (play) play.style.display = 'none';
+  if (pause) pause.style.display = '';
+  var utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.92; utt.pitch = 1; utt.lang = 'en-US';
+  utt.onend = function() { stopAudio(); };
+  utt.onerror = function() { stopAudio(); };
+  window.speechSynthesis.speak(utt);
+}
+updateUI();
+</script>
+</body>
+</html>

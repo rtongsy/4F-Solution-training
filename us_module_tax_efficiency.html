@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F Solution — US Track: Tax Efficiency</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f4f8;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px}
+  .container{width:100%;max-width:860px}
+  .progress-bar-wrap{background:#d1d5db;border-radius:8px;height:10px;margin-bottom:18px;overflow:hidden}
+  .progress-bar-fill{height:10px;border-radius:8px;transition:width 0.4s ease;background:linear-gradient(90deg,#1D9E75,#5DCAA5)}
+  .mod{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:36px 40px;min-height:480px;display:flex;flex-direction:column;justify-content:space-between}
+  h2{font-size:28px;font-weight:700;color:#0F6E56;margin-bottom:16px}
+  p,li{font-size:17px;line-height:1.7;color:#222}
+  .sub{font-size:20px;font-weight:600;color:#0F6E56;margin:18px 0 8px}
+  ul{margin-left:22px;margin-bottom:12px}
+  li{margin-bottom:6px}
+  .badge{display:inline-block;background:#e6f4ef;color:#0F6E56;border-radius:20px;padding:4px 14px;font-size:15px;font-weight:600;margin-bottom:14px}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;flex-wrap:wrap;gap:10px}
+  .btn{padding:12px 28px;border:none;border-radius:8px;font-size:17px;font-weight:600;cursor:pointer;transition:background 0.2s}
+  .btn-primary{background:#0F6E56;color:#fff}
+  .btn-primary:hover{background:#0a5240}
+  .btn-secondary{background:#e6f4ef;color:#0F6E56}
+  .btn-secondary:hover{background:#cde8de}
+  .btn-audio{background:#f0f4f8;color:#0F6E56;border:1px solid #b6d9cc;padding:8px 16px;font-size:15px;border-radius:8px;cursor:pointer}
+  .screen{display:none}
+  .screen.active{display:flex;flex-direction:column;flex:1}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+  th{background:#0F6E56;color:#fff;padding:9px 10px;text-align:left;font-weight:600}
+  td{padding:8px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+  tr:nth-child(even) td{background:#f8fafb}
+  .quiz-opt{display:block;width:100%;text-align:left;padding:12px 18px;margin:7px 0;border:2px solid #d1d5db;border-radius:8px;background:#fff;font-size:17px;cursor:pointer;transition:border-color 0.2s}
+  .quiz-opt:hover{border-color:#0F6E56}
+  .quiz-opt.correct{background:#e6f4ef;border-color:#1D9E75;color:#0a5240;font-weight:600}
+  .quiz-opt.wrong{background:#fde8e8;border-color:#e53e3e;color:#742a2a}
+  .feedback{margin-top:10px;font-size:16px;padding:10px 14px;border-radius:8px}
+  .feedback.correct{background:#e6f4ef;color:#0a5240}
+  .feedback.wrong{background:#fde8e8;color:#742a2a}
+  .score-box{text-align:center;padding:28px;background:#e6f4ef;border-radius:12px;margin:16px 0}
+  .score-num{font-size:52px;font-weight:700;color:#0F6E56}
+  .highlight-box{background:#e6f4ef;border-left:4px solid #0F6E56;padding:14px 18px;border-radius:0 8px 8px 0;margin:14px 0;font-size:17px}
+  .tip-box{background:#fff8e1;border-left:4px solid #f6a800;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:16px}
+  .summary-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #e2e8f0}
+  .summary-num{background:#0F6E56;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px}
+  .progress-text{font-size:14px;color:#666;text-align:right;margin-bottom:6px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+  .card{background:#f8fafb;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px}
+  .card h3{font-size:17px;font-weight:700;color:#0F6E56;margin-bottom:6px}
+  .card p,.card li{font-size:15px}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr}.mod{padding:22px 16px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="progress-text" id="progressText">Screen 1 of 15</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:6.67%"></div></div>
+  <div class="mod">
+
+    <!-- SCREEN 0: Welcome -->
+    <div class="screen active" id="s0">
+      <div>
+        <span class="badge">🇺🇸 US Context</span>
+        <h2>Tax Efficiency — US Track</h2>
+        <p>Tax efficiency is one of the most powerful tools in your client's financial plan — yet it's often the least understood. This module explores how to legally minimize tax at every stage of a client's financial life.</p>
+        <div class="highlight-box">
+          <strong>Three Tax Stages:</strong><br>
+          Every dollar a client earns passes through up to three tax events — when it's <em>earned and saved</em>, when it's <em>accessed and spent</em>, and when it's <em>transferred to heirs</em>. A skilled professional designs the plan to minimize taxation at each stage.
+        </div>
+        <div class="sub">What You'll Cover</div>
+        <ul>
+          <li>The three-stage tax framework</li>
+          <li>US registered accounts and their tax treatment</li>
+          <li>Traditional vs. Roth: when each wins</li>
+          <li>Purpose-built accounts: HSA, 529, ABLE</li>
+          <li>Account sequencing and prioritization</li>
+          <li>Permanent life insurance in tax planning</li>
+          <li>RMDs, Social Security, and Medicare IRMAA</li>
+          <li>Roth conversions and tax bracket management</li>
+          <li>Estate transfer and step-up in basis</li>
+          <li>Income strategies for married clients</li>
+          <li>Summary and discovery conversation guide</li>
+          <li>Module quiz</li>
+        </ul>
+        <p style="margin-top:14px"><strong>12 lessons &nbsp;|&nbsp; ~35 minutes &nbsp;|&nbsp; 80% to pass</strong></p>
+      </div>
+      <div class="nav">
+        <button class="btn btn-audio" onclick="toggleAudio('s0')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(1)">Begin →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: Three Tax Stages -->
+    <div class="screen" id="s1">
+      <div>
+        <h2>Lesson 1: The Three Tax Stages</h2>
+        <p>Tax planning isn't a single decision — it's a system designed across three distinct stages of a client's financial life.</p>
+        <div class="two-col">
+          <div class="card">
+            <h3>Stage 1: Accumulation</h3>
+            <p>Taxes paid (or deferred) as income is earned and saved.</p>
+            <ul>
+              <li>Pre-tax contributions (Traditional 401(k)/IRA) defer tax</li>
+              <li>After-tax contributions (Roth) pay tax now, grow tax-free</li>
+              <li>Non-deductible contributions: taxable growth</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Stage 2: Distribution</h3>
+            <p>Taxes paid when funds are accessed.</p>
+            <ul>
+              <li>Traditional account withdrawals: fully taxable as ordinary income</li>
+              <li>Roth withdrawals (qualified): tax-free</li>
+              <li>Capital gains: taxed at preferential rates</li>
+              <li>RMDs force taxable income after age 73</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="margin-top:4px">
+          <h3>Stage 3: Transfer</h3>
+          <p>Tax implications at death or transfer to heirs.</p>
+          <ul>
+            <li><strong>Step-up in basis:</strong> inherited assets receive a new FMV cost basis — unrealized capital gains are eliminated</li>
+            <li><strong>Federal estate tax:</strong> applies above $13.61M exemption (2024, indexed)</li>
+            <li><strong>Life insurance death benefit:</strong> paid income-tax-free to beneficiaries</li>
+            <li><strong>Inherited IRAs:</strong> generally must be distributed within 10 years (non-spouse)</li>
+          </ul>
+        </div>
+        <div class="highlight-box" style="margin-top:14px">The professional's job is to design a plan that minimizes total tax across all three stages — not just the current year.</div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(0)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s1')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Account Types Overview -->
+    <div class="screen" id="s2">
+      <div>
+        <h2>Lesson 2: US Tax-Advantaged Accounts</h2>
+        <p>The US tax code provides several registered account types, each with different contribution, growth, and withdrawal treatment.</p>
+        <table>
+          <tr><th>Account</th><th>Contribution</th><th>Growth</th><th>Withdrawal</th></tr>
+          <tr><td><strong>Traditional 401(k) / IRA</strong></td><td>Pre-tax (deductible)</td><td>Tax-deferred</td><td>Fully taxable (ordinary income)</td></tr>
+          <tr><td><strong>Roth IRA / Roth 401(k)</strong></td><td>After-tax</td><td>Tax-free</td><td>Tax-free (qualified)</td></tr>
+          <tr><td><strong>HSA</strong></td><td>Pre-tax</td><td>Tax-free</td><td>Tax-free (medical)</td></tr>
+          <tr><td><strong>529 Plan</strong></td><td>After-tax</td><td>Tax-free</td><td>Tax-free (qualified education)</td></tr>
+          <tr><td><strong>ABLE Account</strong></td><td>After-tax</td><td>Tax-free</td><td>Tax-free (disability expenses)</td></tr>
+          <tr><td><strong>Taxable Brokerage</strong></td><td>After-tax</td><td>Taxable annually</td><td>Capital gains treatment</td></tr>
+        </table>
+        <div class="tip-box">
+          <strong>Key distinction:</strong> Traditional accounts reduce taxes now but create a tax liability later. Roth accounts pay tax now but create tax-free income later. The right mix depends on current vs. expected future tax rates.
+        </div>
+        <p>Each account type has specific eligibility rules, contribution limits, and withdrawal conditions. A well-designed plan uses multiple account types to create tax diversification.</p>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s2')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Traditional 401(k) / IRA -->
+    <div class="screen" id="s3">
+      <div>
+        <h2>Lesson 3: Traditional 401(k) and IRA</h2>
+        <p>Traditional pre-tax accounts are the foundation of most US retirement plans. Contributions reduce taxable income today, but all withdrawals are taxed as ordinary income.</p>
+        <div class="sub">2025 Contribution Limits</div>
+        <ul>
+          <li><strong>401(k) / 403(b) employee deferral:</strong> $23,500</li>
+          <li><strong>Catch-up (age 50+):</strong> additional $7,500 → $31,000 total</li>
+          <li><strong>Super catch-up (age 60–63, SECURE 2.0):</strong> additional $11,250 → $34,750 total</li>
+          <li><strong>Traditional IRA:</strong> $7,000 ($8,000 age 50+)</li>
+          <li><strong>IRA deductibility:</strong> phases out if covered by a workplace plan at certain income levels</li>
+        </ul>
+        <div class="sub">Required Minimum Distributions (RMDs)</div>
+        <ul>
+          <li>RMDs begin at age <strong>73</strong> (SECURE 2.0 Act)</li>
+          <li>RMD amount = prior Dec 31 balance ÷ IRS life expectancy factor</li>
+          <li>Failure to take RMD: 25% excise tax on the shortfall (reduced to 10% if corrected timely)</li>
+          <li>Roth IRAs have <strong>no RMDs</strong> during the owner's lifetime</li>
+        </ul>
+        <div class="sub">Spousal IRA</div>
+        <p>A non-working spouse can contribute to a Traditional IRA based on the working spouse's earned income. No attribution rules apply — the spousal IRA is owned solely by the non-working spouse.</p>
+        <div class="highlight-box">Large pre-tax balances create a future tax liability. Clients who accumulate significant Traditional IRA / 401(k) assets may face substantial RMD income and potential Medicare IRMAA surcharges.</div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s3')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: Roth IRA -->
+    <div class="screen" id="s4">
+      <div>
+        <h2>Lesson 4: Roth IRA</h2>
+        <p>The Roth IRA is one of the most powerful tax-planning tools in the US. Contributions are made with after-tax dollars, but qualified withdrawals — including all growth — are completely tax-free.</p>
+        <div class="sub">2025 Contribution Limits and Income Eligibility</div>
+        <ul>
+          <li><strong>Contribution limit:</strong> $7,000 ($8,000 age 50+)</li>
+          <li><strong>Phase-out begins (2024):</strong> $146,000 single / $230,000 married filing jointly</li>
+          <li><strong>Phase-out complete:</strong> $161,000 single / $240,000 MFJ</li>
+          <li><strong>Backdoor Roth:</strong> high earners make a non-deductible Traditional IRA contribution, then convert to Roth — legal under current law</li>
+        </ul>
+        <div class="sub">Key Advantages</div>
+        <ul>
+          <li>No RMDs during the owner's lifetime</li>
+          <li>Contributions (not earnings) can be withdrawn any time without tax or penalty</li>
+          <li>Qualified distributions don't affect Medicare IRMAA thresholds</li>
+          <li>First-time home purchase: up to $10,000 lifetime penalty-free withdrawal of earnings</li>
+          <li>Inherited Roth IRA: non-spouse beneficiaries must fully distribute within 10 years, but withdrawals remain income-tax-free</li>
+        </ul>
+        <div class="sub">Roth 401(k)</div>
+        <p>Many employer plans now offer a Roth 401(k) option — same contribution limits as Traditional 401(k) but after-tax. No income limits apply. Subject to RMDs (but can be rolled to Roth IRA to avoid this).</p>
+        <div class="tip-box"><strong>Roth conversions:</strong> Clients with Traditional IRA/401(k) balances can convert amounts to Roth in low-income years — paying tax now to eliminate future RMDs and create tax-free income. This is the US equivalent of RRSP meltdown planning.</div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(3)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s4')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: Traditional vs. Roth Decision -->
+    <div class="screen" id="s5">
+      <div>
+        <h2>Lesson 5: Traditional vs. Roth — When Each Wins</h2>
+        <p>The core question: will your client's tax rate be higher now or in retirement? The right answer determines which account type wins.</p>
+        <table>
+          <tr><th>Client Situation</th><th>Favors</th><th>Reason</th></tr>
+          <tr><td>High income, peak earning years</td><td>Traditional</td><td>Deduction at high rate now; withdrawals in lower bracket later</td></tr>
+          <tr><td>Early career, low income</td><td>Roth</td><td>Pay tax at low rate now; tax-free growth for decades</td></tr>
+          <tr><td>Expects higher future tax rates</td><td>Roth</td><td>Lock in today's rates</td></tr>
+          <tr><td>Large pre-tax balance, approaching 73</td><td>Roth conversion</td><td>Reduce future RMD burden; manage IRMAA thresholds</td></tr>
+          <tr><td>Wants to pass wealth tax-efficiently</td><td>Roth</td><td>No RMDs, tax-free to heirs</td></tr>
+          <tr><td>Managing Medicare IRMAA</td><td>Roth / brokerage</td><td>Qualified Roth withdrawals don't count as MAGI</td></tr>
+        </table>
+        <div class="highlight-box">
+          <strong>Tax diversification is often the best answer.</strong> Clients with both Traditional and Roth accounts have flexibility to manage taxable income in retirement — drawing from whichever account keeps them in the most favorable bracket each year.
+        </div>
+        <div class="sub">The Break-Even Analysis</div>
+        <p>For clients in the same marginal rate now vs. retirement: Roth and Traditional are mathematically equivalent. The Roth wins if rates rise; Traditional wins if rates fall. When uncertain, split contributions between both.</p>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(4)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s5')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(6)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 6: Purpose-Built Accounts -->
+    <div class="screen" id="s6">
+      <div>
+        <h2>Lesson 6: Purpose-Built Tax-Advantaged Accounts</h2>
+        <p>Beyond retirement accounts, the US tax code provides specialized vehicles for healthcare, education, and disability planning — each with unique advantages.</p>
+        <div class="sub">HSA — Health Savings Account</div>
+        <ul>
+          <li>Available only with a High Deductible Health Plan (HDHP)</li>
+          <li><strong>2025 limits:</strong> $4,300 individual / $8,550 family</li>
+          <li><strong>Triple tax advantage:</strong> contributions deductible → growth tax-free → withdrawals tax-free for qualified medical expenses</li>
+          <li>After age 65: withdrawals for any purpose taxed as ordinary income (like Traditional IRA) — medical withdrawals remain tax-free</li>
+          <li>No RMDs; rolls over year to year; powerful long-term healthcare reserve</li>
+        </ul>
+        <div class="sub">529 Plan — Education Savings</div>
+        <ul>
+          <li>After-tax contributions; tax-free growth and withdrawal for qualified education expenses</li>
+          <li>Many states offer a state income tax deduction for contributions</li>
+          <li><strong>No federal contribution limit</strong>, but subject to gift tax annual exclusion ($18,000/yr per beneficiary in 2024)</li>
+          <li>5-year superfunding: lump-sum $90,000 and elect to spread over 5 years for gift tax purposes</li>
+          <li>SECURE 2.0: up to $35,000 lifetime can be rolled to Roth IRA (after 15 years, annual IRA limits apply)</li>
+          <li>Unused funds: change beneficiary to another family member</li>
+        </ul>
+        <div class="sub">ABLE Account — Disability Savings</div>
+        <ul>
+          <li>For individuals with disabilities diagnosed before age 26</li>
+          <li><strong>2025 contribution limit:</strong> $18,000/year</li>
+          <li>After-tax contributions; tax-free growth and withdrawals for qualified disability expenses</li>
+          <li>Does not affect most means-tested benefit eligibility (SSI, Medicaid)</li>
+        </ul>
+        <div class="tip-box"><strong>No US equivalent to Canada's FHSA.</strong> However, Roth IRA has a first-home exception ($10K lifetime penalty-free withdrawal of earnings). Some states offer first-home savings programs.</div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(5)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s6')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(7)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 7: Account Sequencing -->
+    <div class="screen" id="s7">
+      <div>
+        <h2>Lesson 7: Account Sequencing — Where to Put the Next Dollar</h2>
+        <p>When a client has limited savings dollars, the order of contribution matters. This hierarchy maximizes available tax advantages before moving to less-efficient vehicles.</p>
+        <div class="highlight-box">
+          <strong>Recommended Sequencing (general guidance — always personalize):</strong>
+          <ol style="margin-left:20px;margin-top:8px">
+            <li><strong>Employer 401(k) up to full match</strong> — free money; always capture first</li>
+            <li><strong>HSA to maximum</strong> (if HDHP eligible) — triple tax advantage; best tax-efficiency per dollar</li>
+            <li><strong>Roth IRA to maximum</strong> ($7,000) — after-tax now, tax-free forever; no RMDs</li>
+            <li><strong>Maximize 401(k) / 403(b) contributions</strong> — $23,500 total (or Traditional, depending on bracket)</li>
+            <li><strong>529 contributions</strong> (if education goal exists)</li>
+            <li><strong>Taxable brokerage</strong> — most flexible, least tax-efficient; last resort</li>
+          </ol>
+        </div>
+        <div class="sub">Exceptions and Adjustments</div>
+        <ul>
+          <li>High earners above Roth income limits: use Backdoor Roth before maxing Traditional 401(k)</li>
+          <li>Business owners: add SEP-IRA ($70,000 limit) or Solo 401(k) before taxable accounts</li>
+          <li>Near retirement and large pre-tax balance: Roth conversions may outperform additional Traditional contributions</li>
+          <li>Debt with high interest: pay off before steps 3–6 (employer match always comes first)</li>
+        </ul>
+        <div class="tip-box"><strong>The employer match is non-negotiable.</strong> A 50% match = instant 50% return. No investment can reliably beat it. Always ensure the client captures the full match before anything else.</div>
+        <p style="margin-top:12px">The professional's role is to understand the client's full picture — income, goals, timeline, risk — and sequence savings appropriately.</p>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(6)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s7')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(8)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 8: Permanent Life Insurance in Tax Planning -->
+    <div class="screen" id="s8">
+      <div>
+        <h2>Lesson 8: Permanent Life Insurance Across All Three Stages</h2>
+        <p>Properly structured permanent life insurance can play a role in all three tax stages — making it one of the most versatile tools in advanced tax planning.</p>
+        <div class="sub">Stage 1: Accumulation — Tax-Deferred Growth</div>
+        <ul>
+          <li>Cash value inside a permanent policy grows tax-deferred</li>
+          <li>No annual contribution limits (unlike qualified plans)</li>
+          <li>MEC (Modified Endowment Contract) rules: over-funded policies lose tax-favored loan/withdrawal treatment — stay within IRS 7-pay test limits</li>
+          <li>Ideal for high earners who have maximized all qualified accounts</li>
+        </ul>
+        <div class="sub">Stage 2: Distribution — Tax-Advantaged Income (LIRP Strategy)</div>
+        <ul>
+          <li>Policy loans are <strong>not taxable income</strong> — funds accessed as loans against cash value</li>
+          <li>Life Insurance Retirement Plan (LIRP): accumulate in IUL/whole life, access via loans in retirement</li>
+          <li>Loan income does not count toward Medicare IRMAA thresholds</li>
+          <li>Does not affect Social Security taxation calculations</li>
+          <li>Policy must remain in force — policy lapse with outstanding loans triggers a taxable event</li>
+        </ul>
+        <div class="sub">Stage 3: Transfer — Tax-Free Death Benefit</div>
+        <ul>
+          <li>Death benefit paid income-tax-free to named beneficiaries under IRC §101(a)</li>
+          <li>Passes outside the probate estate (directly to named beneficiaries)</li>
+          <li>Can fund estate tax liability or equalize inheritance between heirs</li>
+          <li>Irrevocable Life Insurance Trust (ILIT): removes death benefit from taxable estate for large estates</li>
+        </ul>
+        <div class="highlight-box">For clients who have maximized 401(k), Roth IRA, and HSA, a well-funded permanent life policy is often the next most tax-efficient vehicle available.</div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(7)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s8')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(9)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 9: Distribution Planning -->
+    <div class="screen" id="s9">
+      <div>
+        <h2>Lesson 9: Distribution Planning</h2>
+        <p>The distribution stage — when clients begin drawing on accumulated assets — is where much of the value of tax planning is realized or lost.</p>
+        <div class="sub">RMDs and Bracket Management</div>
+        <ul>
+          <li>RMDs begin at <strong>age 73</strong> (SECURE 2.0); Roth IRAs have no lifetime RMDs</li>
+          <li>Large pre-tax balances create large forced RMDs — which can push clients into higher brackets</li>
+          <li><strong>Roth conversion ladder:</strong> convert Traditional IRA to Roth in lower-income years (early retirement, before RMD age) to reduce future RMD burden</li>
+          <li>QCD (Qualified Charitable Distribution): age 70½+, donate up to $105,000/year directly from IRA to charity — counts toward RMD but is excluded from income</li>
+        </ul>
+        <div class="sub">Social Security Timing</div>
+        <ul>
+          <li>Benefits can begin at 62 (reduced) or be deferred to 70 (maximum)</li>
+          <li>Each year of delay after FRA (66–67 depending on birth year) adds <strong>8% per year</strong></li>
+          <li>Up to 85% of Social Security benefits are includable in taxable income depending on combined income</li>
+          <li>Roth withdrawals and policy loans do not count toward the Social Security taxation threshold</li>
+        </ul>
+        <div class="sub">Medicare IRMAA</div>
+        <ul>
+          <li>High-income Medicare recipients pay income-related monthly adjustment amounts (IRMAA) on Part B and Part D premiums</li>
+          <li>Surcharges begin at approximately <strong>$103,000 single / $206,000 MFJ</strong> (2024 MAGI; 2-year look-back)</li>
+          <li>Large Roth conversions or asset sales can trigger IRMAA in future years</li>
+          <li>Planning to stay below IRMAA thresholds can save thousands per year in Medicare premiums</li>
+        </ul>
+        <div class="sub">Non-Qualified Annuities</div>
+        <p>Unlike qualified plan annuities (fully taxable), non-qualified annuity payments use an <strong>exclusion ratio</strong> — only the earnings portion is taxable; the return of cost basis is tax-free. This can provide tax-efficient lifetime income.</p>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(8)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s9')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(10)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 10: Transfer and Estate Planning -->
+    <div class="screen" id="s10">
+      <div>
+        <h2>Lesson 10: Transfer Planning</h2>
+        <p>The transfer stage covers how wealth passes to heirs — and the US rules are fundamentally different from (and often more favorable than) those in Canada.</p>
+        <div class="sub">Step-Up in Basis at Death</div>
+        <div class="highlight-box">
+          <strong>No deemed disposition in the US.</strong> When a client dies, inherited assets receive a <em>step-up in basis</em> to fair market value at the date of death. All unrealized capital gains accumulated during the client's lifetime are permanently eliminated — heirs inherit the asset as if they paid today's market price for it.
+        </div>
+        <p style="margin-top:10px">Example: A client bought stock for $50,000 worth $400,000 at death. The heir's cost basis is $400,000 — if they sell immediately, they owe zero capital gains tax. This is a major transfer-planning tool.</p>
+        <div class="sub">Spousal Transfer</div>
+        <ul>
+          <li>Assets can pass to a surviving US citizen spouse free of estate and gift tax (unlimited marital deduction)</li>
+          <li>Inherited IRA: a surviving spouse can roll the deceased's IRA into their own, deferring RMDs until age 73</li>
+          <li>Portability: a surviving spouse can claim the deceased's unused estate tax exemption</li>
+        </ul>
+        <div class="sub">Federal Estate and Gift Tax</div>
+        <ul>
+          <li><strong>2024 exemption: $13.61M per individual</strong> ($27.22M per married couple with portability)</li>
+          <li>Annual gift tax exclusion: $18,000 per recipient (2024)</li>
+          <li>Estates above the exemption: taxed at up to 40%</li>
+          <li><strong>Note:</strong> The current exemption is scheduled to sunset after 2025 — roughly halving without Congressional action</li>
+        </ul>
+        <div class="sub">Section 1202 QSBS Exclusion</div>
+        <p>Investors in qualifying small business stock (C-corporations) held more than 5 years may exclude up to <strong>100% of capital gains</strong> (up to $10M or 10× basis). This is the US equivalent of Canada's Lifetime Capital Gains Exemption for small business shares.</p>
+        <div class="sub">Estate Attorney Referral</div>
+        <p>Estate planning — wills, trusts, beneficiary designations, powers of attorney — requires a licensed estate attorney. Always refer clients to qualified legal counsel for transfer-stage planning.</p>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(9)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s10')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(11)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 11: Income Strategies for Married Clients -->
+    <div class="screen" id="s11">
+      <div>
+        <h2>Lesson 11: Income Strategies for Married Clients</h2>
+        <p>The US does not have a formal pension income splitting election like Canada. However, several strategies allow married clients to manage combined tax exposure effectively.</p>
+        <div class="sub">Married Filing Jointly (MFJ)</div>
+        <ul>
+          <li>MFJ provides wider tax brackets than single filing — inherent income pooling advantage</li>
+          <li>Standard deduction: $29,200 MFJ (2024) vs. $14,600 single</li>
+          <li>Lower-earning spouse effectively shelters income at the household level</li>
+        </ul>
+        <div class="sub">Spousal Roth Conversions</div>
+        <ul>
+          <li>In years when income is lower (early retirement, partial year), convert Traditional IRA to Roth to fill up lower brackets</li>
+          <li>Both spouses' retirement income can be managed jointly to stay within target tax brackets</li>
+        </ul>
+        <div class="sub">Social Security Coordination</div>
+        <ul>
+          <li>A lower-earning spouse can claim spousal benefit (up to 50% of higher earner's FRA benefit)</li>
+          <li>Coordinating claiming ages can maximize lifetime household benefit — often delay higher earner to 70, claim lower earner earlier</li>
+        </ul>
+        <div class="sub">IRMAA Bracket Management</div>
+        <ul>
+          <li>Monitor MAGI to stay below IRMAA surcharge thresholds</li>
+          <li>Roth withdrawals and policy loans help manage MAGI</li>
+          <li>QCDs from IRA accounts reduce MAGI while satisfying RMDs for charitably-inclined clients</li>
+        </ul>
+        <div class="sub">Charitable Strategies</div>
+        <ul>
+          <li><strong>Donor-Advised Fund (DAF):</strong> lump-sum contribution for immediate deduction, grants to charities over time</li>
+          <li><strong>Qualified Charitable Distribution (QCD):</strong> age 70½+, up to $105,000/year directly from IRA — excluded from income, counts toward RMD</li>
+          <li><strong>Charitable Remainder Trust (CRT):</strong> provides income stream, then transfers to charity at death</li>
+        </ul>
+        <div class="tip-box"><strong>Assignment of income doctrine:</strong> The US generally requires income to be taxed in the hands of the person who earned it — formal income splitting to family members (beyond spousal strategies) is limited. Proper structuring through beneficiary-designated accounts and trusts is essential.</div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(10)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s11')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(12)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 12: Summary -->
+    <div class="screen" id="s12">
+      <div>
+        <h2>Module Summary — Tax Efficiency</h2>
+        <p>Here are the 12 key concepts from this module:</p>
+        <div class="summary-item"><div class="summary-num">1</div><div><strong>Three tax stages:</strong> Every dollar passes through accumulation, distribution, and transfer. A complete plan minimizes tax at each stage.</div></div>
+        <div class="summary-item"><div class="summary-num">2</div><div><strong>Traditional accounts</strong> reduce taxes now but create taxable income later via RMDs. Best when current rate exceeds expected future rate.</div></div>
+        <div class="summary-item"><div class="summary-num">3</div><div><strong>Roth accounts</strong> pay tax now, grow and distribute tax-free, with no RMDs. Best for lower current rates, long time horizons, or estate efficiency.</div></div>
+        <div class="summary-item"><div class="summary-num">4</div><div><strong>HSA</strong> is triple tax-advantaged: deductible contributions, tax-free growth, tax-free medical withdrawals. Use HDHP eligibility as a planning trigger.</div></div>
+        <div class="summary-item"><div class="summary-num">5</div><div><strong>529 plans</strong> provide tax-free education savings; some states offer deductions. SECURE 2.0 allows up to $35K rollover to Roth IRA after 15 years.</div></div>
+        <div class="summary-item"><div class="summary-num">6</div><div><strong>Account sequencing:</strong> Employer match → HSA → Roth IRA → Maximize 401(k) → 529 → Taxable brokerage.</div></div>
+        <div class="summary-item"><div class="summary-num">7</div><div><strong>Permanent life insurance</strong> offers tax-deferred accumulation, tax-free policy loan income (LIRP), and income-tax-free death benefit. MEC rules apply.</div></div>
+        <div class="summary-item"><div class="summary-num">8</div><div><strong>RMDs begin at age 73.</strong> Large pre-tax balances create forced taxable income. Roth conversions in lower-income years reduce future RMD burden.</div></div>
+        <div class="summary-item"><div class="summary-num">9</div><div><strong>Medicare IRMAA</strong> surcharges begin ~$103K single / $206K MFJ. Roth withdrawals and policy loans don't count toward MAGI — powerful bracket management tools.</div></div>
+        <div class="summary-item"><div class="summary-num">10</div><div><strong>Step-up in basis at death:</strong> No deemed disposition in the US. Inherited assets receive FMV as new cost basis — unrealized gains are permanently eliminated.</div></div>
+        <div class="summary-item"><div class="summary-num">11</div><div><strong>Federal estate tax exemption:</strong> $13.61M (2024). QSBS Section 1202 may exclude 100% of gains on qualifying small business stock.</div></div>
+        <div class="summary-item"><div class="summary-num">12</div><div><strong>Married strategies:</strong> MFJ brackets, Roth conversions, coordinated Social Security, IRMAA management, QCDs, and DAFs — manage combined household tax efficiently.</div></div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(11)">← Back</button>
+        <button class="btn btn-audio" onclick="toggleAudio('s12')">🔊 Listen</button>
+        <button class="btn btn-primary" onclick="goTo(13)">Take Quiz →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 13: Quiz -->
+    <div class="screen" id="s13">
+      <div>
+        <h2>Module Quiz — Tax Efficiency</h2>
+        <p style="margin-bottom:16px">Answer all 5 questions. You need <strong>80% (4/5)</strong> to pass.</p>
+        <div id="quizContainer"></div>
+        <div id="quizNavArea" style="margin-top:16px"></div>
+      </div>
+      <div class="nav" id="quizBottomNav">
+        <button class="btn btn-secondary" onclick="goTo(12)">← Back to Summary</button>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- SCREEN 14: Results -->
+    <div class="screen" id="s14">
+      <div>
+        <h2>Quiz Results</h2>
+        <div class="score-box">
+          <div class="score-num" id="scoreDisplay">0/5</div>
+          <div id="scoreLabel" style="font-size:20px;font-weight:600;margin-top:8px;color:#0F6E56"></div>
+          <div id="scorePercent" style="font-size:17px;color:#444;margin-top:4px"></div>
+        </div>
+        <div id="resultMessage" style="font-size:17px;line-height:1.7;margin-bottom:16px"></div>
+        <div id="submissionStatus" style="font-size:15px;color:#666;margin-bottom:8px"></div>
+        <div id="submissionDate" style="font-size:14px;color:#888"></div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="goTo(13)">← Retake Quiz</button>
+        <button class="btn btn-primary" onclick="goTo(0)">↩ Restart Module</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 15: Hidden placeholder -->
+    <div class="screen" id="s15" style="display:none"></div>
+
+  </div><!-- end .mod -->
+</div><!-- end .container -->
+
+<script>
+const TOTAL_SCREENS = 16;
+const TOTAL_QUESTIONS = 5;
+const QUIZ_SCREEN_INDEX = 13;
+const LAST_LESSON_INDEX = 12;
+const MODULE_NAME = '4F Solution — US Track: Tax Efficiency';
+const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/236545/unc6gn1/';
+
+let currentScreen = 0;
+let ttsUtterance = null;
+let isSpeaking = false;
+let quizAnswers = {};
+let quizSubmitted = false;
+
+const questions = [
+  {
+    q: "A 28-year-old client is in the 22% tax bracket and expects to be in the 32% bracket at retirement. Which account type should be prioritized?",
+    opts: ["Traditional 401(k) — take the deduction now","Roth IRA — pay tax at the lower current rate","Non-deductible IRA — no current benefit","Taxable brokerage — maximum flexibility"],
+    correct: 1,
+    explanation: "With a lower current rate than expected future rate, Roth is preferred — pay 22% now rather than 32% later on the same dollars."
+  },
+  {
+    q: "A client wants to save for their child's college education. Which account provides tax-free growth and qualified withdrawals for education expenses?",
+    opts: ["Traditional IRA","Roth IRA","529 Plan","ABLE Account"],
+    correct: 2,
+    explanation: "529 plans are purpose-built for education savings: after-tax contributions, tax-free growth, and tax-free withdrawals for qualified education expenses."
+  },
+  {
+    q: "A 70-year-old retired client has $2.1M in a Traditional IRA. What is the primary tax risk in their distribution plan?",
+    opts: ["Capital gains on IRA withdrawals","Roth contribution income limits","Large RMDs pushing them into higher tax brackets and triggering Medicare IRMAA","Loss of Social Security benefits"],
+    correct: 2,
+    explanation: "Large Traditional IRA balances generate large required minimum distributions starting at 73 — forced taxable income that can push clients into higher brackets and trigger Medicare IRMAA premium surcharges."
+  },
+  {
+    q: "A client purchased a vacation property for $120,000 that is worth $580,000 at their death. What is the tax treatment of the $460,000 gain for the heir?",
+    opts: ["The heir pays capital gains tax on $460,000","The heir receives a step-up in basis to $580,000 — the gain is permanently eliminated","The estate pays a deemed disposition tax before transfer","The heir pays ordinary income tax on the full $580,000"],
+    correct: 1,
+    explanation: "In the US, inherited assets receive a step-up in basis to fair market value at death. The heir's basis is $580,000 — the entire $460,000 unrealized gain is permanently eliminated. There is no deemed disposition in the US."
+  },
+  {
+    q: "During discovery, a client mentions they want to minimize taxes for their spouse if they die first. Without making any recommendation, what is the most appropriate next step?",
+    opts: ["Recommend a spousal IRA rollover","Suggest they update their estate plan to include a QTIP trust","Continue asking discovery questions about all four Fundamentals before making any suggestions","Immediately discuss step-up in basis planning"],
+    correct: 2,
+    explanation: "During discovery, the professional's role is to understand, not advise. All four Fundamentals must be explored before bridging to recommendations. This protects the client and ensures a complete plan."
+  }
+];
+
+function goTo(n) {
+  if (n < 0 || n >= TOTAL_SCREENS) return;
+  document.getElementById('s' + currentScreen).classList.remove('active');
+  currentScreen = n;
+  document.getElementById('s' + currentScreen).classList.add('active');
+  stopAudio();
+  updateProgress();
+  if (n === QUIZ_SCREEN_INDEX && !quizSubmitted) renderQuiz();
+  window.scrollTo(0,0);
+}
+
+function updateProgress() {
+  const pct = ((currentScreen + 1) / TOTAL_SCREENS * 100).toFixed(1);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = 'Screen ' + (currentScreen + 1) + ' of ' + TOTAL_SCREENS;
+}
+
+function toggleAudio(screenId) {
+  if (isSpeaking) { stopAudio(); return; }
+  const el = document.getElementById(screenId);
+  const text = el ? el.innerText.replace(/[→←↩🔊]/g,'').trim() : '';
+  if (!text) return;
+  ttsUtterance = new SpeechSynthesisUtterance(text);
+  ttsUtterance.lang = 'en-US';
+  ttsUtterance.rate = 0.92;
+  ttsUtterance.onend = () => { isSpeaking = false; };
+  isSpeaking = true;
+  speechSynthesis.speak(ttsUtterance);
+}
+
+function stopAudio() {
+  if (speechSynthesis.speaking) speechSynthesis.cancel();
+  isSpeaking = false;
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.style.cssText = 'margin-bottom:22px;padding:16px;background:#f8fafb;border-radius:10px;border:1px solid #e2e8f0';
+    qDiv.innerHTML = '<p style="font-weight:600;margin-bottom:10px">' + (qi+1) + '. ' + q.q + '</p>';
+    q.opts.forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.textContent = opt;
+      btn.onclick = () => handleAnswer(qi, oi, btn, qDiv, q);
+      btn.id = 'q' + qi + 'o' + oi;
+      qDiv.appendChild(btn);
+    });
+    container.appendChild(qDiv);
+  });
+  document.getElementById('quizNavArea').innerHTML = '<button class="btn btn-primary" id="submitQuiz" onclick="submitQuiz()" style="display:none">Submit Quiz →</button>';
+}
+
+function handleAnswer(qi, oi, btn, qDiv, q) {
+  if (quizAnswers[qi] !== undefined) return;
+  quizAnswers[qi] = oi;
+  q.opts.forEach((_, i) => {
+    const b = document.getElementById('q' + qi + 'o' + i);
+    if (b) b.disabled = true;
+  });
+  const fb = document.createElement('div');
+  fb.className = 'feedback ' + (oi === q.correct ? 'correct' : 'wrong');
+  if (oi === q.correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✓ Correct — ' + q.explanation;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('q' + qi + 'o' + q.correct).classList.add('correct');
+    fb.textContent = '✗ ' + q.explanation;
+  }
+  qDiv.appendChild(fb);
+  if (Object.keys(quizAnswers).length === TOTAL_QUESTIONS) {
+    document.getElementById('submitQuiz').style.display = 'inline-block';
+  }
+}
+
+function submitQuiz() {
+  quizSubmitted = true;
+  let score = 0;
+  questions.forEach((q, i) => { if (quizAnswers[i] === q.correct) score++; });
+  const pct = Math.round(score / TOTAL_QUESTIONS * 100);
+  const passed = pct >= 80;
+  document.getElementById('scoreDisplay').textContent = score + '/' + TOTAL_QUESTIONS;
+  document.getElementById('scoreLabel').textContent = passed ? '✅ Passed' : '❌ Did Not Pass';
+  document.getElementById('scorePercent').textContent = pct + '%';
+  document.getElementById('resultMessage').innerHTML = passed
+    ? '<p>Excellent work! You have demonstrated a solid understanding of US tax efficiency strategies.</p>'
+    : '<p>You need 80% (4/5) to pass. Review the module and try again — focus on the areas covered in the questions you missed.</p>';
+  const now = new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('submissionDate').textContent = 'Completed: ' + now;
+  document.getElementById('submissionStatus').textContent = 'Submitting your score...';
+  const params = new URLSearchParams();
+  params.append('module', MODULE_NAME);
+  params.append('score', score + '/' + TOTAL_QUESTIONS);
+  params.append('percent', pct + '%');
+  params.append('passed', passed ? 'Yes' : 'No');
+  params.append('date', now);
+  fetch(ZAPIER_WEBHOOK, {method:'POST',body:params,mode:'no-cors'})
+    .then(() => { document.getElementById('submissionStatus').textContent = '✓ Score submitted successfully.'; })
+    .catch(() => { document.getElementById('submissionStatus').textContent = 'Score recorded locally.'; });
+  goTo(14);
+}
+</script>
+</body>
+</html>
